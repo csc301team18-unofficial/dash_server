@@ -1,1 +1,1 @@
-web: gunicorn dashserver.wsgi
+web: gunicorn dashserver.wsgi --log-file--
