@@ -12,6 +12,7 @@ django-heroku = "*"
 django-rest-framework = "*"
 requests = "*"
 dj-database-url = "*"
+monsterurl = "*"
 
 
 [requires]

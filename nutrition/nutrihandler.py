@@ -46,31 +46,25 @@ class NutriHandler:
     Utility class used to make API calls for a particular client.
     TODO: Also used to make logging calls to the database???
     """
-    def __init__(self, client_id):
+    def __init__(self, client_id, default_serving_size):
         """
         :param client_id: The client's ID #TODO: ID TOKEN??
         """
         self.client_id = client_id
+        self.client_default_serve_size = default_serving_size
         print("Created a client nutrition handler for client {}".format(client_id))
 
-
-    def build_food_req_string(self, food_name):
-        """
-        Build a request URL to get a single-item list from Nutritics for a food, with all macros for that food.
-        :param food_name: The name of the food we're searching for
-        :return: The URL to set the GET request to
-        """
-        reqstr = nc.FOOD_BASE_URL + food_name + nc.ALL_ATTRS + nc.LIMIT_ONE
-        return reqstr
-
-    def food_request(self, food_name, serving_size):
+    def food_request(self, food_name, serving_size=None):
         """
         Makes a request to get info for a certain food.
         :param food_name: The name of the food
+        :param serving_size: The serving size of the food. By default is None, and is then later
+                    evaluated to be the default serving size for the client. Can be overridden to
+                    use a custom serving size indicated by the client
         :return: A Food object
         """
         # Make request to Nutritics
-        r = requests.get(self.build_food_req_string(food_name), auth=(nc.NUTRITICS_USER, nc.NUTRITICS_PSWD))
+        r = requests.get(build_food_req_string(food_name), auth=(nc.NUTRITICS_USER, nc.NUTRITICS_PSWD))
         if r.status_code != 200:
             # There's been an error with the get request, so the operation fails
             # This is handled somewhere by the parent call
@@ -78,42 +72,28 @@ class NutriHandler:
 
         food_data = r.json()[1]
 
+        scale = self.client_default_serve_size / 100
+        if serving_size is not None:
+            scale = serving_size / 100
+
         # Construct a food object from the request json
         food = Food(
             food_data["id"],
             food_data["name"],
-            food_data["energyKcal"]["val"],
-            food_data["carbohydrate"]["val"],
-            food_data["protein"]["val"],
-            food_data["fat"]["val"],
+            food_data["energyKcal"]["val"]*scale,
+            food_data["carbohydrate"]["val"]*scale,
+            food_data["protein"]["val"]*scale,
+            food_data["fat"]["val"]*scale,
         )
 
         return food
 
-    def log_food(self, food):
-        """
-        TODO:
-        Log the food to the database for this client.
-        :param food: The food to be logged
-        :return: True if logging is successful, False if any error occurs
-        """
-        return False
 
-    def log_meal(self, meal):
-        """
-        TODO:
-        Log the meal to the database for this client.
-        :param meal: THe meal to be logged
-        :return: True if the loggin gis successful, False if any error occurs
-        """
-
-        # TODO: MAKE SURE THE MEAL CONTAINS AT LEAST ONE FOOD BEFORE LOGGING
-        return False
-
-    def get_serving_size(self):
-        """
-        Runs a query on the database to get the client's preferred serving size
-        :return: The client's preferred serving size TODO: (grams???)
-        """
-        # TODO: Is this necessary?
-        pass
+def build_food_req_string(food_name):
+    """
+    Build a request URL to get a single-item list from Nutritics for a food, with all macros for that food.
+    :param food_name: The name of the food we're searching for
+    :return: The URL to set the GET request to
+    """
+    reqstr = nc.FOOD_BASE_URL + food_name + nc.ALL_ATTRS + nc.LIMIT_ONE
+    return reqstr
