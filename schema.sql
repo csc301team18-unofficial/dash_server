@@ -61,7 +61,6 @@ CREATE TABLE Food_Entry(
   meal_id int REFERENCES Meal(meal_id),
   nutritics_id int, -- OPTIONAL
   food_name VARCHAR(100),
-  serving_size int NOT NULL, -- grams
   calories int NOT NULL,
   fats int NOT NULL,
   protein int NOT NULL,
