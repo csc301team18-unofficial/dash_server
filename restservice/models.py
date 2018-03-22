@@ -56,7 +56,7 @@ class FoodEntry(models.Model):
     food_entry_id = models.IntegerField(primary_key=True)
     time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
-    meal_id = models.ForeignKey("Meal", on_delete=models.CASCADE)   # Can be None, not all entries are meals
+    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE)   # Can be None, not all entries are meals
     nutritics_id = models.IntegerField()
     food_name = models.CharField(max_length=100)
     kilocalories = models.IntegerField()
@@ -81,3 +81,11 @@ class DailyFood(models.Model):
     # One of the following two has to not be None!
     food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE)
     meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE)
+
+    def __str__(self):
+        # TODO: Make this better?
+
+        if self.food_entry_id is None:
+            return "A meal was eaten"
+        else:
+            return "A food was eaten"
