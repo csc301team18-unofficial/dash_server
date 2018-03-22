@@ -1,1 +1,1 @@
-web: gunicorn dashserver.wsgi --preload=True
+web: gunicorn --preload=True dashserver.wsgi
