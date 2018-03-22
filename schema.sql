@@ -8,10 +8,9 @@ SET search_path TO dashschema;
 -- This information is user-specified upon signup
 -- All fields are mandatory
 CREATE TABLE Users(
-  user_id VARCHAR(15) PRIMARY KEY,
+  user_id VARCHAR(20) PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
-  age int NOT NULL,
-  weight_kgs int NOT NULL,
+  serving_size int NOT NULL,
   dash_streak int NOT NULL,
   dash_score int NOT NULL
 );
@@ -21,9 +20,9 @@ CREATE TABLE Users(
 -- data specified here with respect the entries in the Food Entry table
 -- All fields are mandatory
 CREATE TABLE Goals(
-  goal_id VARCHAR(15) PRIMARY KEY,
-  user_id VARCHAR(15) NOT NULL REFERENCES Users (user_id),
-  water_grams int NOT NULL,
+  goal_id VARCHAR(20) PRIMARY KEY,
+  user_id VARCHAR(20) NOT NULL REFERENCES Users (user_id),
+  water_ml int NOT NULL,
   protein_grams int NOT NULL,
   carbs_grams int NOT NULL,
   fats_grams int NOT NULL,
@@ -38,11 +37,15 @@ CREATE TABLE Goals(
 -- Meals belong to and are unique to a user. One user's "Grandma's chicken noodle soup"
 -- will not be recognized for another user who did not specify this meal name
 -- All fields are mandatory
-CREATE TABLE Meal(
+CREATE TABLE Meal_Entry(
   meal_id int PRIMARY KEY,
-  user_id VARCHAR(15) NOT NULL REFERENCES Users (user_id),
+  user_id VARCHAR(20) NOT NULL REFERENCES Users (user_id),
   meal_name VARCHAR(100) NOT NULL,
-  time_of_creation date NOT NULL
+  time_of_creation date NOT NULL,
+  calories int NOT NULL,
+  fats int NOT NULL,
+  protein int NOT NULL,
+  carbs int NOT NULL
 );
 
 
@@ -54,9 +57,9 @@ CREATE TABLE Meal(
 CREATE TABLE Food_Entry(
   food_entry_id int PRIMARY KEY,
   time_of_creation date NOT NULL,
-  user_id VARCHAR(15) NOT NULL REFERENCES Users (user_id),
+  user_id VARCHAR(20) NOT NULL REFERENCES Users (user_id),
   meal_id int REFERENCES Meal(meal_id),
-  nutritics_id VARCHAR(15), -- OPTIONAL
+  nutritics_id int, -- OPTIONAL
   food_name VARCHAR(100),
   serving_size int NOT NULL, -- grams
   calories int NOT NULL,
@@ -73,9 +76,9 @@ CREATE TABLE Food_Entry(
 -- nutritional intake while simultaneously maintaining flexibility in data types collected,
 -- and maintaining an easy-to-comprehend database schema
 CREATE TABLE Daily_Food(
-  day_id VARCHAR(15) PRIMARY KEY,
+  day_id int PRIMARY KEY,
   time_of_creation date NOT NULL,
-  user_id VARCHAR(15) NOT NULL REFERENCES Users (user_id),
+  user_id VARCHAR(20) NOT NULL REFERENCES Users (user_id),
   food_entry_id int REFERENCES Food_Entry (food_entry_id), -- one of the meal/food fields will be filled
-  meal_id int REFERENCES Meal (meal_id)
+  meal_id int REFERENCES Meal_Entry (meal_id)
 );
