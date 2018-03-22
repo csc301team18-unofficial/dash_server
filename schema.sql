@@ -59,7 +59,7 @@ CREATE TABLE Food_Entry(
   time_of_creation date NOT NULL,
   user_id VARCHAR(20) NOT NULL REFERENCES Users (user_id),
   meal_id int REFERENCES Meal(meal_id),
-  nutritics_id int, -- OPTIONAL
+  nutritics_id int,
   food_name VARCHAR(100),
   calories int NOT NULL,
   fats int NOT NULL,
