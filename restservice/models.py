@@ -60,9 +60,9 @@ class FoodEntry(models.Model):
     food_entry_id = models.IntegerField(primary_key=True)
     time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
-    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, blank=True, NULL=True)   # Can be None, not all entries are meals
-    nutritics_id = models.IntegerField(blank=True, NULL=True)
-    food_name = models.CharField(max_length=100, blank=True, NULL=True)
+    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, blank=True, null=True)   # Can be None, not all entries are meals
+    nutritics_id = models.IntegerField(blank=True, null=True)
+    food_name = models.CharField(max_length=100, blank=True, null=True)
     kilocalories = models.IntegerField()
     fat_grams = models.IntegerField()
     carb_grams = models.IntegerField()
@@ -83,8 +83,8 @@ class DailyFood(models.Model):
     time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     # One of the following two has to not be None!
-    food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE, blank=True, NULL=True)
-    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, blank=True, NULL=True)
+    food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE, blank=True, null=True)
+    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         # TODO: Make this better?
