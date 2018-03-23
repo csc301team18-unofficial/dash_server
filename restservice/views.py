@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
 from restservice.models import *
 
 from nutrition import nutrihandler as nh
@@ -32,25 +33,13 @@ def food_info(request, client_id, food_name):
     if request.method == 'GET':
         try:
             user_entry = Users.objects.get(user_id=client_id)
-        except Users.DoesNotExist:
+        except ObjectDoesNotExist:
             # TODO: Create a new user entry
             user_entry = create_new_user(client_id)
 
-        # TODO: Remove this later
-        print("Created a client nutrition handler for client {}".format(client_id))
         serving_size = getattr(user_entry, 'serving_size')
 
-        handler = nh.NutriHandler(serving_size)
-        print("Serving size: {}".format(serving_size))
-
-        try:
-            food_obj = handler.food_request(food_name)
-        except RuntimeError:
-            # TODO:
-            # Case if error occurred getting info from Nutritics, so return an "internal server error" response
-            pass
-
-
+        # TODO: THIS ENTIRE THING
 
 
     else:
@@ -62,6 +51,11 @@ def food_info(request, client_id, food_name):
 #   Helper functions
 # *********************************
 def create_new_user(client_id):
+    """
+    Creates a new user account.
+    :param client_id: Unique client ID sent by DialogFlow. Client ID's are tied to Google accounts.
+    :return:
+    """
     new_user = Users(
         user_id=client_id,
         name=namegen.get_monster(),
