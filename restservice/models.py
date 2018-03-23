@@ -1,5 +1,10 @@
 from django.db import models
 
+"""
+This class is analogous to the schema.sql that was defined earlier.
+It allows Django to interface with the database, while letting us work with objects.
+"""
+
 
 class Users(models.Model):
     user_id = models.CharField(max_length=20, primary_key=True)

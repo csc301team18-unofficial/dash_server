@@ -36,8 +36,24 @@ def food_info(request, client_id, food_name):
             # TODO: Create a new user entry
             user_entry = create_new_user(client_id)
 
+        # TODO: Remove this later
+        print("Created a client nutrition handler for client {}".format(client_id))
+        serving_size = getattr(user_entry, 'serving_size')
+
+        handler = nh.NutriHandler(serving_size)
+        print("Serving size: {}".format(serving_size))
+
+        food_obj = handler.food_request(food_name)
+        if food_obj is None:
+            # TODO:
+            # Case if error occurred getting info from Nutritics, so return an "internal server error" response
+            pass
+
+
+
     else:
-        return
+        # TODO: Return a "bad request" error response
+        pass
 
 
 # *********************************

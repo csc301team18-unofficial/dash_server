@@ -44,15 +44,13 @@ class Food:
 class NutriHandler:
     """
     Utility class used to make API calls for a particular client.
-    TODO: Also used to make logging calls to the database???
     """
-    def __init__(self, client_id, default_serving_size):
+    def __init__(self, default_serving_size=100):
         """
-        :param client_id: The client's ID #TODO: ID TOKEN??
+        :param default_serving_size: Default serving size for any food object that's generated. Used to scale Nutritics
+                    data. Defaults to 100 (for getFoodInfo requests)
         """
-        self.client_id = client_id
         self.client_default_serve_size = default_serving_size
-        print("Created a client nutrition handler for client {}".format(client_id))
 
     def food_request(self, food_name, serving_size=None):
         """
