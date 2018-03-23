@@ -43,11 +43,13 @@ def food_info(request, client_id, food_name):
         handler = nh.NutriHandler(serving_size)
         print("Serving size: {}".format(serving_size))
 
-        food_obj = handler.food_request(food_name)
-        if food_obj is None:
+        try:
+            food_obj = handler.food_request(food_name)
+        except RuntimeError:
             # TODO:
             # Case if error occurred getting info from Nutritics, so return an "internal server error" response
             pass
+
 
 
 

@@ -13,6 +13,7 @@ django-rest-framework = "*"
 requests = "*"
 dj-database-url = "*"
 monsterurl = "*"
+pytz = "*"
 
 
 [requires]
