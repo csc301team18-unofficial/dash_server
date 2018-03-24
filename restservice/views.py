@@ -8,6 +8,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from restservice.models import *
+from serializers import *
 
 from nutrition import nutrihandler as nh
 import monsterurl as namegen
