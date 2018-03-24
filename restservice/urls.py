@@ -19,5 +19,5 @@ from django.conf.urls import url
 from restservice import views
 
 urlpatterns = [
-    url(r'^rest/foodinfo/client_id=(?P<client_id>*?)&food_name=(?P<food_name>[a-zA-Z\s]+(a-zA-z)*)$', views.food_info)
+    url(r'^rest/foodinfo/client_id=(?P<client_id>.?)&food_name=(?P<food_name>[a-zA-Z\s]+(a-zA-z)*)$', views.food_info)
 ]
