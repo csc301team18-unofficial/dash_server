@@ -68,7 +68,7 @@ class NutriHandler:
             raise RuntimeError("Nutritics request failed with status code {}".format(r.status_code))
 
         food_hash = md5_hash_string(food_name)
-        food_data = r.json()[1]
+        food_data = r.json()["1"]
 
         food_cache_dict = dict(
             food_hash=food_hash,
