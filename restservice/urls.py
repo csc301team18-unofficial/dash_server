@@ -18,7 +18,6 @@ from django.urls import path, include
 from django.conf.urls import url
 from restservice import views
 
-
 urlpatterns = [
     url(r'^rest/foodinfo/', views.food_info)
 ]

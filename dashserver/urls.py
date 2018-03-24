@@ -18,5 +18,5 @@ from django.urls import path, include
 from django.conf.urls import url
 
 urlpatterns = [
-    url(r'rest/', include('restservice.urls'))
+    url(r'^', include('restservice.urls'))
 ]
