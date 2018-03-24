@@ -40,7 +40,7 @@ def food_info(request, client_id, food_name):
             food_cache_obj = nh.get_food(food_name)
             food_cache_serializer = FoodCacheSerializer(food_cache_obj)
             return JSONResponse(food_cache_serializer.data)
-        
+
         except RuntimeError:
             # This happens if the Nutritics API call in get_food() fails
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
