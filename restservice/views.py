@@ -43,7 +43,7 @@ def food_info(request, client_id, food_name):
 
         except RuntimeError:
             # This happens if the Nutritics API call in get_food() fails
-            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            print("SOMETHING IN NUTRITICS BROKE")
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

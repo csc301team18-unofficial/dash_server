@@ -4,6 +4,7 @@ from restservice.models import *
 import hashlib
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class MealBuilder:
     """
     Container / utility class that represents a meal that the user is trying to log.
