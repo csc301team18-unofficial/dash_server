@@ -56,7 +56,9 @@ class NutriHandler:
         try:
             food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
         except ObjectDoesNotExist:
-            food_obj = FoodCache.objects.create(self.food_request(food_name))
+            food_cache_dict = self.food_request(food_name)
+            print(food_cache_dict)
+            food_obj = FoodCache.objects.create(food_cache_dict)
             
         return food_obj
 
