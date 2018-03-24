@@ -1,4 +1,4 @@
-NUTRITICS_USER = "dashserver5"
+NUTRITICS_USER = "dashserver6"
 NUTRITICS_PSWD = "csc301!!"
 
 FOOD_BASE_URL = "https://www.nutritics.com/api/v1.1/&food="
