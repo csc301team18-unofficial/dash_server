@@ -34,8 +34,8 @@ def food_info(request, client_id, food_name):
         user_entry = get_or_create_user(client_id)
 
         # a JSON object
-        serialized_food_cache = FoodCacheSerializer.objects
-                        .create(NutriHandler.get_food(food_name).data)
+        serialized_food_cache = FoodCacheSerializer.objects \
+                                .create(NutriHandler.get_food(food_name).data)
         return serialized_food_cache
 
     else:
