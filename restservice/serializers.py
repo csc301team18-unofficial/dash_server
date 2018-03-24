@@ -14,14 +14,13 @@ class FoodCacheSerializer(serializers.Serializer):
         """
         :param validated_data: a dict where each key corresponds to a field in FoodCache
         """
-        return FoodCache.objects.create(dict(
+        return FoodCache.objects.create(
                 food_hash=validated_data["food_hash"],
                 food_name=validated_data["food_name"],
                 kilocalories=validated_data["kilocalories"],
                 fat_grams=validated_data["fat_grams"],
                 carb_grams=validated_data["carb_grams"],
                 protein_grams=validated_data["protein_grams"]
-            )
         )
 
     def update(self, instance, validated_data):
