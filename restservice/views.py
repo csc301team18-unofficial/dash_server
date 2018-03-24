@@ -8,9 +8,9 @@ from rest_framework.parsers import JSONParser
 from rest_framework import status
 from django.core.exceptions import ObjectDoesNotExist
 from restservice.models import *
-from serializers import *
+from restservice.serializers import *
 
-from nutrition import nutrihandler as nh
+from nutrition.nutrihandler import *
 import monsterurl as namegen
 
 
@@ -32,19 +32,21 @@ def food_info(request, client_id, food_name):
     :return:
     """
     if request.method == 'GET':
-        user_entry = get_or_create_user(client_id)
+        get_or_create_user(client_id)
 
-        # a JSON object
-        serialized_food_cache = FoodCacheSerializer.objects \
-                                .create(NutriHandler.get_food(food_name).data)
-        return serialized_food_cache
+        nh = NutriHandler()
+
+        try:
+            food_cache_obj = nh.get_food(food_name)
+            food_cache_serializer = FoodCacheSerializer(food_cache_obj)
+            return JSONResponse(food_cache_serializer.data)
+        
+        except RuntimeError:
+            # This happens if the Nutritics API call in get_food() fails
+            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     else:
-        # TODO: Return a "bad request" error response
-        return JSONResponse(status=status.HTTP_400_BAD_REQUEST)
-
-#@csrf_exempt
-#def water_comms(request, client_id)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 # *********************************
@@ -62,6 +64,7 @@ def get_or_create_user(client_id):
 
     return user_entry
 
+
 def create_new_user(client_id):
     """
     Creates a new user account.
@@ -70,12 +73,12 @@ def create_new_user(client_id):
     """
     # returns a tuple of (new_user, created)
     # and we select just the new_user object
-    new_user = Users.objects.get_or_create(
+    new_user = Users.objects.create(
         user_id=client_id,
         name=namegen.get_monster(),
         serving_size=100,
         streak=0,
         score=0
-    )[0]
+    )
 
     return new_user
