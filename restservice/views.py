@@ -41,9 +41,9 @@ def food_info(request, client_id, food_name):
             food_cache_serializer = FoodCacheSerializer(food_cache_obj)
             return JSONResponse(food_cache_serializer.data)
 
-        except RuntimeError:
+        except RuntimeError as e:
             # This happens if the Nutritics API call in get_food() fails
-            print("SOMETHING IN NUTRITICS BROKE")
+            print(e)
             return HttpResponse(status=status.HTTP_410_GONE)
 
     else:

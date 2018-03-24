@@ -65,7 +65,7 @@ class NutriHandler:
         r = requests.get(build_food_req_string(food_name), auth=(nc.NUTRITICS_USER, nc.NUTRITICS_PSWD))
         if r.status_code != 200:
             # There's been an error with the get request, so the operation fails
-            raise RuntimeError("Nutritics request failed.")
+            raise RuntimeError("Nutritics request failed with status code {}".format(r.status_code))
 
         food_hash = md5_hash_string(food_name)
         food_data = r.json()[1]
