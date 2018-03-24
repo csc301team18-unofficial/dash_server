@@ -17,5 +17,5 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    url(r'rest/', include('restservice.urls'))
+    url(r'^rest/foodinfo/', views.food_info)
 ]
