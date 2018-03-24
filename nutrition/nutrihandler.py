@@ -51,11 +51,12 @@ class NutriHandler:
         :param food_name: The name of the food
         :return: A FoodCacheRecord
         """
+
         try:
             food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
         except ObjectDoesNotExist:
-            food_obj = self.food_request(food_name)
-
+            food_obj = FoodCache.objects.create(self.food_request(food_name))
+            
         return food_obj
 
     def food_request(self, food_name):
@@ -68,7 +69,7 @@ class NutriHandler:
         food_hash = md5_hash_string(food_name)
         food_data = r.json()[1]
 
-        food_obj = FoodCache(
+        food_cache_dict = dict(
             food_hash=food_hash,
             food_name=food_name,
             kilocalories=food_data["energyKcal"]["val"],
@@ -77,9 +78,7 @@ class NutriHandler:
             fat_grams=food_data["fat"]["val"]
         )
 
-        # Save record to table
-        food_obj.save()
-        return food_obj
+        return food_cache_dict
 
 
 def build_food_req_string(food_name):
