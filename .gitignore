@@ -1,0 +1,10 @@
+
+\.env
+
+\.env\.save
+
+\.idea/
+
+dashserver/__pycache__/
+
+restservice/__pycache__/
