@@ -36,7 +36,7 @@ class FoodCacheSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.Serializer):
     user_id = serializers.CharField(max_length=20, read_only=True)
-    name = serializers.CharField(max_length=150, unique=True)
+    name = serializers.CharField(max_length=150)
     serving_size = serializers.IntegerField(default=100)
     streak = serializers.IntegerField()
     score = serializers.IntegerField()
@@ -70,7 +70,7 @@ class UserSerializer(serializers.Serializer):
         instance.save()
 
         return instance
-        
+
 # class UserScoreSerializer(serializers.Serializer):
 #     serialized_score = serializers.IntegerField()
 #     def create(self, validated_data):
