@@ -55,7 +55,7 @@ class NutriHandler:
         try:
             food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
         except ObjectDoesNotExist:
-            food_cache_dict = self.food_request(food_name)
+            food_cache_dict = food_request(food_name)
             food_obj = FoodCache.objects.create(
                 food_hash=food_cache_dict["food_hash"],
                 food_name=food_cache_dict["food_name"],
@@ -67,26 +67,27 @@ class NutriHandler:
             
         return food_obj
 
-    def food_request(self, food_name):
-        # Make request to Nutritics
-        r = requests.get(build_food_req_string(food_name), auth=(nc.NUTRITICS_USER, nc.NUTRITICS_PSWD))
-        if r.status_code != 200:
-            # There's been an error with the get request, so the operation fails
-            raise RuntimeError("Nutritics request failed with status code {}".format(r.status_code))
 
-        food_hash = md5_hash_string(food_name)
-        food_data = r.json()["1"]
+def food_request(food_name):
+    # Make request to Nutritics
+    r = requests.get(build_food_req_string(food_name), auth=(nc.NUTRITICS_USER, nc.NUTRITICS_PSWD))
+    if r.status_code != 200:
+        # There's been an error with the get request, so the operation fails
+        raise RuntimeError("Nutritics request failed with status code {}".format(r.status_code))
 
-        food_cache_dict = dict(
-            food_hash=food_hash,
-            food_name=food_name,
-            kilocalories=food_data["energyKcal"]["val"],
-            protein_grams=food_data["protein"]["val"],
-            carb_grams=food_data["carbohydrate"]["val"],
-            fat_grams=food_data["fat"]["val"]
-        )
+    food_hash = md5_hash_string(food_name)
+    food_data = r.json()["1"]
 
-        return food_cache_dict
+    food_cache_dict = dict(
+        food_hash=food_hash,
+        food_name=food_name,
+        kilocalories=food_data["energyKcal"]["val"],
+        protein_grams=food_data["protein"]["val"],
+        carb_grams=food_data["carbohydrate"]["val"],
+        fat_grams=food_data["fat"]["val"]
+    )
+
+    return food_cache_dict
 
 
 def build_food_req_string(food_name):

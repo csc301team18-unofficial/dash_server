@@ -20,4 +20,5 @@ from restservice import views
 
 urlpatterns = [
     url(r'^foodinfo/client_id=(?P<client_id>.+?)&food_name=(?P<food_name>.+?)/$', views.food_info)
+    # MORE URLS GO HERE
 ]

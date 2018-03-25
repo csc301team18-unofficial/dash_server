@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'restservice',
-    'webapp',
+    'webinterface',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
