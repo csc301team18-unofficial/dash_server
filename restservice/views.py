@@ -40,10 +40,30 @@ def food_info(request, client_id, food_name):
             # This happens if the Nutritics API call in get_food() fails
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return JSONResponse(food_cache_serializer.data)
+# @csrf_exempt
+# def log_food(request, client_id, food_name, serving_size):
+#     """
+#     Handles GET FoodInfo requests. Returns a JSON representation of the Food Class,
+#     using NutriHandler.py
+#     :param request: The request that's received
+#     :param client_id: The client's unique ID
+#     :param food_name:
+#     :return:
+#     """
+#
+#     if request.method == 'POST':
+#         user_entry = get_or_create_user(client_id)
+#         # TO DO:
+#         # - log_food == post request (client, food, serving size(optional))
+#         # - make row with food_name and nutritics response in DailyFood table
+#         # - send back HTTP200 response (good) or HTTP500 (bad)
+#         # write new DailyFood deserializer (json to models)
+#
+#     else:
+#         return JSONResponse(status=status.HTTP_400_BAD_REQUEST)
 
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+#@csrf_exempt
+#def water_comms(request, client_id)
 
 #@csrf_exempt
 #def water(request, client_id,)
