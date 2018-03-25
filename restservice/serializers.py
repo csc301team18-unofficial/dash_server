@@ -53,7 +53,7 @@ class UserScoreSerializer(serializers.Serializer):
         :param validated_data: an int corresponding to a User instance's score
         :return: JSON object containing the score
         """
-        data = {"points":validated_data}
+        data = {"points": validated_data}
         json_data = json.dumps(data)
 
         return json_data

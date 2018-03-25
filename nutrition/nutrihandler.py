@@ -75,6 +75,9 @@ def food_request(food_name):
         # There's been an error with the get request, so the operation fails
         raise RuntimeError("Nutritics request failed with status code {}".format(r.status_code))
 
+    if r.status_code == 404:
+        raise Exception("Couldn't find the thing in Nutritics")
+
     food_hash = md5_hash_string(food_name)
     food_data = r.json()["1"]
 
