@@ -101,10 +101,10 @@ def build_food_req_string(food_name):
     return reqstr
 
 
-def md5_hash_string(str):
+def md5_hash_string(string):
     """
     Returns a Hex representation of running an MD5 hash on the given string.
-    :param str: String to hash
+    :param string: String to hash
     :return: Hex hash string
     """
-    return hashlib.md5(str.encode()).hexdigest()
+    return hashlib.md5(string.encode()).hexdigest()
