@@ -70,7 +70,7 @@ class UserSerializer(serializers.Serializer):
         instance.save()
 
         return instance
-        
+
 # class UserScoreSerializer(serializers.Serializer):
 #     serialized_score = serializers.IntegerField()
 #     def create(self, validated_data):
