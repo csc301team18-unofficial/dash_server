@@ -99,6 +99,42 @@ def get_points(request, client_id):
     """
     # if user is not in database yet, add user to database
     if request.method == 'GET':
+        user_obj = get_or_create_user(client_id)
+
+        # parse JSON object to return a JSON object with just the "points"
+        try:
+
+            # gets serialized user from database
+            user_serializer = UserSerializer(user_obj)
+            # loads json string into dict
+            data_dict = json.loads(user_serializer.data)
+            # create new dict with just points data
+            # data = {"points" : data_dict["points"]}
+            data = {"TEST PASSED"}
+            # create JSON object from the points variable, with only 1 field
+            json_data = json.dumps(data)
+
+            return JSONResponse(json_data, status=status.HTTP_200_OK)
+
+        except RuntimeError:
+            # should never reach this block because users that don't exist
+            # are added to the database
+            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_ranking(request, client_id):
+    """
+    Handles GET ranking requests. Returns a JSON representation of the User Class.
+    :param request: HTTP request
+    :param client_id: Client's unique ID
+    :return: HttpResponse with status 400 or 500 if request was not sucessful,
+    and a JSONResponse containing an int otherwise
+    """
+    pass
+    # if user is not in database yet, add user to database
+    if request.method == 'GET':
         user = get_or_create_user(client_id)
 
         try:
@@ -111,6 +147,7 @@ def get_points(request, client_id):
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
 
 
 # *********************************
