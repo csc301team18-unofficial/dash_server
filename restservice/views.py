@@ -66,7 +66,8 @@ def get_points(request, client_id):
             # loads json string into dict
             data_dict = json.loads(user_serializer.data)
             # create new dict with just points data
-            data = {"points" : data_dict["points"]}
+            # data = {"points" : data_dict["points"]}
+            data = {"TEST PASSED"}
             # create JSON object from the points variable, with only 1 field
             json_data = json.dumps(data)
 
