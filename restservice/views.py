@@ -28,7 +28,7 @@ def food_info(request, client_id, food_name):
     using NutriHandler.py
     :param request: The request that's received
     :param client_id: The client's unique ID
-    :param food_name:
+    :param food_name: The name of the food the client is searching for
     :return:
     """
     if request.method == 'GET':
@@ -39,12 +39,12 @@ def food_info(request, client_id, food_name):
         try:
             food_cache_obj = nh.get_food(food_name)
             food_cache_serializer = FoodCacheSerializer(food_cache_obj)
-            return JSONResponse(food_cache_serializer.data)
 
-        except RuntimeError as e:
+        except RuntimeError:
             # This happens if the Nutritics API call in get_food() fails
-            print(e)
-            return HttpResponse(status=status.HTTP_410_GONE)
+            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return JSONResponse(food_cache_serializer.data)
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -68,6 +68,8 @@ def get_or_create_user(client_id):
 
 def create_new_user(client_id):
     """
+    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
+    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
     Creates a new user account.
     :param client_id: Unique client ID sent by DialogFlow. Client ID's are tied to Google accounts.
     :return:

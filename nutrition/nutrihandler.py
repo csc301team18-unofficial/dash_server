@@ -48,7 +48,6 @@ class NutriHandler:
     def get_food(self, food_name):
         """
         Makes a request to get info for a certain food.
-        TODO: Can potentially throw a RuntimeException, handle in the parent call
         :param food_name: The name of the food
         :return: A FoodCacheRecord
         """
