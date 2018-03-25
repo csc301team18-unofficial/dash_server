@@ -34,29 +34,26 @@ class FoodCacheSerializer(serializers.Serializer):
         return instance
 
 
-# class UserSerializer(serializers.Serializer):
-#     user_id = serializers.CharField(max_length=20, read_only=True)
-#     name = serializers.CharField(max_length=150, unique=True)
-#     serving_size = serializers.IntegerField(default=100)
-#     streak = serializers.IntegerField()
-#     score = serializers.IntegerField()
-#     timezone = serializers.CharField(max_length=32, choices=TIMEZONES, default='EST')
-#
-#     def create(self, validated_data):
-#         """
-#         :param validated_data: a dict where each key corresponds to a field in Users
-#         """
+class UserSerializer(serializers.Serializer):
+    user_id = serializers.CharField(max_length=20, read_only=True)
+    name = serializers.CharField(max_length=150, unique=True)
+    serving_size = serializers.IntegerField(default=100)
+    streak = serializers.IntegerField()
+    score = serializers.IntegerField()
+    timezone = serializers.CharField(max_length=32, choices=TIMEZONES, default='EST')
 
-class UserScoreSerializer(serializers.Serializer):
     def create(self, validated_data):
         """
-        :param validated_data: an int corresponding to a User instance's score
-        :return: JSON object containing the score
+        :param validated_data: a dict where each key corresponds to a field in Users
         """
-        data = {"points":validated_data}
-        json_data = json.dumps(data)
-
-        return json_data
+        return User.objects.create(
+            user_id = validated_data["user_id"],
+            name = validated_data["name"],
+            serving_size = validated_data["serving_size"],
+            streak = validated_data["streak"],
+            score = validated_data["score"],
+            timezone = validated_data["timezone"]
+        )
 
     def update(self, instance, validated_data):
         """
@@ -64,6 +61,34 @@ class UserScoreSerializer(serializers.Serializer):
         :param validated_data: an int corresponding to a User instance's new score
         :return: updated instance with the new code
         """
-        instance.score = validated_data
+        instance.user_id = validated_data.get('user_id', instance.name)
+        instance.name = validated_data.get('name', instance.name)
+        instance.serving_size = validated_data.get('serving_size', instance.name)
+        instance.streak = validated_data.get('streak', instance.name)
+        instance.score = validated_data.get('score', instance.name)
+        instance.timezone = validated_data.get('timezone', instance.name)
         instance.save()
+
         return instance
+        
+# class UserScoreSerializer(serializers.Serializer):
+#     serialized_score = serializers.IntegerField()
+#     def create(self, validated_data):
+#         """
+#         :param validated_data: an int corresponding to a User instance's score
+#         :return: JSON object containing the score
+#         """
+#         data = {"points":validated_data}
+#         json_data = json.dumps(data)
+#
+#         return json_data
+#
+#     def update(self, instance, validated_data):
+#         """
+#         :param instance: a User instance to update
+#         :param validated_data: an int corresponding to a User instance's new score
+#         :return: updated instance with the new code
+#         """
+#         instance.score = validated_data
+#         instance.save()
+#         return instance
