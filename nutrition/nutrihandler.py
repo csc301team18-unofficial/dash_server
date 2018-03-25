@@ -72,14 +72,12 @@ def food_request(food_name):
     # Make request to Nutritics
     r = requests.get(build_food_req_string(food_name), auth=(nc.NUTRITICS_USER, nc.NUTRITICS_PSWD))
 
-    print("DEBUG MESSAGE: NUTRITICS REQUEST RETURNS {}".format(r.status_code))
-    
-    if r.status_code != 200:
-        # There's been an error with the get request, so the operation fails
-        raise RuntimeError("Nutritics request failed with status code {}".format(r.status_code))
+    response = r.json()
+    if response["status"] != 200:
+        raise RuntimeError("Nutritics query failed")
 
     food_hash = md5_hash_string(food_name)
-    food_data = r.json()["1"]
+    food_data = response["1"]
 
     food_cache_dict = dict(
         food_hash=food_hash,
