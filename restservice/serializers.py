@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from restservice.models import *
+import json
 
 
 class FoodCacheSerializer(serializers.Serializer):
@@ -29,5 +30,40 @@ class FoodCacheSerializer(serializers.Serializer):
         instance.fat_grams = validated_data.get('fat_grams', instance.name)
         instance.carb_grams = validated_data.get('carb_grams', instance.name)
         instance.protein_grames = validated_data.get('protein_grams', instance.name)
+        instance.save()
+        return instance
+
+
+# class UserSerializer(serializers.Serializer):
+#     user_id = serializers.CharField(max_length=20, read_only=True)
+#     name = serializers.CharField(max_length=150, unique=True)
+#     serving_size = serializers.IntegerField(default=100)
+#     streak = serializers.IntegerField()
+#     score = serializers.IntegerField()
+#     timezone = serializers.CharField(max_length=32, choices=TIMEZONES, default='EST')
+#
+#     def create(self, validated_data):
+#         """
+#         :param validated_data: a dict where each key corresponds to a field in Users
+#         """
+
+class UserScoreSerializer(serializers.Serializer):
+    def create(self, validated_data):
+        """
+        :param validated_data: an int corresponding to a User instance's score
+        :return: JSON object containing the score
+        """
+        data = {"points":validated_data}
+        json_data = json.dumps(data)
+
+        return json_data
+
+    def update(self, instance, validated_data):
+        """
+        :param instance: a User instance to update
+        :param validated_data: an int corresponding to a User instance's new score
+        :return: updated instance with the new code
+        """
+        instance.score = validated_data
         instance.save()
         return instance
