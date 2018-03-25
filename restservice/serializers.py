@@ -36,17 +36,17 @@ class FoodCacheSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.Serializer):
     user_id = serializers.CharField(max_length=20, read_only=True)
-    name = serializers.CharField(max_length=150, unique=True)
+    name = serializers.CharField(max_length=150)
     serving_size = serializers.IntegerField(default=100)
     streak = serializers.IntegerField()
     score = serializers.IntegerField()
-    timezone = serializers.CharField(max_length=32, choices=TIMEZONES, default='EST')
+    timezone = serializers.CharField(max_length=32)
 
     def create(self, validated_data):
         """
         :param validated_data: a dict where each key corresponds to a field in Users
         """
-        return User.objects.create(
+        return Users.objects.create(
             user_id = validated_data["user_id"],
             name = validated_data["name"],
             serving_size = validated_data["serving_size"],
