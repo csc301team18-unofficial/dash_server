@@ -17,7 +17,50 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
-@csrf_exempt
+def logFood(request, client_id):
+    if request.method == 'GET':
+        get_or_create_user(client_id)
+
+        """
+        - Get food info using get_food()
+        - Get serving size to scale values by (either from request args or from user)
+        - Scale food macro values by serving size
+        - Add a new FoodEntry, and link to a new DailyFood Entry
+        - Add points if the user is still within their macro goals
+        - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
+        """
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+def logWater(request, client_id):
+    if request.method == 'POST':
+        pass
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+def waterGoals(request, client_id):
+    if request.method == 'GET':
+        # TODO: Return how much water the user has had in the last 24 hours
+        pass
+    elif request.method == 'POST':
+        # TODO: Log some water
+        pass
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+def macros(request, client_id):
+    if request.method == 'GET':
+        # TODO: Return what the user's current macros are
+        pass
+    elif request.method == 'POST':
+        # TODO: Update the user's current macros
+        pass
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
 def food_info(request, client_id, food_name):
     """
     Handles GET FoodInfo requests. Returns a JSON representation of the Food Class,
@@ -96,7 +139,7 @@ def get_ranking(request, client_id):
 
         try:
             points_serializer = UserScoreSerializer(user.score)
-            # TO DO: create JSON object from the points variable (only 1 field)
+            # TODO: create JSON object from the points variable (only 1 field)
             return JSONResponse(points_serializer.data, status=status.HTTP_200_OK)
         except RuntimeError:
             # should never reach this block because users that don't exist
@@ -106,39 +149,15 @@ def get_ranking(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-# @csrf_exempt
-# def log_food(request, client_id, food_name, serving_size):
-#     """
-#     Handles GET FoodInfo requests. Returns a JSON representation of the Food Class,
-#     using NutriHandler.py
-#     :param request: The request that's received
-#     :param client_id: The client's unique ID
-#     :param food_name:
-#     :return:
-#     """
-#
-#     if request.method == 'POST':
-#         user_entry = get_or_create_user(client_id)
-#         # TO DO:
-#         # - log_food == post request (client, food, serving size(optional))
-#         # - make row with food_name and nutritics response in DailyFood table
-#         # - send back HTTP200 response (good) or HTTP500 (bad)
-#         # write new DailyFood deserializer (json to models)
-#
-#     else:
-#         return JSONResponse(status=status.HTTP_400_BAD_REQUEST)
-
-#@csrf_exempt
-#def water_comms(request, client_id)
-
-#@csrf_exempt
-#def water(request, client_id,)
 
 # *********************************
 #   Helper functions
 # *********************************
+
 def get_or_create_user(client_id):
     """
+    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
+    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
     Checks if the client already has a registered account, or if one needs to be made.
     Gets the account if it already exists, or makes a new one if it doesn't.
     """
@@ -152,8 +171,6 @@ def get_or_create_user(client_id):
 
 def create_new_user(client_id):
     """
-    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
-    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
     Creates a new user account.
     :param client_id: Unique client ID sent by DialogFlow. Client ID's are tied to Google accounts.
     :return:
