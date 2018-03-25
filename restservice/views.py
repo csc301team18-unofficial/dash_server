@@ -18,6 +18,14 @@ class JSONResponse(HttpResponse):
 
 
 @csrf_exempt
+def logFood(request, client_id):
+    if request.method == 'GET':
+        get_or_create_user(client_id)
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+
 def food_info(request, client_id, food_name):
     """
     Handles GET FoodInfo requests. Returns a JSON representation of the Food Class,
@@ -72,11 +80,14 @@ def food_info(request, client_id, food_name):
 #@csrf_exempt
 #def water(request, client_id,)
 
+
 # *********************************
 #   Helper functions
 # *********************************
 def get_or_create_user(client_id):
     """
+    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
+    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
     Checks if the client already has a registered account, or if one needs to be made.
     Gets the account if it already exists, or makes a new one if it doesn't.
     """
@@ -90,8 +101,6 @@ def get_or_create_user(client_id):
 
 def create_new_user(client_id):
     """
-    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
-    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
     Creates a new user account.
     :param client_id: Unique client ID sent by DialogFlow. Client ID's are tied to Google accounts.
     :return:
