@@ -35,10 +35,14 @@ def food_info(request, client_id, food_name):
         try:
             food_cache_obj = nh.get_food(food_name)
             food_cache_serializer = FoodCacheSerializer(food_cache_obj)
+            return JSONResponse(food_cache_serializer.data, status=status.HTTP_200_OK)
 
         except RuntimeError:
             # This happens if the Nutritics API call in get_food() fails
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 # @csrf_exempt
 # def log_food(request, client_id, food_name, serving_size):
