@@ -17,8 +17,8 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
-def logFood(request, client_id):
-    if request.method == 'GET':
+def log_food(request, client_id):
+    if request.method == 'POST':
         get_or_create_user(client_id)
 
         """
@@ -105,48 +105,14 @@ def get_points(request, client_id):
         # parse JSON object to return a JSON object with just the "points"
         # gets serialized user from database
         user_serializer = UserSerializer(user_obj)
-        # loads json string into dict
-
-        # TESTED CODE:
-        # data_dict = json.loads(user_serializer.data)
 
         # create new dict with just points data
-
-        # TODO: This needs cleaning
         data = {"points" : user_serializer.data["score"]}
-        # data = {"TEST PASSED": 0}
-        # create JSON object from the points variable, with only 1 field
-        json_data = json.dumps(data)
+
         return JSONResponse(data, status=status.HTTP_200_OK)
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
-
-
-# TODO: Are we even implementing this? I thought we weren't doing get ranking because it's too much computation
-# def get_ranking(request, client_id):
-#     """
-#     Handles GET ranking requests. Returns a JSON representation of the User Class.
-#     :param request: HTTP request
-#     :param client_id: Client's unique ID
-#     :return: HttpResponse with status 400 or 500 if request was not sucessful,
-#     and a JSONResponse containing an int otherwise
-#     """
-#     pass
-#     # if user is not in database yet, add user to database
-#     if request.method == 'GET':
-#         user = get_or_create_user(client_id)
-#
-#         try:
-#             points_serializer = UserSerializer(user)
-#             # TODO: create JSON object from the points variable (only 1 field)
-#             return JSONResponse(points_serializer.data, status=status.HTTP_200_OK)
-#         except RuntimeError:
-#             # should never reach this block because users that don't exist
-#             # are added to the database
-#             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-#     else:
-#         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 
