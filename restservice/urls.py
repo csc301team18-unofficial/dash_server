@@ -18,6 +18,8 @@ from restservice import views
 
 urlpatterns = [
     url(r'^foodinfo/(?P<client_id>.+?)/food_name=(?P<food_name>.+?)/$', views.food_info),
-    url(r'^points/(?P<client_id>.+?)/$', views.get_points)
+    url(r'^points/(?P<client_id>.+?)/$', views.get_points),
+    url(r'^watergoals/(?P<client_id>.+?)/.*?$', views.water_goals),
+    url(r'^macros/(?P<client_id>.+?)/.*?$', views.macros)
     # MORE URLS GO HERE
 ]

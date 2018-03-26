@@ -32,14 +32,15 @@ def logFood(request, client_id):
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
-def logWater(request, client_id):
+
+def log_water(request, client_id):
     if request.method == 'POST':
         pass
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def waterGoals(request, client_id):
+def water_goals(request, client_id):
     if request.method == 'GET':
         # TODO: Return how much water the user has had in the last 24 hours
         pass
@@ -102,58 +103,54 @@ def get_points(request, client_id):
         user_obj = get_or_create_user(client_id)
 
         # parse JSON object to return a JSON object with just the "points"
-        try:
+        # gets serialized user from database
+        user_serializer = UserSerializer(user_obj)
+        # loads json string into dict
+        data_dict = json.loads(user_serializer.data)
+        # create new dict with just points data
 
-            # gets serialized user from database
-            user_serializer = UserSerializer(user_obj)
-            # loads json string into dict
-            data_dict = json.loads(user_serializer.data)
-            # create new dict with just points data
-            # data = {"points" : data_dict["points"]}
-            data = {"TEST PASSED":0}
-            # create JSON object from the points variable, with only 1 field
-            json_data = json.dumps(data)
+        # TODO: This needs cleaning
+        # data = {"points" : data_dict["points"]}
+        data = {"TEST PASSED": 0}
+        # create JSON object from the points variable, with only 1 field
+        json_data = json.dumps(data)
 
-            return JSONResponse(json_data, status=status.HTTP_200_OK)
+        return JSONResponse(json_data, status=status.HTTP_200_OK)
 
-        except RuntimeError:
-            # should never reach this block because users that don't exist
-            # are added to the database
-            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_ranking(request, client_id):
-    """
-    Handles GET ranking requests. Returns a JSON representation of the User Class.
-    :param request: HTTP request
-    :param client_id: Client's unique ID
-    :return: HttpResponse with status 400 or 500 if request was not sucessful,
-    and a JSONResponse containing an int otherwise
-    """
-    pass
-    # if user is not in database yet, add user to database
-    if request.method == 'GET':
-        user = get_or_create_user(client_id)
-
-        try:
-            points_serializer = UserScoreSerializer(user.score)
-            # TODO: create JSON object from the points variable (only 1 field)
-            return JSONResponse(points_serializer.data, status=status.HTTP_200_OK)
-        except RuntimeError:
-            # should never reach this block because users that don't exist
-            # are added to the database
-            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+# TODO: Are we even implementing this? I thought we weren't doing get ranking because it's too much computation
+# def get_ranking(request, client_id):
+#     """
+#     Handles GET ranking requests. Returns a JSON representation of the User Class.
+#     :param request: HTTP request
+#     :param client_id: Client's unique ID
+#     :return: HttpResponse with status 400 or 500 if request was not sucessful,
+#     and a JSONResponse containing an int otherwise
+#     """
+#     pass
+#     # if user is not in database yet, add user to database
+#     if request.method == 'GET':
+#         user = get_or_create_user(client_id)
+#
+#         try:
+#             points_serializer = UserSerializer(user)
+#             # TODO: create JSON object from the points variable (only 1 field)
+#             return JSONResponse(points_serializer.data, status=status.HTTP_200_OK)
+#         except RuntimeError:
+#             # should never reach this block because users that don't exist
+#             # are added to the database
+#             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#     else:
+#         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 
 # *********************************
 #   Helper functions
 # *********************************
-
 def get_or_create_user(client_id):
     """
     TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
