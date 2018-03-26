@@ -36,8 +36,22 @@ def get_post_water(request, client_id):
     """
     Log water intake.
     """
-    if request.method == 'POST':
+    if request.method == 'GET':
+        user_obj = get_or_create_user(client_id)
+
+        # parse JSON object to return a JSON object with just the "points"
+        # gets serialized user from database
+        user_serializer = UserSerializer(user_obj)
+
+        # create new dict with just points data
+        data = {"water_ml" : user_serializer.data["score"]}
+
+        return JSONResponse(data, status=status.HTTP_200_OK)
+
+    elif request.method == 'POST':
         pass
+
+
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 

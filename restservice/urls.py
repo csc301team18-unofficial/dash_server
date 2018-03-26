@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^foodinfo/(?P<client_id>.+?)/food_name=(?P<food_name>.+?)/$', views.get_food_info),
     url(r'^points/(?P<client_id>.+?)/$', views.get_points), # GET points
     url(r'^watergoals/(?P<client_id>.+?)/.*?$', views.get_post_water_goals), # GET water goals
-    url(r'^macros/(?P<client_id>.+?)/.*?$', views.get_post_macros) # GET current macros
+    url(r'^macros/(?P<client_id>.+?)/.*?$', views.get_post_macros), # GET current macros
     url(r'^macros/(?P<client_id>.+?)/.*?$', views.get_post_water) # GET current water
 
     # POST Request URLs
