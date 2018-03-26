@@ -117,8 +117,7 @@ def get_points(request, client_id):
         # data = {"TEST PASSED": 0}
         # create JSON object from the points variable, with only 1 field
         json_data = json.dumps(data)
-
-        return JSONResponse(json_data, status=status.HTTP_200_OK)
+        return JSONResponse(data, status=status.HTTP_200_OK)
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
