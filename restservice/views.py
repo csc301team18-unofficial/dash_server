@@ -106,7 +106,10 @@ def get_points(request, client_id):
         # gets serialized user from database
         user_serializer = UserSerializer(user_obj)
         # loads json string into dict
-        data_dict = json.loads(user_serializer.data)
+
+        # TESTED CODE:
+        # data_dict = json.loads(user_serializer.data)
+
         # create new dict with just points data
 
         # TODO: This needs cleaning
