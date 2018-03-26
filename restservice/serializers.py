@@ -71,12 +71,12 @@ class UserSerializer(serializers.Serializer):
 
         return instance
 
-
-class GoalsSerializer(serializers.Serializer):
-    goal_id = serializers.CharField(max_length=20, primary_key=True)
-    user_id = serializers.CharField()
-    water_ml = serializers.IntegerField()
-    protein_grams = serializers.IntegerField()
-    fat_grams = serializers.IntegerField()
-    carb_grams = serializers.IntegerField()
-    kilocalories = serializers.IntegerField()
+# 
+# class GoalsSerializer(serializers.Serializer):
+#     goal_id = serializers.CharField(max_length=32)
+#     user_id = serializers.CharField()
+#     water_ml = serializers.IntegerField()
+#     protein_grams = serializers.IntegerField()
+#     fat_grams = serializers.IntegerField()
+#     carb_grams = serializers.IntegerField()
+#     kilocalories = serializers.IntegerField()
