@@ -16,8 +16,7 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
-
-def log_food(request, client_id):
+def post_food(request, client_id):
     if request.method == 'POST':
         get_or_create_user(client_id)
 
@@ -33,14 +32,17 @@ def log_food(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def log_water(request, client_id):
+def get_post_water(request, client_id):
+    """
+    Log water intake.
+    """
     if request.method == 'POST':
         pass
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def water_goals(request, client_id):
+def get_post_water_goals(request, client_id):
     if request.method == 'GET':
         # TODO: Return how much water the user has had in the last 24 hours
         pass
@@ -51,7 +53,7 @@ def water_goals(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def macros(request, client_id):
+def get_post_macros(request, client_id):
     if request.method == 'GET':
         # TODO: Return what the user's current macros are
         pass
@@ -61,8 +63,31 @@ def macros(request, client_id):
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
+def get_points(request, client_id):
+    """
+    Handles GET points requests. Returns a JSON representation of the user's score.
+    :param request: HTTP request
+    :param client_id: Client's unique ID
+    :return: HttpResponse with status 400 or 500 if request was not sucessful,
+    and a JSONResponse containing an int otherwise
+    """
+    # if user is not in database yet, add user to database
+    if request.method == 'GET':
+        user_obj = get_or_create_user(client_id)
 
-def food_info(request, client_id, food_name):
+        # parse JSON object to return a JSON object with just the "points"
+        # gets serialized user from database
+        user_serializer = UserSerializer(user_obj)
+
+        # create new dict with just points data
+        data = {"points" : user_serializer.data["score"]}
+
+        return JSONResponse(data, status=status.HTTP_200_OK)
+
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+def get_food_info(request, client_id, food_name):
     """
     Handles GET FoodInfo requests. Returns a JSON representation of the Food Class,
     using NutriHandler.py
@@ -90,29 +115,7 @@ def food_info(request, client_id, food_name):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_points(request, client_id):
-    """
-    Handles GET points requests. Returns a JSON representation of the user's score.
-    :param request: HTTP request
-    :param client_id: Client's unique ID
-    :return: HttpResponse with status 400 or 500 if request was not sucessful,
-    and a JSONResponse containing an int otherwise
-    """
-    # if user is not in database yet, add user to database
-    if request.method == 'GET':
-        user_obj = get_or_create_user(client_id)
 
-        # parse JSON object to return a JSON object with just the "points"
-        # gets serialized user from database
-        user_serializer = UserSerializer(user_obj)
-
-        # create new dict with just points data
-        data = {"points" : user_serializer.data["score"]}
-
-        return JSONResponse(data, status=status.HTTP_200_OK)
-
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 
