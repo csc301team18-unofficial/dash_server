@@ -1,5 +1,5 @@
 import requests
-from nutrition import nutriconstants as nc
+from utility import utilconstants as nc
 from restservice.models import *
 import hashlib
 from django.core.exceptions import ObjectDoesNotExist

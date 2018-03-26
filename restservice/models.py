@@ -18,7 +18,7 @@ class Users(models.Model):
 
 
 class Goals(models.Model):
-    goal_id = models.CharField(max_length=20, primary_key=True)
+    goal_id = models.CharField(max_length=32, primary_key=True)
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     water_ml = models.IntegerField()
     protein_grams = models.IntegerField()

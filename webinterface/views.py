@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from restservice.serializers import *
 
-from nutrition.nutrihandler import *
+from utility.utils import *
 
 
 def serve_client(request, client_name):

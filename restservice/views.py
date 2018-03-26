@@ -1,12 +1,14 @@
 from django.shortcuts import render
 
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from restservice.serializers import *
 
-from nutrition.nutrihandler import *
+from rest_framework.parsers import JSONParser
+
+from utility.utils import NutriHandler, md5_hash_string
 import monsterurl as namegen
 
 
@@ -18,7 +20,7 @@ class JSONResponse(HttpResponse):
 
 def post_food(request, client_id):
     if request.method == 'POST':
-        get_or_create_user(client_id)
+        get_or_create_user_and_goals(client_id)
 
         """
         - Get food info using get_food()
@@ -37,7 +39,7 @@ def get_post_water(request, client_id):
     Log water intake.
     """
     if request.method == 'GET':
-        user_obj = get_or_create_user(client_id)
+        user_obj = get_or_create_user_and_goals(client_id)
 
         # parse JSON object to return a JSON object with just the "points"
         # gets serialized user from database
@@ -56,12 +58,20 @@ def get_post_water(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_post_water_goals(request, client_id):
+# TODO: This is a test function by Dash, don't delete this!
+def goals(request, client_id):
+    print(JSONParser().parse(request))
+    return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+def water_goals(request, client_id):
     if request.method == 'GET':
-        # TODO: Return how much water the user has had in the last 24 hours
+        # TODO: Return what the user's current goal for daily water consumption is
+        user = get_or_create_user_and_goals(client_id)
+
         pass
     elif request.method == 'POST':
-        # TODO: Log some water
+        # TODO: Update the user's goal for daily water consumption
         pass
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -72,10 +82,11 @@ def get_post_macros(request, client_id):
         # TODO: Return what the user's current macros are
         pass
     elif request.method == 'POST':
-        # TODO: Update the user's current macros
+        # TODO: Update the user's macros
         pass
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
 
 def get_points(request, client_id):
     """
@@ -87,7 +98,7 @@ def get_points(request, client_id):
     """
     # if user is not in database yet, add user to database
     if request.method == 'GET':
-        user_obj = get_or_create_user(client_id)
+        user_obj = get_or_create_user_and_goals(client_id)[0]
 
         # parse JSON object to return a JSON object with just the "points"
         # gets serialized user from database
@@ -101,10 +112,10 @@ def get_points(request, client_id):
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
+
 def get_food_info(request, client_id, food_name):
     """
-    Handles GET FoodInfo requests. Returns a JSON representation of the Food Class,
-    using NutriHandler.py
+    Handles GET FoodInfo requests. Returns a JSON representation of the FoodCache, using utils.py
     :param request: HTTP request
     :param client_id: The client's unique ID
     :param food_name: The name of the food the client is searching for
@@ -112,7 +123,7 @@ def get_food_info(request, client_id, food_name):
     """
     # if user is not in database yet, add user to database
     if request.method == 'GET':
-        get_or_create_user(client_id)
+        get_or_create_user_and_goals(client_id)
 
         nh = NutriHandler()
 
@@ -129,14 +140,10 @@ def get_food_info(request, client_id, food_name):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
-
 # *********************************
 #   Helper functions
 # *********************************
-def get_or_create_user(client_id):
+def get_or_create_user_and_goals(client_id):
     """
     TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
     TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
@@ -145,10 +152,11 @@ def get_or_create_user(client_id):
     """
     try:
         user_entry = Users.objects.get(user_id=client_id)
+        user_goals = Goals.objects.get(user_id=client_id)
     except ObjectDoesNotExist:
-        user_entry = create_new_user(client_id)
+        user_entry, user_goals = create_new_user(client_id)
 
-    return user_entry
+    return user_entry, user_goals
 
 
 def create_new_user(client_id):
@@ -157,8 +165,6 @@ def create_new_user(client_id):
     :param client_id: Unique client ID sent by DialogFlow. Client ID's are tied to Google accounts.
     :return:
     """
-    # returns a tuple of (new_user, created)
-    # and we select just the new_user object
     new_user = Users.objects.create(
         user_id=client_id,
         name=namegen.get_monster(),
@@ -167,4 +173,14 @@ def create_new_user(client_id):
         score=0
     )
 
-    return new_user
+    new_user_goals = Goals.objects.create(
+        goal_id=md5_hash_string(client_id),
+        user_id=client_id,
+        water_ml=3500,
+        protein_grams=50,
+        fat_grams=70,
+        carb_grams=310,
+        kilocalories=2070
+    )
+
+    return new_user, new_user_goals
