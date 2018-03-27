@@ -4,6 +4,9 @@ from restservice.models import *
 import hashlib
 from django.core.exceptions import ObjectDoesNotExist
 
+"""
+File for general utility functions and classes.
+"""
 
 class MealBuilder:
     """
@@ -97,3 +100,7 @@ def md5_hash_string(string):
     :return: Hex hash string
     """
     return hashlib.md5(string.encode()).hexdigest()
+
+
+def calories_from_macros(carb, fat, protein):
+    return (fat*9) + ((carb+protein)*4)

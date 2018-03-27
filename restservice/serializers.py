@@ -2,6 +2,7 @@ from rest_framework import serializers
 from restservice.models import *
 import json
 from utility import utilconstants
+from utility import utils
 
 
 class FoodCacheSerializer(serializers.Serializer):
@@ -89,7 +90,7 @@ class GoalsSerializer(serializers.Serializer):
         fat_grams = validated_data["fat_grams"]
         protein_grams = validated_data["protein_grams"]
         carb_grams = validated_data["carb_grams"]
-        kilocalories = (fat_grams * 9) + (4 * (protein_grams + carb_grams))
+        kilocalories = utils.calories_from_macros(carb_grams, fat_grams, protein_grams)
 
         return Users.objects.create(
             goal_id=validated_data["goal_id"],
@@ -112,7 +113,12 @@ class GoalsSerializer(serializers.Serializer):
             except KeyError:
                 print("The value for {} was not specified, so it was not updated".format(goal_param))
 
-        instance.kilocalories = ((instance.carb_grams + instance.protein_grams) * 4) + (instance.fat_grams * 9)
+        instance.kilocalories = utils.calories_from_macros(
+            instance.carb_grams,
+            instance.fat_grams,
+            instance.protein_grams
+        )
+
         instance.save()
 
         return instance
