@@ -75,11 +75,8 @@ def goals(request, client_id):
         print(goal_data)
 
         goals_serializer = GoalsSerializer(user_goals, data=goal_data)
-        if goals_serializer.is_valid():
-            goals_serializer.save()
-            return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
-
-        return JSONResponse(goals_serializer.errors, status=status.HTTP_200_OK)
+        goals_serializer.save()
+        return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
