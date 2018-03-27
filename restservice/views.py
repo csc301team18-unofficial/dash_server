@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.renderers import JSONRenderer
 from rest_framework import status
 from restservice.serializers import *
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.parsers import JSONParser
 
@@ -59,6 +60,7 @@ def get_post_water(request, client_id):
 
 
 # TODO: This is a test function by Dash, don't delete this!
+@csrf_exempt
 def goals(request, client_id):
     if request.method == 'POST':
         goal_data = JSONParser().parse(request)
