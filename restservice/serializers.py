@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from restservice.models import *
 import json
+from utility import utilconstants
 
 
 class FoodCacheSerializer(serializers.Serializer):
@@ -86,7 +87,7 @@ class GoalsSerializer(serializers.Serializer):
         :param validated_data: a dict where each key corresponds to a field in Users
         """
         # TODO: Remove print statement in production
-        print("GOAL OBJECT CREATED BY SERIALIZER, THIS SHOULDN'T HAPPEN")
+        print("GOAL OBJECT CREATED BY SERIALIZER, THIS SHOULDN'T HAPPEN, PLS FIX")
 
         fat_grams = validated_data["fat_grams"]
         protein_grams = validated_data["protein_grams"]
@@ -104,11 +105,21 @@ class GoalsSerializer(serializers.Serializer):
         )
 
     def update(self, instance, validated_data):
-        # TODO: Check if this works
-        instance.water_ml = validated_data.get('water_ml', instance.water_ml)
-        instance.carb_grams = validated_data.get('carb_grams', instance.carb_grams)
-        instance.fat_grams = validated_data.get('fat_grams', instance.fat_grams)
-        instance.protein_grams = validated_data.get('protein_grams', instance.protein_grams)
+        # TODO: Doesn't work, verify validated data and only take certain values
+
+        for goal_param in utilconstants.GOAL_PARAM_NAMES:
+            try:
+                value = validated_data[goal_param]
+                setattr(instance, goal_param, value)
+            except KeyError:
+                print("The value for {} was not specified, so it was not updated".format(goal_param))
+
+
+        # instance.water_ml = validated_data.get('water_ml', instance.water_ml)
+        # instance.carb_grams = validated_data.get('carb_grams', instance.carb_grams)
+        # instance.fat_grams = validated_data.get('fat_grams', instance.fat_grams)
+        # instance.protein_grams = validated_data.get('protein_grams', instance.protein_grams)
+
         instance.kilocalories = ((instance.carb_grams + instance.protein_grams) * 4) + (instance.fat_grams * 9)
         instance.save()
 
