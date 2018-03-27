@@ -27,7 +27,8 @@ class Goals(models.Model):
     kilocalories = models.IntegerField()
 
     def __str__(self):
-        return "carbs: {}\nprotein: {}\nfat: {}\n kilocalories: {}".format(
+        return "water_ml: {}\ncarbs: {}\nprotein: {}\nfat: {}\nkilocalories: {}".format(
+            self.water_ml,
             self.carb_grams,
             self.protein_grams,
             self.fat_grams,

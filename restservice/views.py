@@ -88,6 +88,7 @@ def goals(request, client_id):
                 parsed_goal_data[goal_param] = None
                 print("{} not specified".format(goal_param))
 
+        user_goals.save()
         print(parsed_goal_data)
 
 
