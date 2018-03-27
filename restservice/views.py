@@ -46,6 +46,12 @@ def water(request, client_id):
     Log some amount of water
     """
     if request.method == 'GET':
+<<<<<<< HEAD
+        pass
+        # SYNTAX FOR LOOKUP OF WATER INFORMATION FOR A USER:
+        # from DailyFood get all entries where user_id=client_id &&
+        # food_entry_id=(food entries with food_name=water)
+=======
         user_obj = get_or_create_user_and_goals(client_id)
 
         # parse JSON object to return a JSON object with just the "points"
@@ -56,6 +62,7 @@ def water(request, client_id):
         data = {"water_ml" : user_serializer.data["score"]}
 
         return JSONResponse(data, status=status.HTTP_200_OK)
+>>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
 
     elif request.method == 'POST':
         pass
@@ -64,10 +71,30 @@ def water(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
+<<<<<<< HEAD
+def get_post_water_goals(request, client_id):
+    # TODO break up the Goals object we get into the separate methods per goal
+    # currently, we just return the whole Goals object
+    # TODO get_or_create_goals helper
+    # TODO GoalSerializer class 
+    goals_obj = get_or_create_goals(client_id)
+
+    if request.method == 'GET':
+        # TODO: Return how much water the user has had in the last 24 hours
+        pass
+
+
+    elif request.method == 'POST':
+        # TODO: Log some water
+        pass
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+=======
 @csrf_exempt
 def goals(request, client_id):
     if request.method == 'GET':
         user, user_goals = get_or_create_user_and_goals(client_id)
+>>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
 
         goals_serializer = GoalsSerializer(user_goals)
         return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
@@ -159,17 +186,41 @@ def get_or_create_user_and_goals(client_id):
         user_entry = Users.objects.get(user_id=client_id)
         user_goals = Goals.objects.get(user_id=client_id)
     except ObjectDoesNotExist:
+<<<<<<< HEAD
+        user_entry = Users.objects.create(
+                user_id=client_id,
+                name=namegen.get_monster(),
+                serving_size=100,
+                streak=0,
+                score=0
+            )
+=======
         user_entry, user_goals = create_new_user(client_id)
+>>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
 
     return user_entry, user_goals
 
+def get_or_create_goals(client_id):
+    """
+    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
+    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
+    Checks if the client already has a registered account, or if one needs to be made.
+    Gets the account if it already exists, or makes a new one if it doesn't.
+    """
+<<<<<<< HEAD
+    try:
+        goal_entry = Goals.objects.get(user_id=client_id)
+    except ObjectDoesNotExist:
+        goal_entry = Goals.objects.create(
+                user_id=client_id,
+                name=namegen.get_monster(),
+                serving_size=100,
+                streak=0,
+                score=0
+            )
 
-def create_new_user(client_id):
-    """
-    Creates a new user account.
-    :param client_id: Unique client ID sent by DialogFlow. Client ID's are tied to Google accounts.
-    :return:
-    """
+    return user_entry
+=======
     new_user = Users.objects.create(
         user_id=client_id,
         name=monsterurl.get_monster(),
@@ -189,3 +240,4 @@ def create_new_user(client_id):
     )
 
     return new_user, new_user_goals
+>>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
