@@ -60,7 +60,9 @@ def get_post_water(request, client_id):
 
 # TODO: This is a test function by Dash, don't delete this!
 def goals(request, client_id):
-    print(JSONParser().parse(request))
+    if request.method == 'POST':
+        goal_data = JSONParser().parse(request)
+        print(goal_data)
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
