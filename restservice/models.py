@@ -35,36 +35,38 @@ class Goals(models.Model):
             self.kilocalories
         )
 
+class Meal(models.Model):
+    """
+    Nutrition data for meals that the user creates.
 
-class MealEntry(models.Model):
-    meal_entry_id = models.IntegerField(primary_key=True)
-    # time_of_creation = models.DateTimeField()
-    user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
+    """
+    meal_id = models.IntegerField(primary_key=True)
     meal_name = models.CharField(max_length=100)
-    kilocalories = models.IntegerField()
-    fat_grams = models.IntegerField()
-    carb_grams = models.IntegerField()
-    protein_grams = models.IntegerField()
+    user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
 
     def __str__(self):
         return "meal name: {}\ncarbs: {}\nprotein: {}\nfat: {}\n kilocalories: {}".format(
-            self.meal_name,
-            self.carb_grams,
-            self.protein_grams,
-            self.fat_grams,
-            self.kilocalories
+            self.meal_id
         )
 
+class MealOrFoodEntry(models.Model):
+    """
+    Each food entry is one thing that user user_id ate, with the nutrition data
+    scaled to the appropriate amounts, given the user's portion size.
 
-class FoodEntry(models.Model):
-    food_entry_id = models.IntegerField(primary_key=True)
+
+    """
+    entry_id = models.IntegerField(primary_key=True)
     # time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     food_name = models.CharField(max_length=100, blank=True, null=True)
+    meal_id = models.IntegerField(primary_key=True)
     kilocalories = models.IntegerField()
     fat_grams = models.IntegerField()
     carb_grams = models.IntegerField()
     protein_grams = models.IntegerField()
+    water_ml = models.IntegerField()
+
 
     def __str__(self):
         return "food name: {}\ncarbs: {}\nprotein: {}\nfat: {}\n kilocalories: {}".format(
@@ -74,16 +76,6 @@ class FoodEntry(models.Model):
             self.fat_grams,
             self.kilocalories
         )
-
-
-class DailyFood(models.Model):
-    day_id = models.IntegerField(primary_key=True)
-    time_of_creation = models.DateTimeField()
-    user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
-    # One of the following two has to not be None!
-    food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE, null=True)
-    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, null=True)
-
 
 class FoodCache(models.Model):
     """
@@ -100,3 +92,12 @@ class FoodCache(models.Model):
     fat_grams = models.IntegerField()
     carb_grams = models.IntegerField()
     protein_grams = models.IntegerField()
+
+
+# class DailyFood(models.Model):
+#     day_id = models.IntegerField(primary_key=True)
+#     time_of_creation = models.DateTimeField()
+#     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
+#     # One of the following two has to not be None!
+#     food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE, null=True)
+#     meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, null=True)

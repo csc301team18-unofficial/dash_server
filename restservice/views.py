@@ -21,18 +21,38 @@ class JSONResponse(HttpResponse):
 
 
 @csrf_exempt
-def food(request, client_id):
+def post_food_entry(request, client_id):
+    """
+    Create new row for a user's food or meal entry.
+    - Get food info using get_food()
+    - Get serving size to scale values by (either from request args or from user)
+    - Scale food macro values by serving size
+    - Add a new FoodEntry, and link to a new DailyFood Entry
+    - Add points if the user is still within their macro goals
+    - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
+    """
     if request.method == 'POST':
         user_obj = get_or_create_user_and_goals(client_id)[0]
 
-        """
-        - Get food info using get_food()
-        - Get serving size to scale values by (either from request args or from user)
-        - Scale food macro values by serving size
-        - Add a new FoodEntry, and link to a new DailyFood Entry
-        - Add points if the user is still within their macro goals
-        - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
-        """
+
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+@csrf_exempt
+def post_meal_entry(request, client_id):
+    """
+    Create new row for a user's food or meal entry.
+    - Get food info using get_food()
+    - Get serving size to scale values by (either from request args or from user)
+    - Scale food macro values by serving size
+    - Add a new FoodEntry, and link to a new DailyFood Entry
+    - Add points if the user is still within their macro goals
+    - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
+    - awards points if user is working towards goals, removes points if user is overeating
+    """
+    if request.method == 'POST':
+        user_obj = get_or_create_user_and_goals(client_id)[0]
 
 
     else:
@@ -46,23 +66,13 @@ def water(request, client_id):
     Log some amount of water
     """
     if request.method == 'GET':
-<<<<<<< HEAD
         pass
         # SYNTAX FOR LOOKUP OF WATER INFORMATION FOR A USER:
         # from DailyFood get all entries where user_id=client_id &&
         # food_entry_id=(food entries with food_name=water)
-=======
-        user_obj = get_or_create_user_and_goals(client_id)
-
-        # parse JSON object to return a JSON object with just the "points"
-        # gets serialized user from database
-        user_serializer = UserSerializer(user_obj)
-
-        # create new dict with just points data
-        data = {"water_ml" : user_serializer.data["score"]}
-
+        data = ""
         return JSONResponse(data, status=status.HTTP_200_OK)
->>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
+
 
     elif request.method == 'POST':
         pass
@@ -71,31 +81,10 @@ def water(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-<<<<<<< HEAD
-def get_post_water_goals(request, client_id):
-    # TODO break up the Goals object we get into the separate methods per goal
-    # currently, we just return the whole Goals object
-    # TODO get_or_create_goals helper
-    # TODO GoalSerializer class 
-    goals_obj = get_or_create_goals(client_id)
-
-    if request.method == 'GET':
-        # TODO: Return how much water the user has had in the last 24 hours
-        pass
-
-
-    elif request.method == 'POST':
-        # TODO: Log some water
-        pass
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
-=======
 @csrf_exempt
 def goals(request, client_id):
     if request.method == 'GET':
         user, user_goals = get_or_create_user_and_goals(client_id)
->>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
-
         goals_serializer = GoalsSerializer(user_goals)
         return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
 
@@ -122,6 +111,8 @@ def goals(request, client_id):
 
 
 def get_points(request, client_id):
+    # TODO: every DailyFood call should also award points to/penalize users
+
     """
     Handles GET points requests. Returns a JSON representation of the user's score.
     :param request: HTTP request
@@ -184,9 +175,7 @@ def get_or_create_user_and_goals(client_id):
     """
     try:
         user_entry = Users.objects.get(user_id=client_id)
-        user_goals = Goals.objects.get(user_id=client_id)
     except ObjectDoesNotExist:
-<<<<<<< HEAD
         user_entry = Users.objects.create(
                 user_id=client_id,
                 name=namegen.get_monster(),
@@ -194,50 +183,19 @@ def get_or_create_user_and_goals(client_id):
                 streak=0,
                 score=0
             )
-=======
-        user_entry, user_goals = create_new_user(client_id)
->>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
 
-    return user_entry, user_goals
-
-def get_or_create_goals(client_id):
-    """
-    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
-    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
-    Checks if the client already has a registered account, or if one needs to be made.
-    Gets the account if it already exists, or makes a new one if it doesn't.
-    """
-<<<<<<< HEAD
     try:
         goal_entry = Goals.objects.get(user_id=client_id)
     except ObjectDoesNotExist:
         goal_entry = Goals.objects.create(
-                user_id=client_id,
-                name=namegen.get_monster(),
-                serving_size=100,
-                streak=0,
-                score=0
-            )
+                goal_id=md5_hash_string(client_id),
+                user_id=new_user,
+                water_ml=3500,
+                protein_grams=50,
+                fat_grams=70,
+                carb_grams=310,
+                kilocalories=2070
+        )
 
-    return user_entry
-=======
-    new_user = Users.objects.create(
-        user_id=client_id,
-        name=monsterurl.get_monster(),
-        serving_size=100,
-        streak=0,
-        score=0
-    )
 
-    new_user_goals = Goals.objects.create(
-        goal_id=md5_hash_string(client_id),
-        user_id=new_user,
-        water_ml=3500,
-        protein_grams=50,
-        fat_grams=70,
-        carb_grams=310,
-        kilocalories=2070
-    )
-
-    return new_user, new_user_goals
->>>>>>> 499c21c31ed4ca00d6f78dd3f562ab41bd450778
+    return user_entry, goal_entry
