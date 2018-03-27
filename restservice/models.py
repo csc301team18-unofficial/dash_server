@@ -14,7 +14,7 @@ class Users(models.Model):
     timezone = models.CharField(max_length=32, choices=TIMEZONES, default='EST')
 
     def __str__(self):
-        return "{} has a score of {}, and has a streak of {}".format(self.name, self.score, self.streak)
+        return self.user_id
 
 
 class Goals(models.Model):

@@ -180,7 +180,7 @@ def create_new_user(client_id):
 
     new_user_goals = Goals.objects.create(
         goal_id=md5_hash_string(client_id),
-        user_id=new_user.user_id,
+        user_id=new_user,
         water_ml=3500,
         protein_grams=50,
         fat_grams=70,
