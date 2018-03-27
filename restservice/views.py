@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 
 from utility.utils import get_food, md5_hash_string
-import monsterurl as namegen
+import monsterurl
 
 
 class JSONResponse(HttpResponse):
@@ -19,9 +19,11 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
+
+@csrf_exempt
 def food(request, client_id):
     if request.method == 'POST':
-        get_or_create_user_and_goals(client_id)
+        user_obj = get_or_create_user_and_goals(client_id)[0]
 
         """
         - Get food info using get_food()
@@ -31,13 +33,17 @@ def food(request, client_id):
         - Add points if the user is still within their macro goals
         - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
         """
+
+
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
+@csrf_exempt
 def water(request, client_id):
     """
-    Get the quantity of water consumed today / Update amount of water the user has consumed
+    Get the quantity of water consumed today or
+    Log some amount of water
     """
     if request.method == 'GET':
         user_obj = get_or_create_user_and_goals(client_id)
@@ -53,7 +59,6 @@ def water(request, client_id):
 
     elif request.method == 'POST':
         pass
-
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -80,27 +85,13 @@ def goals(request, client_id):
             try:
                 param = raw_goal_data[goal_param]
                 parsed_goal_data[goal_param] = param
-
                 setattr(user_goals, goal_param, param)
-                print(user_goals)
-
             except KeyError:
                 parsed_goal_data[goal_param] = None
-                print("{} not specified".format(goal_param))
 
         user_goals.save()
-        print(parsed_goal_data)
-
-
-
-
-
-        # goals_serializer = GoalsSerializer(user_goals, data=raw_goal_data)
-        # goals_serializer.save()
-        # return JSONResponse(, status=status.HTTP_200_OK)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
-
 
 
 def get_points(request, client_id):
@@ -120,7 +111,7 @@ def get_points(request, client_id):
         user_serializer = UserSerializer(user_obj)
 
         # create new dict with just points data
-        data = {"points" : user_serializer.data["score"]}
+        data = {"points": user_serializer.data["score"]}
 
         return JSONResponse(data, status=status.HTTP_200_OK)
 
@@ -181,7 +172,7 @@ def create_new_user(client_id):
     """
     new_user = Users.objects.create(
         user_id=client_id,
-        name=namegen.get_monster(),
+        name=monsterurl.get_monster(),
         serving_size=100,
         streak=0,
         score=0
@@ -189,7 +180,7 @@ def create_new_user(client_id):
 
     new_user_goals = Goals.objects.create(
         goal_id=md5_hash_string(client_id),
-        user_id=new_user,
+        user_id=new_user.user_id,
         water_ml=3500,
         protein_grams=50,
         fat_grams=70,
