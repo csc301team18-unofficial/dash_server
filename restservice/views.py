@@ -132,7 +132,9 @@ def food_info(request, client_id):
         get_or_create_user_and_goals(client_id)
 
         try:
-            food_name = JSONParser().parse(request).get("food_name")
+            data = JSONParser().parse(request)
+            print(data)
+            food_name = data.get("food_name")
         except KeyError:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
