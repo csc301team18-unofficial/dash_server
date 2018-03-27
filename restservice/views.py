@@ -136,7 +136,7 @@ def food_info(request, client_id):
             print(data)
             food_name = data.get("food_name")
         except KeyError:
-            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
         try:
             food_cache_obj = get_food(food_name)
