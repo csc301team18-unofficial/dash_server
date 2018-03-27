@@ -1,5 +1,5 @@
 import requests
-from nutrition import nutriconstants as nc
+from utility import utilconstants as nc
 from restservice.models import *
 import hashlib
 from django.core.exceptions import ObjectDoesNotExist
@@ -34,38 +34,27 @@ class MealBuilder:
         pass
 
 
-class NutriHandler:
+def get_food(food_name):
     """
-    Utility class used to make API calls for a particular client.
+    Makes a request to get info for a certain food.
+    :param food_name: The name of the food
+    :return: A FoodCacheRecord
     """
-    def __init__(self, default_serving_size=100):
-        """
-        :param default_serving_size: Default serving size for any food object that's generated. Used to scale Nutritics
-                    data. Defaults to 100 (for getFoodInfo requests)
-        """
-        self.client_default_serve_size = default_serving_size
 
-    def get_food(self, food_name):
-        """
-        Makes a request to get info for a certain food.
-        :param food_name: The name of the food
-        :return: A FoodCacheRecord
-        """
+    try:
+        food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
+    except ObjectDoesNotExist:
+        food_cache_dict = food_request(food_name)
+        food_obj = FoodCache.objects.create(
+            food_hash=food_cache_dict["food_hash"],
+            food_name=food_cache_dict["food_name"],
+            kilocalories=food_cache_dict["kilocalories"],
+            fat_grams=food_cache_dict["fat_grams"],
+            carb_grams=food_cache_dict["carb_grams"],
+            protein_grams=food_cache_dict["protein_grams"]
+        )
 
-        try:
-            food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
-        except ObjectDoesNotExist:
-            food_cache_dict = food_request(food_name)
-            food_obj = FoodCache.objects.create(
-                food_hash=food_cache_dict["food_hash"],
-                food_name=food_cache_dict["food_name"],
-                kilocalories=food_cache_dict["kilocalories"],
-                fat_grams=food_cache_dict["fat_grams"],
-                carb_grams=food_cache_dict["carb_grams"],
-                protein_grams=food_cache_dict["protein_grams"]
-            )
-            
-        return food_obj
+    return food_obj
 
 
 def food_request(food_name):

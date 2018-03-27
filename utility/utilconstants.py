@@ -8,3 +8,5 @@ FAT_ATTR = "&attr=name,fat"
 CARBS_ATTR = "&attr=name,carbohydrate"
 
 LIMIT_ONE = "&limit=1"
+
+GOAL_PARAM_NAMES = ["water_ml", "fat_grams", "protein_grams", "carb_grams"]

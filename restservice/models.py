@@ -6,19 +6,19 @@ TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 
 
 class Users(models.Model):
-    user_id = models.CharField(max_length=20, primary_key=True)
-    name = models.CharField(max_length=150, unique=True)
+    user_id = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
     serving_size = models.IntegerField(default=100)
     streak = models.IntegerField()
     score = models.IntegerField()
     timezone = models.CharField(max_length=32, choices=TIMEZONES, default='EST')
 
     def __str__(self):
-        return "{} has a score of {}, and has a streak of {}".format(self.name, self.score, self.streak)
+        return self.user_id
 
 
 class Goals(models.Model):
-    goal_id = models.CharField(max_length=20, primary_key=True)
+    goal_id = models.CharField(max_length=32, primary_key=True)
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     water_ml = models.IntegerField()
     protein_grams = models.IntegerField()
@@ -27,7 +27,8 @@ class Goals(models.Model):
     kilocalories = models.IntegerField()
 
     def __str__(self):
-        return "carbs: {}\nprotein: {}\nfat: {}\n kilocalories: {}".format(
+        return "water_ml: {}\ncarbs: {}\nprotein: {}\nfat: {}\nkilocalories: {}".format(
+            self.water_ml,
             self.carb_grams,
             self.protein_grams,
             self.fat_grams,
