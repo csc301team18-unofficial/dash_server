@@ -71,7 +71,7 @@ class UserSerializer(serializers.Serializer):
 
         return instance
 
-# 
+#
 # class GoalsSerializer(serializers.Serializer):
 #     goal_id = serializers.CharField(max_length=32)
 #     user_id = serializers.CharField()
