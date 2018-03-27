@@ -80,10 +80,19 @@ def goals(request, client_id):
             try:
                 param = raw_goal_data[goal_param]
                 parsed_goal_data[goal_param] = param
+
+                setattr(user_goals, goal_param, param)
+                print(user_goals)
+
             except KeyError:
+                parsed_goal_data[goal_param] = None
                 print("{} not specified".format(goal_param))
 
         print(parsed_goal_data)
+
+
+
+
 
         # goals_serializer = GoalsSerializer(user_goals, data=raw_goal_data)
         # goals_serializer.save()
