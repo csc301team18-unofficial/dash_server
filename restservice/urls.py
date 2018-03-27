@@ -25,5 +25,4 @@ urlpatterns = [
     url(r'^macros/(?P<client_id>.+?)/.*?$', views.get_post_water) # GET current water
 
     # POST Request URLs
-
 ]
