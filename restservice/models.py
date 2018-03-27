@@ -6,8 +6,8 @@ TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 
 
 class Users(models.Model):
-    user_id = models.CharField(max_length=20, primary_key=True)
-    name = models.CharField(max_length=150, unique=True)
+    user_id = models.CharField(max_length=100, primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
     serving_size = models.IntegerField(default=100)
     streak = models.IntegerField()
     score = models.IntegerField()

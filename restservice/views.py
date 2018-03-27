@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.parsers import JSONParser
 
-from utility.utils import NutriHandler, md5_hash_string
+from utility.utils import get_food, md5_hash_string
 import monsterurl as namegen
 
 
@@ -63,7 +63,8 @@ def get_post_water(request, client_id):
 @csrf_exempt
 def goals(request, client_id):
     if request.method == 'POST':
-        goal_data = JSONParser().parse(request)
+        parser = JSONParser()
+        goal_data = parser.parse(request)
         print(goal_data)
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
@@ -117,7 +118,8 @@ def get_points(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_food_info(request, client_id, food_name):
+@csrf_exempt
+def food_info(request, client_id):
     """
     Handles GET FoodInfo requests. Returns a JSON representation of the FoodCache, using utils.py
     :param request: HTTP request
@@ -129,10 +131,13 @@ def get_food_info(request, client_id, food_name):
     if request.method == 'GET':
         get_or_create_user_and_goals(client_id)
 
-        nh = NutriHandler()
+        try:
+            food_name = JSONParser().parse(request).get("food_name")
+        except KeyError:
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            food_cache_obj = nh.get_food(food_name)
+            food_cache_obj = get_food(food_name)
             food_cache_serializer = FoodCacheSerializer(food_cache_obj)
             return JSONResponse(food_cache_serializer.data, status=status.HTTP_200_OK)
 

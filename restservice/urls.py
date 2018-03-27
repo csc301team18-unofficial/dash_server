@@ -18,7 +18,9 @@ from restservice import views
 
 urlpatterns = [
     # GET Request URLs
-    url(r'^foodinfo/(?P<client_id>.+?)/food_name=(?P<food_name>.+?)/$', views.get_food_info),
+    url(r'^foodinfo/(?P<client_id>.+?)/$', views.food_info),
+
+
     url(r'^points/(?P<client_id>.+?)/$', views.get_points),  # GET points
     url(r'^watergoals/(?P<client_id>.+?)/.*?$', views.water_goals),  # GET water goals
     url(r'^macros/(?P<client_id>.+?)/.*?$', views.get_post_macros),  # GET current macros
