@@ -38,9 +38,9 @@ class Goals(models.Model):
 
 class MealEntry(models.Model):
     meal_entry_id = models.IntegerField(primary_key=True)
+    # time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     meal_name = models.CharField(max_length=100)
-    time_of_creation = models.DateTimeField()
     kilocalories = models.IntegerField()
     fat_grams = models.IntegerField()
     carb_grams = models.IntegerField()
@@ -58,7 +58,7 @@ class MealEntry(models.Model):
 
 class FoodEntry(models.Model):
     food_entry_id = models.IntegerField(primary_key=True)
-    time_of_creation = models.DateTimeField()
+    # time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     food_name = models.CharField(max_length=100, blank=True, null=True)
     kilocalories = models.IntegerField()
@@ -81,8 +81,8 @@ class DailyFood(models.Model):
     time_of_creation = models.DateTimeField()
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     # One of the following two has to not be None!
-    food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE, blank=True, null=True)
-    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, blank=True, null=True)
+    food_entry_id = models.ForeignKey("FoodEntry", on_delete=models.CASCADE, null=True)
+    meal_id = models.ForeignKey("MealEntry", on_delete=models.CASCADE, null=True)
 
 
 class FoodCache(models.Model):
