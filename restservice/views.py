@@ -19,7 +19,7 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
-def post_food(request, client_id):
+def food(request, client_id):
     if request.method == 'POST':
         get_or_create_user_and_goals(client_id)
 
@@ -35,9 +35,9 @@ def post_food(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_post_water(request, client_id):
+def water(request, client_id):
     """
-    Log water intake.
+    Get the quantity of water consumed today / Update amount of water the user has consumed
     """
     if request.method == 'GET':
         user_obj = get_or_create_user_and_goals(client_id)
@@ -59,38 +59,30 @@ def get_post_water(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-# TODO: This is a test function by Dash, don't delete this!
 @csrf_exempt
 def goals(request, client_id):
+    if request.method == 'GET':
+        user, user_goals = get_or_create_user_and_goals(client_id)
+
+        goals_serializer = GoalsSerializer(user_goals)
+        return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
+
     if request.method == 'POST':
+        user, user_goals = get_or_create_user_and_goals(client_id)
+
         parser = JSONParser()
         goal_data = parser.parse(request)
         print(goal_data)
+
+        goals_serializer = GoalsSerializer(user_goals, data=goal_data)
+        if goals_serializer.is_valid():
+            goals_serializer.save()
+            return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
+
+        return JSONResponse(goals_serializer.errors, status=status.HTTP_204_NO_CONTENT)
+
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
-
-def water_goals(request, client_id):
-    if request.method == 'GET':
-        # TODO: Return what the user's current goal for daily water consumption is
-        user = get_or_create_user_and_goals(client_id)
-
-        pass
-    elif request.method == 'POST':
-        # TODO: Update the user's goal for daily water consumption
-        pass
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
-
-
-def get_post_macros(request, client_id):
-    if request.method == 'GET':
-        # TODO: Return what the user's current macros are
-        pass
-    elif request.method == 'POST':
-        # TODO: Update the user's macros
-        pass
-    else:
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 def get_points(request, client_id):
@@ -119,7 +111,7 @@ def get_points(request, client_id):
 
 
 @csrf_exempt
-def food_info(request, client_id):
+def food_info(request, client_id, food_name):
     """
     Handles GET FoodInfo requests. Returns a JSON representation of the FoodCache, using utils.py
     :param request: HTTP request
@@ -130,13 +122,6 @@ def food_info(request, client_id):
     # if user is not in database yet, add user to database
     if request.method == 'GET':
         get_or_create_user_and_goals(client_id)
-
-        try:
-            data = JSONParser().parse(request)
-            print(data)
-            food_name = data.get("food_name")
-        except KeyError:
-            return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
         try:
             food_cache_obj = get_food(food_name)

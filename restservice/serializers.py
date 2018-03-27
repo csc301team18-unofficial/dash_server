@@ -87,17 +87,25 @@ class GoalsSerializer(serializers.Serializer):
         """
         # TODO: Remove print statement in production
         print("GOAL OBJECT CREATED BY SERIALIZER, THIS SHOULDN'T HAPPEN")
+
+        fat_grams = validated_data["fat_grams"]
+        protein_grams = validated_data["protein_grams"]
+        carb_grams = validated_data["carb_grams"]
+        kilocalories = (fat_grams * 9) + (4 * (protein_grams + carb_grams))
+
         return Users.objects.create(
+            goal_id=validated_data["goal_id"],
             user_id=validated_data["user_id"],
-            name=validated_data["name"],
-            serving_size=validated_data["serving_size"],
-            streak=validated_data["streak"],
-            score=validated_data["score"],
-            timezone=validated_data["timezone"]
+            water_ml=validated_data["water_ml"],
+            fat_grams=fat_grams,
+            protein_grams=protein_grams,
+            carb_grams=carb_grams,
+            kilocalories=kilocalories
         )
 
     def update(self, instance, validated_data):
         # TODO: Check if this works
+        instance.water_ml = validated_data.get('water_ml', instance.water_ml)
         instance.carb_grams = validated_data.get('carb_grams', instance.carb_grams)
         instance.fat_grams = validated_data.get('fat_grams', instance.fat_grams)
         instance.protein_grams = validated_data.get('protein_grams', instance.protein_grams)
