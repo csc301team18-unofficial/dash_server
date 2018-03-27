@@ -71,12 +71,23 @@ def goals(request, client_id):
         user, user_goals = get_or_create_user_and_goals(client_id)
 
         parser = JSONParser()
-        goal_data = parser.parse(request)
-        print(goal_data)
+        raw_goal_data = parser.parse(request)
+        print(raw_goal_data)
 
-        goals_serializer = GoalsSerializer(user_goals, data=goal_data)
-        goals_serializer.save()
-        return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
+        parsed_goal_data = dict()
+
+        for goal_param in utilconstants.GOAL_PARAM_NAMES:
+            try:
+                param = raw_goal_data[goal_param]
+                parsed_goal_data[goal_param] = param
+            except KeyError:
+                print("{} not specified".format(goal_param))
+
+        print(parsed_goal_data)
+
+        # goals_serializer = GoalsSerializer(user_goals, data=raw_goal_data)
+        # goals_serializer.save()
+        # return JSONResponse(, status=status.HTTP_200_OK)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
