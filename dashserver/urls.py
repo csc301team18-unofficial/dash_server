@@ -18,6 +18,6 @@ from django.urls import path, include
 from django.conf.urls import url
 
 urlpatterns = [
-    url(r'^$', include('webinterface.urls')),
+    url(r'^insights/', include('webinterface.urls')),
     url(r'^rest/', include('restservice.urls'))
 ]

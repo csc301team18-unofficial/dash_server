@@ -79,7 +79,7 @@ def goals(request, client_id):
             goals_serializer.save()
             return JSONResponse(goals_serializer.data, status=status.HTTP_200_OK)
 
-        return JSONResponse(goals_serializer.errors, status=status.HTTP_204_NO_CONTENT)
+        return JSONResponse(goals_serializer.errors, status=status.HTTP_200_OK)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
