@@ -1,0 +1,64 @@
+/* Styles for insights*/
+
+@font-face {
+    font-family: 'kg_blank_space_sketchregular';
+    src: url('chalk-webfont.woff2') format('woff2'),
+         url('chalk-webfont.woff') format('woff');
+}
+body {
+    background-color: #282828;
+    color: #EFEFEF;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.progress-bar {
+    background-color: #CC5500 !important;
+}
+.progress {
+    background-color: #d8d8d8 !important;
+}
+
+#headline{
+    margin-top: 60px;
+}
+
+#title h1 {
+    font-size: 110px;
+    font-family: 'kg_blank_space_sketchregular', 'Open Sans' !important;
+}
+#dashHead {
+    font-weight: bold;
+    color: #CC5500;
+    margin-left: -8px;
+}
+#score{
+    text-align: right;
+}
+#scoreValue {
+    margin-top: -15px;
+    font-size: 90px;
+}
+#days{
+    font-size: 15px;
+    margin-top: -10px;
+}
+ol {
+  height: 20px;
+  padding: 1em 0;
+  margin-top: -10px;
+}
+ol li {
+  display: inline-block;
+  height: 20px;
+  border: 1px solid #EFEFEF;
+  margin-right: 4px;
+}
+ol li:nth-child(5n) {
+  transform: rotate(409deg);
+  height: 30px;
+  position: relative;
+  left: -15px;
+  top: 5px;
+  margin-right: 1em;
+  margin-top: -10px;
+}
