@@ -18,17 +18,9 @@ from restservice import views
 
 urlpatterns = [
     # GET Request URLs
-    url(r'^foodinfo/(?P<client_id>.+?)/(?P<food_name>.+?)$', views.food_info),
-
-
-    url(r'^points/(?P<client_id>.+?)/$', views.get_points),  # GET points
-    url(r'^water/(?P<client_id>.+?)/.*?$', views.water),  # GET water goals
-    url(r'^goals/(?P<client_id>.+?)/.*?$', views.goals),  # GET current macros
-
-    # POST Request URLs
-
-
-    # Testing URLs ~ Dash
-    url(r'^goals/(?P<client_id>.+?)/.*?$', views.goals),
-
+    url(r'^foodinfo/(?P<client_id>.+?)/(?P<food_name>.+?)$', views.food_info),  # GET info about a certain food
+    url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
+    url(r'^water/(?P<client_id>.+?)/$', views.water),  # GET OR PUT daily water intake
+    url(r'^goals/(?P<client_id>.+?)/$', views.goals),  # GET or PUT current macros
+    url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET points
 ]

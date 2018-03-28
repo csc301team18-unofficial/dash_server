@@ -1,0 +1,94 @@
+/* Styles for insights*/
+
+/* Global styles */
+@font-face {
+    font-family: 'kg_blank_space_sketchregular';
+    src: url('chalk-webfont.woff2') format('woff2'),
+         url('chalk-webfont.woff') format('woff');
+}
+body {
+    background-color: #282828;
+    color: #EFEFEF;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/*headline styles*/
+#headline{
+    margin-top: 60px;
+}
+
+#title h1 {
+    font-size: 110px;
+    font-family: 'kg_blank_space_sketchregular', 'Open Sans' !important;
+}
+
+#dashHead {
+    font-weight: bold;
+    color: #CC5500;
+}
+
+#score{
+    text-align: center;
+}
+
+#scoreValue {
+    margin-top: -15px;
+    font-size: 90px;
+    color: #CC5500;
+}
+
+#scoreExplanation{
+    font-size: 9px;
+    text-align: left;
+}
+
+#days{
+    font-size: 15px;
+    margin-top: -10px;
+}
+ol {
+  height: 20px;
+  padding: 1em 0;
+  margin-top: -10px;
+}
+ol li {
+  display: inline-block;
+  height: 20px;
+  border: 1px solid #EFEFEF;
+  margin-right: 4px;
+}
+ol li:nth-child(5n) {
+  transform: rotate(409deg);
+  height: 30px;
+  position: relative;
+  left: -15px;
+  top: 5px;
+  margin-right: 1em;
+  margin-top: -10px;
+}
+
+/* General progress bar styles*/
+.progress-bar {
+    background-color: #23c4bf !important;
+}
+.progress {
+    background-color: #d8d8d8 !important;
+    margin: 15px 0;
+    height: 25px;
+    width: 80%;
+}
+
+/* Macros styles*/
+#macros {
+  margin-top: 60px;
+
+}
+
+/* Meals styles*/
+#meals {
+  margin-top: 60px;
+
+}
+#calories {
+  height: 40px;
+}
