@@ -21,42 +21,42 @@ class JSONResponse(HttpResponse):
 
 
 @csrf_exempt
-def post_food_entry(request, client_id):
-    """
-    Create new row for a user's food or meal entry.
-    - Get food info using get_food()
-    - Get serving size to scale values by (either from request args or from user)
-    - Scale food macro values by serving size
-    - Add a new FoodEntry, and link to a new DailyFood Entry
-    - Add points if the user is still within their macro goals
-    - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
-    """
+def username(request, client_id):
     if request.method == 'POST':
         user_obj = get_or_create_user_and_goals(client_id)[0]
 
+        response = {"username": user_obj.name}
+        return JSONResponse(response, status=status.HTTP_200_OK)
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_exempt
-def post_meal_entry(request, client_id):
+def log_food_entry(request, client_id):
     """
-    Create new row for a user's food or meal entry.
-    - Get food info using get_food()
-    - Get serving size to scale values by (either from request args or from user)
-    - Scale food macro values by serving size
-    - Add a new FoodEntry, and link to a new DailyFood Entry
-    - Add points if the user is still within their macro goals
-    - Return a 200_OK response if everything works out, and return a 500_ISE response if anything breaks
-    - awards points if user is working towards goals, removes points if user is overeating
+    Gets a JSON object from the client defining the food's name, and optionally the serving size used.
+    Logs the food using the specified serving size, or the default serving size
     """
     if request.method == 'POST':
-        user_obj = get_or_create_user_and_goals(client_id)[0]
+        user_obj, user_goals = get_or_create_user_and_goals(client_id)
 
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+def log_meal_entry(request, client_id):
+
+    if request.method == 'POST':
+        # TODO: Parse JSON for meal name
+        user_obj, user_goals = get_or_create_user_and_goals(client_id)
+
+        mb = utils.MealBuilder(user_obj)
+
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @csrf_exempt
@@ -72,7 +72,6 @@ def water(request, client_id):
         # food_entry_id=(food entries with food_name=water)
         data = ""
         return JSONResponse(data, status=status.HTTP_200_OK)
-
 
     elif request.method == 'POST':
         pass
@@ -110,7 +109,7 @@ def goals(request, client_id):
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_points(request, client_id):
+def points(request, client_id):
     # TODO: every DailyFood call should also award points to/penalize users
 
     """
@@ -178,7 +177,7 @@ def get_or_create_user_and_goals(client_id):
     except ObjectDoesNotExist:
         user_entry = Users.objects.create(
                 user_id=client_id,
-                name=namegen.get_monster(),
+                name=monsterurl.get_monster(),
                 serving_size=100,
                 streak=0,
                 score=0
@@ -189,7 +188,7 @@ def get_or_create_user_and_goals(client_id):
     except ObjectDoesNotExist:
         goal_entry = Goals.objects.create(
                 goal_id=md5_hash_string(client_id),
-                user_id=new_user,
+                user_id=user_entry,
                 water_ml=3500,
                 protein_grams=50,
                 fat_grams=70,
@@ -197,5 +196,14 @@ def get_or_create_user_and_goals(client_id):
                 kilocalories=2070
         )
 
-
     return user_entry, goal_entry
+
+
+def calculate_points(user):
+    """
+    This function calculates points to award or deduct from the user.
+    The closer the user gets to their goals, the more points they're awarded.
+    However, if they move past any of their targets, they should be penalised.
+    :param user: The user who's points should be calculated
+    """
+    pass

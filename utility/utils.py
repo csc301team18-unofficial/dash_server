@@ -13,28 +13,55 @@ class MealBuilder:
     Container / utility class that represents a meal that the user is trying to log.
     A meal is made up of multiple food objects.
     """
-    def __init__(self, name):
-        self.name = name
-        self.k_cal = 0
+    def __init__(self, meal_name, user):
+        self.user = user
+        self.meal_name = meal_name
         self.carb = 0
         self.protein = 0
         self.fat = 0
-        # Generates a meal ID using the MD5 hash, based on the name of the meal
-        self.meal_id = md5_hash_string(name)
+        # Generates a meal ID using the MD5 hash, based on the name of the meal and the user's ID
+        self.meal_id = md5_hash_string(meal_name + user.user_id)
 
-    def add_food(self, food):
+    def add_food(self, food_name, serving_size=0):
         """
         Adds a Food to the meal, and updates meal macros accordingly
-        :param food: A Food object
+        :param food_name: The name of the food to add
+        :param serving_size: The serving size to scale the food to. If left unchanged (default 0)
+                then the default serving size for the user is used
         """
-        self.k_cal += food.k_cal
-        self.protein += food.protein
-        self.carb += food.carb
-        self.fat += food.fat
+        food = get_food(food_name)
 
-    def generate_meal_record(self, ):
-        # TODO: Create MealEntry record
-        pass
+        # Get scale factor
+        if serving_size == 0:
+            scale = self.user.serving_size / 100
+        else:
+            scale = serving_size / 100
+
+        # Apply scaling
+        self.protein += food.protein_grams * scale
+        self.carb += food.carb_grams * scale
+        self.fat += food.fat_grams * scale
+
+        # Convert floats to ints
+        self.protein = int(round(self.protein))
+        self.fat = int(round(self.fat))
+        self.carb = int(round(self.carb))
+
+    def generate_meal_record(self):
+        """
+        Construct and return a MealCache object
+        :return: A MealCache object that represents this meal
+        """
+        meal = MealCache.objects.create(
+            meal_id=self.meal_id,
+            meal_name=self.meal_name,
+            user_id=self.user.user_id,
+            fat_grams=self.fat,
+            protein_grams=self.protein,
+            carb_grams=self.carb,
+            kilocalories=calories_from_macros(self.carb, self.fat, self.protein)
+        )
+        return meal
 
 
 def get_food(food_name):
