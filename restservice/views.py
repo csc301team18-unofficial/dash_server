@@ -22,8 +22,8 @@ def username(request, client_id):
     """
     if request.method == 'GET':
         user_obj = get_or_create_user_and_goals(client_id)[0]
-
         response = {"username": user_obj.name}
+
         return JSONResponse(response, status=status.HTTP_200_OK)
 
     else:
@@ -36,10 +36,28 @@ def log_food_entry(request, client_id):
     TODO:
     Gets a JSON object from the client defining the food's name, and optionally the serving size used.
     Logs the food using the specified serving size, or the default serving size
+
+    Update user's points.
+
+    Example JSON request:
+    {
+        "food_name": "banana",
+        "serving": 120
+    }
+
     """
     if request.method == 'POST':
         user_obj, user_goals = get_or_create_user_and_goals(client_id)
 
+        food_entry_json = JSONParser().parse(request)
+
+        Entry.objects.create(
+            user_id=client_id,
+            name=monsterurl.get_monster(),
+            serving_size=100,
+            sprint=1,
+            points=0
+        )
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -72,7 +90,7 @@ def log_meal_entry(request, client_id):
 @csrf_exempt
 def create_meal(request, client_id):
     """
-    Create a meal and add it to the MealCache. A meal belongs to a specific user, and is associated with 
+    Create a meal and add it to the MealCache. A meal belongs to a specific user, and is associated with
     :param request:
     :param client_id:
     :return:
@@ -124,6 +142,7 @@ def water(request, client_id):
     Get the quantity of water consumed today
     or
     Log some amount of water
+    Data about user's water intake is stored in DailyFood table.
     """
     if request.method == 'GET':
         user, user_goals = get_or_create_user_and_goals()
@@ -178,9 +197,7 @@ def points(request, client_id):
     # if user is not in database yet, add user to database
     if request.method == 'GET':
         user_obj = get_or_create_user_and_goals(client_id)[0]
-
         user_serializer = UserSerializer(user_obj)
-
         # create new dict with just points data
         data = {"points": user_serializer.data["points"]}
 
