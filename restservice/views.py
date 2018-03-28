@@ -64,6 +64,7 @@ def water(request, client_id):
     """
     Get the quantity of water consumed today or
     Log some amount of water
+    Data about user's water intake is stored in DailyFood table.
     """
     if request.method == 'GET':
         pass
