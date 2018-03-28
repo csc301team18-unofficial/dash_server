@@ -26,7 +26,8 @@
         <div class="row">
             <div class="col" id="title">
               <h1><span id="dashHead">DASH</span>board</h1>
-              <h4 id="days">Days with DASH (29)</h4>
+
+              <h4 id="days">Your current sprint (29 days)</h4>
               <ol id="count">&nbsp;</ol>
               <script>
                 $(function() {
@@ -35,34 +36,38 @@
                   };
                 });
               </script>
+
             </div>
             <div class="col-2" id="score">
-              <div>your Dash Score</div>
-              <div id="scoreValue">98</div>
+              <p>your Dash Score</p>
+              <p id="scoreValue">98</p>
+              <p id="scoreExplanation">We base this score on how often you check in with DASH,
+                and how closely you follow your health goals.</p>
             </div>
           </div>
         </div>
     </div>
-    <div class="container" id="progressBars">
 
+    <div class="container" id="macros">
             <div class="row justify-content-start">
                 <div class="col-6">
+                  <p>Today's Macros</p>
                     <div class="progress" id="carbs">
-                      <div class="progress-bar progress-bar" role="progressbar"
+                      <div class="progress-bar" role="progressbar"
                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
                             40%
                       </div>
                     </div>
 
                     <div class="progress" id="protein">
-                      <div class="progress-bar progress-bar" role="progressbar"
+                      <div class="progress-bar" role="progressbar"
                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
                             40%
                       </div>
                     </div>
 
-                    <div class="progress" id="fat" style="height: 50px;">
-                      <div class="progress-bar progress-bar" role="progressbar"
+                    <div class="progress" id="fat">
+                      <div class="progress-bar" role="progressbar"
                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
                             40%
                       </div>
@@ -70,11 +75,14 @@
                 </div>
             </div>
     </div>
+
+
     <div class="container" id="meals">
         <div class="row justify-content-start">
             <div class="col-6">
-                <div class="progress" id="fat" style="height: 50px;">
-                  <div class="progress-bar progress-bar" role="progressbar"
+              <p>Today's Meals</p>
+                <div class="progress" id="calories">
+                  <div class="progress-bar" role="progressbar"
                         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
                         40%
                   </div>
