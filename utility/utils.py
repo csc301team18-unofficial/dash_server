@@ -219,16 +219,28 @@ def get_today_macros(user_id):
     user_obj = get_or_create_user_and_goals(user_id)
     user_food_entries = Entry.objects.get(user_id=user_id).filter()
 
+    # Food/meal entries logged today so far:
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = datetime.combine(today, time())
+    today_end = datetime.combine(tomorrow, time())
+
+    user_food_list = Entry.objects
+                    .filter(user_id=user_id)
+                    .filter(time_of_creation=today_start)
+                    .filter(time_of_creation=today_end)
+
     # Macros today:
     carbs_g_today = 0
     fat_g_today = 0
     protein_g_today = 0
     water_ml_today = 0
 
-    today = datetime.now().date()
-    tomorrow = today + timedelta(1)
-    today_start = datetime.combine(today, time())
-    today_end = datetime.combine(tomorrow, time())
+    for entry in user_food_list:
+        carbs_g_today += entry.carb_grams
+        fat_g_today += entry.fat_grams
+        protein_g_today += entry.protein_grams
+        water_ml_today += entry.water_ml
 
     macros_dict = dict(
         'carbs_grams' = carbs_g_today,
