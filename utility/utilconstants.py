@@ -14,3 +14,5 @@ LIMIT_ONE = "&limit=1"
 GOAL_PARAM_NAMES = ["water_ml", "fat_grams", "protein_grams", "carb_grams"]
 
 TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
+
+FOOD_ENUM = ["food1", "food2", "food3", "food4", "food5"]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
+
 from restservice.models import *
-import json
 from utility import utilconstants
 from utility import utils
 
@@ -40,8 +40,8 @@ class UserSerializer(serializers.Serializer):
     user_id = serializers.CharField(max_length=20, read_only=True)
     name = serializers.CharField(max_length=150)
     serving_size = serializers.IntegerField(default=100)
-    streak = serializers.IntegerField()
-    score = serializers.IntegerField()
+    sprint = serializers.IntegerField()
+    points = serializers.IntegerField()
     timezone = serializers.CharField(max_length=32)
 
     def create(self, validated_data):
@@ -49,25 +49,25 @@ class UserSerializer(serializers.Serializer):
         :param validated_data: a dict where each key corresponds to a field in Users
         """
         return Users.objects.create(
-            user_id = validated_data["user_id"],
-            name = validated_data["name"],
-            serving_size = validated_data["serving_size"],
-            streak = validated_data["streak"],
-            score = validated_data["score"],
-            timezone = validated_data["timezone"]
+            user_id=validated_data["user_id"],
+            name=validated_data["name"],
+            serving_size=validated_data["serving_size"],
+            sprint=validated_data["streak"],
+            points=validated_data["points"],
+            timezone=validated_data["timezone"]
         )
 
     def update(self, instance, validated_data):
         """
         :param instance: a User instance to update
-        :param validated_data: an int corresponding to a User instance's new score
+        :param validated_data: an int corresponding to a User instance's new points
         :return: updated instance with the new code
         """
         instance.user_id = validated_data.get('user_id', instance.user_id)
         instance.name = validated_data.get('name', instance.name)
         instance.serving_size = validated_data.get('serving_size', instance.name)
-        instance.streak = validated_data.get('streak', instance.streak)
-        instance.score = validated_data.get('score', instance.score)
+        instance.sprint = validated_data.get('streak', instance.streak)
+        instance.points = validated_data.get('points', instance.points)
         instance.timezone = validated_data.get('timezone', instance.timezone)
         instance.save()
 
@@ -103,7 +103,7 @@ class GoalsSerializer(serializers.Serializer):
         )
 
     def update(self, instance, validated_data):
-        # TODO: This should never be called
+        # TODO: Remove this in production
         print("GAMESERIALIZER UPDATE CALLED, SOMETHING HAS GONE HORRIBLY WRONG")
 
         for goal_param in utilconstants.GOAL_PARAM_NAMES:

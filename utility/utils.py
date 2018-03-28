@@ -2,11 +2,13 @@ import requests
 from utility import utilconstants as nc
 from restservice.models import *
 import hashlib
+import monsterurl
 from django.core.exceptions import ObjectDoesNotExist
 
 """
 File for general utility functions and classes.
 """
+
 
 class MealBuilder:
     """
@@ -47,7 +49,7 @@ class MealBuilder:
         self.fat = int(round(self.fat))
         self.carb = int(round(self.carb))
 
-    def generate_meal_record(self):
+    def create_meal_record(self):
         """
         Construct and return a MealCache object
         :return: A MealCache object that represents this meal
@@ -64,13 +66,25 @@ class MealBuilder:
         return meal
 
 
+def get_meal(user, meal_name):
+    """
+    Checks the MealCache if the meal exists or not, and return it if it does. If the meal does not exist,
+    this function throws an ObjectDoesNotExist Exception that MUST be handled in the parent.
+    :param user: The user the meal belongs to
+    :param meal_name: The name of the meal
+    :return: The named meal object associated to the given user
+    """
+    meal_id = md5_hash_string(meal_name + user.user_id)
+    meal = MealCache.objects.get(meal_id=meal_id)
+    return meal
+
+
 def get_food(food_name):
     """
     Makes a request to get info for a certain food.
     :param food_name: The name of the food
     :return: A FoodCacheRecord
     """
-
     try:
         food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
     except ObjectDoesNotExist:
@@ -110,6 +124,73 @@ def food_request(food_name):
     return food_cache_dict
 
 
+def get_or_create_user_and_goals(client_id):
+    """
+    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
+    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
+    Checks if the client already has a registered account, or if one needs to be made.
+    Gets the account if it already exists, or makes a new one if it doesn't.
+    """
+    try:
+        user_entry = Users.objects.get(user_id=client_id)
+    except ObjectDoesNotExist:
+        user_entry = Users.objects.create(
+            user_id=client_id,
+            name=monsterurl.get_monster(),
+            serving_size=100,
+            sprint=1,
+            points=0
+        )
+
+    try:
+        goal_entry = Goals.objects.get(user_id=client_id)
+    except ObjectDoesNotExist:
+        goal_entry = Goals.objects.create(
+            goal_id=md5_hash_string(client_id),
+            user_id=user_entry,
+            water_ml=3500,
+            protein_grams=50,
+            fat_grams=70,
+            carb_grams=310,
+            kilocalories=2070
+        )
+
+    return user_entry, goal_entry
+
+
+def calculate_points(user):
+    """
+    This function calculates points to award or deduct from the user.
+    The closer the user gets to their goals for today, the more points they're awarded.
+    However, if they move past any of their targets, they should be penalised.
+    Points and Score are the same thing.
+    :param user: The user who's points should be calculated
+    """
+    # TODO: THIS NEEDS TO BE IMPLEMENTED
+    pass
+
+
+def get_today_macros(user):
+    """
+    Get the amount of carbs / protein / fat / water / kcal the user has consumed since the beginning of the day
+    :param user: The user we're checking
+    :return: A dictionary that maps macro -> quantity of macro consumed
+    """
+    # TODO: THIS NEEDS TO BE IMPLEMENTED
+    pass
+
+
+def update_sprint(user, current_time):
+    """
+    Compares the current time with the time in user.last_checkin. If the last check-in was yesterday, increment the
+    user's current sprint by 1. If the last check-in was before yesterday, reset the user's sprint to 1.
+    Sprint and Streak are the same thing.
+    :param user:
+    :return:
+    """
+    pass
+
+
 def build_food_req_string(food_name):
     """
     Build a request URL to get a single-item list from Nutritics for a food, with all macros for that food.
@@ -130,4 +211,7 @@ def md5_hash_string(string):
 
 
 def calories_from_macros(carb, fat, protein):
-    return (fat*9) + ((carb+protein)*4)
+    """
+    Converts quanities of macros in grams into the sum total kilocalorie count
+    """
+    return (fat * 9) + ((carb + protein) * 4)
