@@ -160,13 +160,17 @@ def get_or_create_user_and_goals(client_id):
     return user_entry, goal_entry
 
 
-def calculate_points(user_id, entry_id):
+def calculate_points(user_id):
     """
-    This function calculates points to award or deduct from the user.
+    Return the total points awarded to the user for reaching daily goals.
+    Points are negative if goals are surpassed.
+
     The closer the user gets to their goals for today, the more points they're awarded.
     However, if they move past any of their targets, they should be penalised.
     Points and Score are the same thing.
+
     :param user: The user who's points should be calculated
+
 
     Workflow:
     User logs a food or meal entry. Entry gets posted into database.
@@ -201,12 +205,21 @@ def calculate_points(user_id, entry_id):
     user, goal_macros = get_or_create_user_and_goals(user_id)
     daily_macros_dict = get_today_macros(user_id)
 
-    return (
-                daily_macros_dict[water_ml] / goal_macros.water_ml +
-                daily_macros_dict[water_ml] / goal_macros.protein_grams +
-                daily_macros_dict[water_ml] / goal_macros.fat_grams +
-                daily_macros_dict[water_ml] / goal_macros.carb_grams
-            )
+    # if daily amounts consumed are over the goal limit, points are negative
+
+    water_points = daily_macros_dict['water_ml'] / goal_macros.water_ml
+    water_points = water_points if (water_points <= 1) else (1 - water_points)
+
+    protein_points = daily_macros_dict['protein_grams'] / goal_macros.protein_grams
+    protein_points = protein_points if (protein_points <= 1) else (1 - protein_points)
+
+    fat_points = daily_macros_dict['fat_grams'] / goal_macros.fat_grams
+    fat_points = fat_points if (fat_points <= 1) else (1 - fat_points)
+
+    carb_points = daily_macros_dict['carb_grams'] / goal_macros.carb_grams
+    carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
+
+    return water_points + protein_points + fat_points + carb_points
 
 
 def get_today_macros(user_id):
