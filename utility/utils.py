@@ -141,7 +141,8 @@ def get_or_create_user_and_goals(client_id):
             name=monsterurl.get_monster(),
             serving_size=100,
             sprint=1,
-            points=0
+            points=0,
+            timezone='EST'
         )
 
     try:
