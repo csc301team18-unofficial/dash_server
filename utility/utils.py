@@ -4,6 +4,7 @@ from restservice.models import *
 import hashlib
 import monsterurl
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime, timedelta, time
 
 """
 File for general utility functions and classes.
@@ -126,8 +127,9 @@ def food_request(food_name):
 
 def get_or_create_user_and_goals(client_id):
     """
-    TODO: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
-    TODO: THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
+    NOTE: THIS FUNCTION HAS TO BE CALLED AT THE BEGINNING OF EVERY REQUEST-HANDLING FUNCTION IN THIS CLASS
+    THERE ARE NO EXCEPTIONS TO THIS, OR IT'LL BREAK EVERYTHING
+
     Checks if the client already has a registered account, or if one needs to be made.
     Gets the account if it already exists, or makes a new one if it doesn't.
     """
@@ -158,29 +160,99 @@ def get_or_create_user_and_goals(client_id):
     return user_entry, goal_entry
 
 
-def calculate_points(user):
+def calculate_points(user_id, entry_id):
     """
     This function calculates points to award or deduct from the user.
     The closer the user gets to their goals for today, the more points they're awarded.
     However, if they move past any of their targets, they should be penalised.
     Points and Score are the same thing.
     :param user: The user who's points should be calculated
+
+    Workflow:
+    User logs a food or meal entry. Entry gets posted into database.
+    Points awarded is a function of (todays_macros)/(goal_macros)
+
+    todays_macros_dict = dict(
+        'carbs_grams' = carbs_g_today,
+        'fat_grams' = fat_g_today,
+        'protein_grams' = protein_g_today,
+        'water_ml' = water_ml_today
+    )
+
+    Concrete Example:
+    =================
+
+    * Adding points:
+    - Total points so far: 150
+    - Daily macros so far: 70%
+    - Anne logs apple. Apple gets added to Entry
+    - Daily macros now: 75%
+    - Total points now: 150 + 5 = 155
+
+    * Subtracting points:
+    - Total points so far: 150
+    - Daily macros so far: 100%
+    - Anne logs apple. Apple gets added to Entry
+    - Daily macros now: 105%
+    - Total points now: 150 - 5 = 145
+
+
     """
-    # TODO: THIS NEEDS TO BE IMPLEMENTED
-    pass
+    user, goal_macros = get_or_create_user_and_goals(user_id)
+    daily_macros_dict = get_today_macros(user_id)
+
+    return (
+                daily_macros_dict[water_ml] / goal_macros.water_ml +
+                daily_macros_dict[water_ml] / goal_macros.protein_grams +
+                daily_macros_dict[water_ml] / goal_macros.fat_grams +
+                daily_macros_dict[water_ml] / goal_macros.carb_grams
+            )
 
 
-def get_today_macros(user):
+def get_today_macros(user_id):
     """
     Get the amount of carbs / protein / fat / water / kcal the user has consumed since the beginning of the day
     :param user: The user we're checking
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
     # TODO: THIS NEEDS TO BE IMPLEMENTED
-    pass
+    user_obj = get_or_create_user_and_goals(user_id)
+    user_food_entries = Entry.objects.get(user_id=user_id).filter()
+
+    # Food/meal entries logged today so far:
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = datetime.combine(today, time())
+    today_end = datetime.combine(tomorrow, time())
+
+    user_food_list = Entry.objects
+                    .filter(user_id=user_id)
+                    .filter(time_of_creation=today_start)
+                    .filter(time_of_creation=today_end)
+
+    # Macros today:
+    carbs_g_today = 0
+    fat_g_today = 0
+    protein_g_today = 0
+    water_ml_today = 0
+
+    for entry in user_food_list:
+        carbs_g_today += entry.carb_grams
+        fat_g_today += entry.fat_grams
+        protein_g_today += entry.protein_grams
+        water_ml_today += entry.water_ml
+
+    macros_dict = dict(
+        'carbs_grams' = carbs_g_today,
+        'fat_grams' = fat_g_today,
+        'protein_grams' = protein_g_today,
+        'water_ml' = water_ml_today
+    )
+
+    return macros_dict
 
 
-def update_sprint(user, current_time):
+def update_sprint(user_id, current_time):
     """
     Compares the current time with the time in user.last_checkin. If the last check-in was yesterday, increment the
     user's current sprint by 1. If the last check-in was before yesterday, reset the user's sprint to 1.
