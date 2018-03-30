@@ -38,8 +38,12 @@ class Entry(models.Model):
     entry_id = models.IntegerField(primary_key=True)
     user_id = models.ForeignKey("Users", on_delete=models.CASCADE)
     time_of_creation = models.DateTimeField()
-    food_name = models.CharField(max_length=100, blank=True, null=True)
-    meal_id = models.IntegerField(primary_key=True, null=True)
+    entry_name = models.CharField(max_length=100, blank=True, null=True)
+
+    # TODO: We never access an entry object to find the meal that created it, so there's no point connecting it to
+    # TODO: the MealCache table, right? Instead we can just indicate if something is a meal, or just a single food~ Dash
+    is_meal = models.BooleanField(default=False)
+    # meal_id = models.CharField(max_length=32, null=True)
     kilocalories = models.IntegerField()
     fat_grams = models.IntegerField()
     carb_grams = models.IntegerField()
