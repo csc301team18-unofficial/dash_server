@@ -64,7 +64,7 @@ def log_food_entry(request, client_id):
 
 
 @csrf_exempt
-def log_meal_entry(request, client_id):
+def log_meal(request, client_id):
     """
     Log an existing meal (a meal exists if it is in the MealCache). If the meal does not exist, throws a 400 BAD REQUEST
     error (DialogFlow then tells the user they must create the meal before logging it).
@@ -78,9 +78,33 @@ def log_meal_entry(request, client_id):
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
-        meal = MealCache.objects.get(user_id=user.user_id).objects.get(meal_name=meal_name)
-        new_entry = Entry.objects.create()
-        # TODO: Complete this!
+        try:
+            meal = get_meal(user, meal_name)
+        except ObjectDoesNotExist:
+            # Case if user hasn't created the meal they're trying to log
+            return HttpResponse(status=status.HTTP_403_FORBIDDEN)
+
+        currtime = datetime.now()
+
+        try:
+            new_entry = Entry.objects.create(
+                entry_id=md5_hash_string(user.user_id.__str__() + currtime.__str__()),
+                user_id=user,
+                time_of_creation=currtime,
+                entry_name=meal_name,
+                is_meal=True,
+                kilocalories=meal.kilocalories,
+                fat_grams=meal.fat_grams,
+                protein_grams=meal.protein_grams,
+                carb_grams=meal.carb_grams,
+                water_ml=0
+            )
+            return HttpResponse(status=status.HTTP_200_OK)
+        except Exception as e:
+            print("Entry creation failed")
+            print(e.__class__.__name__)
+            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         pass
 
     else:
@@ -97,17 +121,13 @@ def create_meal(request, client_id):
     """
     if request.method == 'POST':
         user, user_goals = get_or_create_user_and_goals(client_id)
-
         meal_data = JSONParser().parse(request)
         meal_name = meal_data["meal_name"]
-
         food_details = meal_data["food_details"]
-
         mb = utils.MealBuilder(meal_name, user)
 
         # Iterate through the food items in the JSON
         for food_title in utilconstants.FOOD_ENUM:
-
             if food_title in food_details:
                 food = food_details[food_title]
 
@@ -129,6 +149,7 @@ def create_meal(request, client_id):
 
         # TODO: Figure out exactly which error is raised when two records try to have the same primary key
         except Exception:
+            # Case if this meal already exists
             return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
     else:
