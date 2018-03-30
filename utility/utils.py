@@ -203,7 +203,7 @@ def calculate_points(user_id):
 
 
     """
-    user, goal_macros = get_or_create_user_and_goals(user_id)
+    goal_macros = get_or_create_user_and_goals(user_id)[1]
     daily_macros_dict = get_today_macros(user_id)
 
     # if daily amounts consumed are over the goal limit, points are negative
@@ -230,7 +230,7 @@ def get_today_macros(user_id):
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
     # TODO: THIS NEEDS TO BE IMPLEMENTED
-    user_obj = get_or_create_user_and_goals(user_id)
+    user_obj = get_or_create_user_and_goals(user_id)[0]
     user_food_entries = Entry.objects.get(user_id=user_id).filter()
 
     # Food/meal entries logged today so far:
@@ -274,7 +274,7 @@ def update_sprint(user_id, current_time):
     :param user:
     :return:
     """
-    pass
+
 
 
 def build_food_req_string(food_name):
