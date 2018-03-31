@@ -45,6 +45,7 @@ class Entry(models.Model):
     carb_grams = models.IntegerField()
     protein_grams = models.IntegerField()
     water_ml = models.IntegerField(null=True)
+    is_water = models.BooleanField(default=False)
 
     def __str__(self):
         return self.entry_id
