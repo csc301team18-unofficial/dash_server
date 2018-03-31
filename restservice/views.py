@@ -217,10 +217,6 @@ def log_water(request, client_id):
         "water_ml": 250
     }
     """
-    # if request.method == 'POST':
-    #     # TODO:
-    #     water_ml =
-    #     pass
 
     if request.method == 'POST':
         user, user_goals = get_or_create_user_and_goals(client_id)
@@ -237,7 +233,7 @@ def log_water(request, client_id):
 
         try:
 
-            # Create meal entry
+            # Create water entry
             Entry.objects.create(
                 entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
                 user_id=client_id,
@@ -249,7 +245,7 @@ def log_water(request, client_id):
                 carb_grams=0,
                 is_water=True,
                 water_ml=water_ml
-            )
+            ).save()
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
 
