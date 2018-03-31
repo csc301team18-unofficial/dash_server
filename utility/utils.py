@@ -162,7 +162,7 @@ def get_or_create_user_and_goals(client_id):
     return user_entry, goal_entry
 
 
-def calculate_points(user_id):
+def calculate_points(user, user_goals):
     """
     Return the total points awarded to the user for reaching daily goals.
     Points are negative if goals are surpassed.
@@ -172,11 +172,11 @@ def calculate_points(user_id):
     Points and Score are the same thing.
 
     :param user: The user who's points should be calculated
-
+    :param user_goals: The user's goals
 
     Workflow:
     User logs a food or meal entry. Entry gets posted into database.
-    Points awarded is a function of (todays_macros)/(goal_macros)
+    Points awarded is a function of (todays_macros)/(user_goals)
 
     todays_macros_dict = dict(
         'carbs_grams' = carbs_g_today,
@@ -187,7 +187,6 @@ def calculate_points(user_id):
 
     Concrete Example:
     =================
-
     * Adding points:
     - Total points so far: 150
     - Daily macros so far: 70%
@@ -201,24 +200,21 @@ def calculate_points(user_id):
     - Anne logs apple. Apple gets added to Entry
     - Daily macros now: 105%
     - Total points now: 150 - 5 = 145
-
-
     """
-    user, goal_macros = get_or_create_user_and_goals(user_id)
-    daily_macros_dict = get_today_macros(user_id)
+    daily_macros_dict = get_today_macros(user.user_id)
 
     # if daily amounts consumed are over the goal limit, points are negative
 
-    water_points = daily_macros_dict['water_ml'] / goal_macros.water_ml
+    water_points = daily_macros_dict['water_ml'] / user_goals.water_ml
     water_points = water_points if (water_points <= 1) else (1 - water_points)
 
-    protein_points = daily_macros_dict['protein_grams'] / goal_macros.protein_grams
+    protein_points = daily_macros_dict['protein_grams'] / user_goals.protein_grams
     protein_points = protein_points if (protein_points <= 1) else (1 - protein_points)
 
-    fat_points = daily_macros_dict['fat_grams'] / goal_macros.fat_grams
+    fat_points = daily_macros_dict['fat_grams'] / user_goals.fat_grams
     fat_points = fat_points if (fat_points <= 1) else (1 - fat_points)
 
-    carb_points = daily_macros_dict['carb_grams'] / goal_macros.carb_grams
+    carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
     carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
 
     return water_points + protein_points + fat_points + carb_points
@@ -264,14 +260,24 @@ def get_today_macros(user):
     return macros_dict
 
 
+def update_points_sprint_checkin(user, user_goals, current_datetime):
+    # TODO: Needs docs!
+
+    # update user's last_checkin
+    setattr(user, "last_checkin", current_datetime)
+
+    # update sprint
+    update_sprint(user)
+
+    # add points to score
+    setattr(user, "points", user.points + calculate_points(user, user_goals))
+
+
 def update_sprint(user):
     """
     Compares the current time with the time in user.last_checkin. If the last check-in was yesterday, increment the
     user's current sprint by 1. If the last check-in was before yesterday, reset the user's sprint to 1.
     Sprint and Streak are the same thing.
-
-    :param user_id: id of user
-    :return:
     """
     last_checkin = user.last_checkin
     current_time = datetime.now().date()

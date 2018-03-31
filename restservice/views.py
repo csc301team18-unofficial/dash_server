@@ -31,9 +31,8 @@ def username(request, client_id):
 
 
 @csrf_exempt
-def log_food_entry(request, client_id):
+def log_food(request, client_id):
     """
-    TODO:
     Gets a JSON object from the client defining the food's name, and optionally the serving size used.
     Logs the food using the specified serving size, or the default serving size
 
@@ -47,46 +46,41 @@ def log_food_entry(request, client_id):
 
     """
     if request.method == 'POST':
-        user_obj = get_or_create_user_and_goals(client_id)[0]
+        user, user_goals = get_or_create_user_and_goals(client_id)
 
         food_entry_json = JSONParser().parse(request)
         if "food_name" in food_entry_json:
             food_name = food_entry_json["food_name"]
+            serving = food_entry_json["serving"] if "serving" in food_entry_json else user.serving_size
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
-        serving = food_entry_json["serving"] if "serving" in food_entry_json else user_obj.serving_size
-        food_info = food_info(food_name)
-        current_datetime = today = datetime.now()
+        food_data = get_food(food_name)
 
-        # add new row to Entry for this food
+        curr_datetime = datetime.now()
+
         try:
+            # Create food entry
             Entry.objects.create(
-                entry_id = md5_hash_string(str(client_id) + str(current_datetime)),
-                user_id = client_id,
-                time_of_creation = current_datetime,
-                entry_name = food_name,
-                is_meal = False,
-                kilocalories = food_info["kilocalories"],
-                fat_grams = food_info["fat_grams"],
-                carb_grams = food_info["carb_grams"],
-                protein_grams = food_info["protein_grams"],
-                water_ml = 0
+                entry_id=md5_hash_string(str(client_id) + str(curr_datetime)),
+                user_id=client_id,
+                time_of_creation=curr_datetime,
+                entry_name=food_name,
+                is_meal=False,
+                kilocalories=food_data["kilocalories"]*serving,
+                fat_grams=food_data["fat_grams"]*serving,
+                carb_grams=food_data["carb_grams"]*serving,
+                protein_grams=food_data["protein_grams"]*serving,
+                water_ml=0
             )
+
+            update_points_sprint_checkin(user, user_goals, curr_datetime)
             return HttpResponse(status=status.HTTP_200_OK)
+
         except Exception as e:
             print("Entry creation failed")
             print(e.__class__.__name__)
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # update user's last_checkin
-        setattr(user_obj, "last_checkin", current_datetime)
-
-        # update sprint
-        update_sprint(user_obj)
-
-        # add points to score
-        setattr(user_obj, "points", points + calculate_points(client_id))
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -113,13 +107,15 @@ def log_meal(request, client_id):
             # Case if user hasn't created the meal they're trying to log
             return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
-        currtime = datetime.now()
+        curr_datetime = datetime.now()
 
         try:
+
+            # Create meal entry
             Entry.objects.create(
-                entry_id=md5_hash_string(user.user_id.__str__() + currtime.__str__()),
+                entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
                 user_id=user,
-                time_of_creation=currtime,
+                time_of_creation=curr_datetime,
                 entry_name=meal_name,
                 is_meal=True,
                 kilocalories=meal.kilocalories,
@@ -129,7 +125,8 @@ def log_meal(request, client_id):
                 water_ml=0
             )
 
-            # TODO: Reward / deduct points here
+            update_points_sprint_checkin(user, user_goals, curr_datetime)
+
             return HttpResponse(status=status.HTTP_200_OK)
         except Exception as e:
             print("Entry creation failed")
@@ -178,7 +175,6 @@ def create_meal(request, client_id):
             mb.create_meal_record()
             return HttpResponse(status=status.HTTP_200_OK)
 
-        # TODO: Figure out exactly which error is raised when two records try to have the same primary key
         except Exception as e:
             # Case if this meal already exists
             print(e.__class__.__name__)
@@ -189,23 +185,18 @@ def create_meal(request, client_id):
 
 
 @csrf_exempt
-def water(request, client_id):
+def log_water(request, client_id):
     """
-    TODO:
-    Get the quantity of water consumed today
-    or
-    Log some amount of water
+    Log some amount of water.
     Data about user's water intake is stored in DailyFood table.
-    """
-    if request.method == 'GET':
-        user, user_goals = get_or_create_user_and_goals()
-        # SYNTAX FOR LOOKUP OF WATER INFORMATION FOR A USER:
-        # from DailyFood get all entries where user_id=client_id &&
-        # food_entry_id=(food entries with food_name=water)
-        data = ""
-        return JSONResponse(data, status=status.HTTP_200_OK)
+    Receives a JSON that looks like this:
 
-    elif request.method == 'POST':
+    {
+        "water_quantity": 300
+    }
+    """
+    if request.method == 'POST':
+        # TODO: Complete this!
         pass
 
     else:
@@ -248,7 +239,6 @@ def points(request, client_id):
     :return: HttpResponse with status 400 if request was invalid or 500 if request was not sucessful,
     and a JSONResponse containing an int otherwise
     """
-    # if user is not in database yet, add user to database
     if request.method == 'GET':
         user_obj = get_or_create_user_and_goals(client_id)[0]
         user_serializer = UserSerializer(user_obj)
@@ -262,6 +252,19 @@ def points(request, client_id):
 
 
 @csrf_exempt
+def today_info(request, client_id):
+    """
+    Handles get requests and returns the quantities of macros and water that the user has consumed today.
+    THIS IS DIFFERENT FROM GET MACROS
+    :param request:
+    :param client_id:
+    :return:
+    """
+    # TODO: HIGH PRIORITY, COMPLETE THIS
+    pass
+
+
+@csrf_exempt
 def food_info(request, client_id, food_name):
     """
     Handles GET FoodInfo requests. Returns a JSON representation of the FoodCache, using utils.py
@@ -270,7 +273,6 @@ def food_info(request, client_id, food_name):
     :param food_name: The name of the food the client is searching for
     :return:
     """
-    # if user is not in database yet, add user to database
     if request.method == 'GET':
         get_or_create_user_and_goals(client_id)
 
