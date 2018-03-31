@@ -69,7 +69,8 @@ def log_food_entry(request, client_id):
             kilocalories = food_info["kilocalories"],
             fat_grams = food_info["fat_grams"],
             carb_grams = food_info["carb_grams"],
-            protein_grams = food_info["protein_grams"]
+            protein_grams = food_info["protein_grams"],
+            water_ml = 0
         )
 
         # update user's last_checkin
