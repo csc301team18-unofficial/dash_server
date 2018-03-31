@@ -279,7 +279,7 @@ def update_sprint(user_id):
     user_obj = get_or_create_user_and_goals(user_id)[0]
 
     last_checkin = user_obj.last_checkin
-    current_time = datetime.now().date()
+    current_time = datetime.now()
     delta =  current_time - last_checkin
 
     setattr(user, sprint, (user_obj.sprint+1 if delta.days < 1 else 1))

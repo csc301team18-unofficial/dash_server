@@ -47,17 +47,39 @@ def log_food_entry(request, client_id):
 
     """
     if request.method == 'POST':
-        user_obj, user_goals = get_or_create_user_and_goals(client_id)
+        user_obj = get_or_create_user_and_goals(client_id)[0]
 
         food_entry_json = JSONParser().parse(request)
+        if "food_name" in food_entry_json:
+            food_name = food_entry_json["food_name"]
+        else:
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
+        serving = food_entry_json["serving"] if "serving" in food_entry_json else user_obj.serving_size
+        food_info = food_info(food_name)
+        current_datetime = today = datetime.now()
+
+        # add new row to Entry for this food
         Entry.objects.create(
-            user_id=client_id,
-            name=monsterurl.get_monster(),
-            serving_size=100,
-            sprint=1,
-            points=0
+            entry_id = md5_hash_string(client_id + str(current_datetime)) # concatenate user_id + time_of_creation
+            user_id = client_id
+            time_of_creation = current_datetime
+            entry_name = food_name
+            is_meal = False
+            kilocalories = food_info["kilocalories"]
+            fat_grams = food_info["fat_grams"]
+            carb_grams = food_info["carb_grams"]
+            protein_grams = food_info["protein_grams"]
         )
+
+        # update user's last_checkin
+        setattr(user_obj, last_checkin, current_datetime)
+
+        # update sprint
+        update_sprint(client_id)
+
+        # add points to score
+        setattr(user_obj, points, points+calculate_points(client_id))
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
