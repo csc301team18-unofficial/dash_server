@@ -226,7 +226,6 @@ def get_today_macros(user):
     :param user: The user we're checking
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
-
     # Food/meal entries logged today so far:
     today = datetime.now().date()
     tomorrow = today + timedelta(1)
