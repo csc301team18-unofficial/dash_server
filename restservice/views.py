@@ -88,34 +88,6 @@ def log_food(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def which_meal(datetime_obj):
-    """"
-    Returns "breakfast", "lunch", or "dinner" classification, given a datetime object.
-
-    On a 24 hour clock,
-      Breakfast: 3:00 - 10:59
-      Lunch: 11:00 - 15:59
-      Dinner: 16:00 - 2:59
-
-    :param: datetime datetime_obj
-    :return: string
-    """
-    # create datetime objects which represent tha bounds of each meal
-    # the first three params don't matter since it's year, month, day
-
-    breakfast_time = datetime(1, 1, 1, 3, 0, 0).time() #breakfast starts at 3am
-    lunch_time = datetime(1, 1, 1, 11, 0, 0).time() # lunch starts at 11am
-    dinner_time = datetime(1, 1, 1, 16, 0, 0).time() # dinner starts at 4pm
-
-    meal_time = datetime_obj.time()
-    if (breakfast_time <= meal_time < lunch_time):
-        return "breakfast"
-    elif (lunch_time <= meal_time < dinner_time):
-        return "lunch"
-    else:
-        return "dinner"
-
-
 @csrf_exempt
 def log_meal(request, client_id):
     """
