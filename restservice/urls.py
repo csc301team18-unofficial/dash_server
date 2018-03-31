@@ -17,10 +17,15 @@ from django.conf.urls import url
 from restservice import views
 
 urlpatterns = [
-    # GET Request URLs
-    url(r'^foodinfo/(?P<client_id>.+?)/(?P<food_name>.+?)$', views.food_info),  # GET info about a certain food
+    url(r'^foodinfo/(?P<client_id>.+?)/(?P<food_name>.+?)/$', views.food_info),  # GET info about a certain food
     url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
     url(r'^water/(?P<client_id>.+?)/$', views.water),  # GET OR PUT daily water intake
     url(r'^goals/(?P<client_id>.+?)/$', views.goals),  # GET or PUT current macros
-    url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET points
+    url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET username
+    url(r'^create_meal/(?P<client_id>.+?)/$', views.create_meal),  # POST create a meal
+    url(r'^log_meal/(?P<client_id>.+?)/$', views.log_meal),  # POST log a meal
+    url(r'^log_food/(?P<client_id>.+?)/$', views.log_food),  # POST log a food
+    url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
+    url(r'^today/(?P<client_id>.+?)/$', views.today_info),  # GET info about today's consumption
+
 ]
