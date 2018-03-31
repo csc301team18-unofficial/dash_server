@@ -60,18 +60,24 @@ def log_food_entry(request, client_id):
         current_datetime = today = datetime.now()
 
         # add new row to Entry for this food
-        Entry.objects.create(
-            entry_id = md5_hash_string(str(client_id) + str(current_datetime)),
-            user_id = client_id,
-            time_of_creation = current_datetime,
-            entry_name = food_name,
-            is_meal = False,
-            kilocalories = food_info["kilocalories"],
-            fat_grams = food_info["fat_grams"],
-            carb_grams = food_info["carb_grams"],
-            protein_grams = food_info["protein_grams"],
-            water_ml = 0
-        )
+        try:
+            Entry.objects.create(
+                entry_id = md5_hash_string(str(client_id) + str(current_datetime)),
+                user_id = client_id,
+                time_of_creation = current_datetime,
+                entry_name = food_name,
+                is_meal = False,
+                kilocalories = food_info["kilocalories"],
+                fat_grams = food_info["fat_grams"],
+                carb_grams = food_info["carb_grams"],
+                protein_grams = food_info["protein_grams"],
+                water_ml = 0
+            )
+            return HttpResponse(status=status.HTTP_200_OK)
+        except Exception as e:
+            print("Entry creation failed")
+            print(e.__class__.__name__)
+            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # update user's last_checkin
         setattr(user_obj, "last_checkin", current_datetime)
