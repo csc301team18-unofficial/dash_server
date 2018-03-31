@@ -61,14 +61,14 @@ def log_food_entry(request, client_id):
 
         # add new row to Entry for this food
         Entry.objects.create(
-            entry_id = md5_hash_string(str(client_id) + str(current_datetime)) 
-            user_id = client_id
-            time_of_creation = current_datetime
-            entry_name = food_name
-            is_meal = False
-            kilocalories = food_info["kilocalories"]
-            fat_grams = food_info["fat_grams"]
-            carb_grams = food_info["carb_grams"]
+            entry_id = md5_hash_string(str(client_id) + str(current_datetime)),
+            user_id = client_id,
+            time_of_creation = current_datetime,
+            entry_name = food_name,
+            is_meal = False,
+            kilocalories = food_info["kilocalories"],
+            fat_grams = food_info["fat_grams"],
+            carb_grams = food_info["carb_grams"],
             protein_grams = food_info["protein_grams"]
         )
 
