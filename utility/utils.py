@@ -204,7 +204,7 @@ def calculate_points(user_id):
 
 
     """
-    goal_macros = get_or_create_user_and_goals(user_id)[1]
+    user, goal_macros = get_or_create_user_and_goals(user_id)
     daily_macros_dict = get_today_macros(user_id)
 
     # if daily amounts consumed are over the goal limit, points are negative
@@ -224,15 +224,12 @@ def calculate_points(user_id):
     return water_points + protein_points + fat_points + carb_points
 
 
-def get_today_macros(user_id):
+def get_today_macros(user):
     """
     Get the amount of carbs / protein / fat / water / kcal the user has consumed since the beginning of the day
     :param user: The user we're checking
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
-    # TODO: THIS NEEDS TO BE IMPLEMENTED
-    user_obj = get_or_create_user_and_goals(user_id)[0]
-    user_food_entries = Entry.objects.get(user_id=user_id).filter()
 
     # Food/meal entries logged today so far:
     today = datetime.now().date()
@@ -241,7 +238,7 @@ def get_today_macros(user_id):
     today_end = datetime.combine(tomorrow, time())
 
     user_food_list = Entry.objects \
-        .filter(user_id=user_id) \
+        .filter(user_id=user.user_id) \
         .filter(time_of_creation=today_start) \
         .filter(time_of_creation=today_end)
 
@@ -267,7 +264,7 @@ def get_today_macros(user_id):
     return macros_dict
 
 
-def update_sprint(user_id):
+def update_sprint(user):
     """
     Compares the current time with the time in user.last_checkin. If the last check-in was yesterday, increment the
     user's current sprint by 1. If the last check-in was before yesterday, reset the user's sprint to 1.
@@ -276,13 +273,11 @@ def update_sprint(user_id):
     :param user_id: id of user
     :return:
     """
-    user_obj = get_or_create_user_and_goals(user_id)[0]
+    last_checkin = user.last_checkin
+    current_time = datetime.now().date()
+    delta = current_time - last_checkin
 
-    last_checkin = user_obj.last_checkin
-    current_time = datetime.now()
-    delta =  current_time - last_checkin
-
-    setattr(user, sprint, (user_obj.sprint+1 if delta.days < 1 else 1))
+    setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
 
 
 def build_food_req_string(food_name):
