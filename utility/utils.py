@@ -217,9 +217,9 @@ def calculate_points(user, user_goals):
     carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
     carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
 
-    water_points + protein_points + fat_points + carb_points
+    points = water_points + protein_points + fat_points + carb_points
 
-    return 406
+    return points
 
 
 def get_today_macros(user):

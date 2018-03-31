@@ -89,7 +89,7 @@ def log_food(request, client_id):
             return HttpResponse(status=status.HTTP_200_OK)
 
         except Exception as e:
-            print("Entry creation failed")
+            print("Entry creation failed: food")
             print(e.__class__.__name__)
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -144,7 +144,7 @@ def log_meal(request, client_id):
 
             return HttpResponse(status=status.HTTP_200_OK)
         except Exception as e:
-            print("Entry creation failed")
+            print("Entry creation failed: meal")
             print(e.__class__.__name__)
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -217,10 +217,46 @@ def log_water(request, client_id):
         "water_ml": 250
     }
     """
+    # if request.method == 'POST':
+    #     # TODO:
+    #     water_ml =
+    #     pass
+
     if request.method == 'POST':
-        # TODO:
-        # Add water intake to Entry list
-        pass
+        user, user_goals = get_or_create_user_and_goals(client_id)
+
+        water_data = JSONParser().parse(request)
+        if "water_ml" in water_data:
+            water_ml = water_data["water_ml"]
+        else:
+            return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+        curr_datetime = datetime.now()
+
+        try:
+
+            # Create meal entry
+            Entry.objects.create(
+                entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
+                user_id=user,
+                time_of_creation=curr_datetime,
+                entry_name= "water",
+                kilocalories=0,
+                fat_grams=0,
+                protein_grams=0,
+                carb_grams=0,
+                is_water=True,
+                water_ml=water_ml
+            )
+
+            update_points_sprint_checkin(user, user_goals, curr_datetime)
+
+            return HttpResponse(status=status.HTTP_200_OK)
+
+        except Exception as e:
+            print("Entry creation failed: water")
+            print(e.__class__.__name__)
+            return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
@@ -256,9 +292,9 @@ def goals(request, client_id):
             "protein_grams": 150,
             "fat_grams": 30
         }
-        
+
         or even just
-        
+
         {
             "water_ml": 3000
         }
