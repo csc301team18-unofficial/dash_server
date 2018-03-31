@@ -73,13 +73,13 @@ def log_food_entry(request, client_id):
         )
 
         # update user's last_checkin
-        setattr(user_obj, last_checkin, current_datetime)
+        setattr(user_obj, "last_checkin", current_datetime)
 
         # update sprint
         update_sprint(user_obj)
 
         # add points to score
-        setattr(user_obj, points, points + calculate_points(client_id))
+        setattr(user_obj, "points", points + calculate_points(client_id))
 
     else:
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
