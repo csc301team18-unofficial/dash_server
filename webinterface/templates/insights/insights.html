@@ -93,6 +93,9 @@
             <div class="col-3">
               Breakfast
               <ul class="food_list">
+                {% for breakfast in breakfast_foods %}
+                  <li>{{breakfast}}</li>
+                {% endfor %}
                 <li>Breakfast food 1</li>
                 <li>Breakfast food 2</li>
                 <li>Breakfast food 3</li>
@@ -103,6 +106,9 @@
             <div class="col-3">
               Lunch
               <ul class="food_list">
+                {% for lunch in lunch_foods %}
+                  <li>{{lunch}}</li>
+                {% endfor %}
                 <li>Lunch food 1</li>
                 <li>Lunch food 2</li>
                 <li>Lunch food 3</li>
@@ -113,6 +119,9 @@
             <div class="col-3">
               Dinner
               <ul class="food_list">
+                {% for dinner in dinner_foods %}
+                  <li>{{dinner}}</li>
+                {% endfor %}
                 <li>Dinner food 1</li>
                 <li>Dinner food 2</li>
                 <li>Dinner food 3</li>
