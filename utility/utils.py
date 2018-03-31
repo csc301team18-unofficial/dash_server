@@ -326,14 +326,54 @@ def which_meal(datetime_obj):
     # create datetime objects which represent tha bounds of each meal
     # the first three params don't matter since it's year, month, day
 
-    breakfast_time = datetime(1, 1, 1, 3, 0, 0).time() #breakfast starts at 3am
-    lunch_time = datetime(1, 1, 1, 11, 0, 0).time() # lunch starts at 11am
-    dinner_time = datetime(1, 1, 1, 16, 0, 0).time() # dinner starts at 4pm
+    breakfast_time = datetime(1, 1, 1, 3, 0, 0).time()  # breakfast starts at 3am
+    lunch_time = datetime(1, 1, 1, 11, 0, 0).time()     # lunch starts at 11am
+    dinner_time = datetime(1, 1, 1, 15, 0, 0).time()    # dinner starts at 5pm
 
     meal_time = datetime_obj.time()
-    if (breakfast_time <= meal_time < lunch_time):
+    if breakfast_time <= meal_time < lunch_time:
         return "breakfast"
-    elif (lunch_time <= meal_time < dinner_time):
+    elif lunch_time <= meal_time < dinner_time:
         return "lunch"
     else:
         return "dinner"
+
+
+def get_relevant_user_data(client_name):
+    """
+    Takes a username and generates a dictionary of information that is relevant to the user.
+    This information includes:
+        - User's daily goals
+        - The number of consecutive days the user has been using DASH
+        - User's current calorie count / water consumption / macros / etc
+        - User's current score
+        - User's current streak
+        - A list of foods that the user has consumed today (probably a queryset object or something)
+
+    :param client_name: The client's monstrous username
+    :return: Dict of info about the user
+    """
+
+    try:
+        # Get the user from the database
+        user = Users.objects.get(name=client_name)
+
+    except ObjectDoesNotExist:
+        # Catch the exception and pass it along, handle in parent
+        raise ObjectDoesNotExist
+
+    user_goals = Goals.objects.get(user_id=user.user_id)
+    user_data = dict()
+
+    # Add goals and other stats to user
+    user_data["points"] = user.score
+    user_data["sprint"] = user.streak
+    user_data["carb_goal"] = user_goals.carb_grams
+    user_data["fat_goal"] = user_goals.fat_grams
+    user_data["protein_goal"] = user_goals.protein_grams
+    user_data["kcal_goal"] = user_goals.kilocalories
+    user_data["water_goal"] = user_goals.water_ml
+
+    # TODO: Add the user's stats for TODAY, i.e how much carbs / fats / proteins / water they've consumed so far
+
+    return user_data
