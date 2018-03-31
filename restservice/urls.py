@@ -22,5 +22,10 @@ urlpatterns = [
     url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
     url(r'^water/(?P<client_id>.+?)/$', views.water),  # GET OR PUT daily water intake
     url(r'^goals/(?P<client_id>.+?)/$', views.goals),  # GET or PUT current macros
-    url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET points
+    url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET username
+    url(r'^create_meal/(?P<client_id>.+?)/$', views.create_meal),  # POST create a meal
+    url(r'^log_meal/(?P<client_id>.+?)/$', views.log_meal),  # POST log a meal
+    url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
+    # url(r'^sprint/(?P<client_id>.+?)/$', views.sprint),  # GET current sprint
+
 ]

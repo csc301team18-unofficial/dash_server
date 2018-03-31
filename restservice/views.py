@@ -148,8 +148,9 @@ def create_meal(request, client_id):
             return HttpResponse(status=status.HTTP_200_OK)
 
         # TODO: Figure out exactly which error is raised when two records try to have the same primary key
-        except Exception:
+        except Exception as e:
             # Case if this meal already exists
+            print(e.__class__.__name__)
             return HttpResponse(status=status.HTTP_403_FORBIDDEN)
 
     else:
@@ -202,6 +203,7 @@ def goals(request, client_id):
                 setattr(user_goals, goal_param, param)
 
         user_goals.save()
+        return HttpResponse(status=status.HTTP_200_OK)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
