@@ -226,6 +226,8 @@ def log_water(request, client_id):
         user, user_goals = get_or_create_user_and_goals(client_id)
 
         water_data = JSONParser().parse(request)
+        print(water_data+"\n")
+        print(water_data["water_ml"])
         if "water_ml" in water_data:
             water_ml = water_data["water_ml"]
         else:
