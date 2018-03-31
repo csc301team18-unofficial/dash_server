@@ -61,3 +61,32 @@ def get_relevant_user_data(client_name):
     # TODO: Add the user's stats for TODAY, i.e how much carbs / fats / proteins / water they've consumed so far
 
     return user_data
+
+
+def get_dummy_data_for_html(userid):
+    """
+    Return dummy dictionary to display on HTML.
+
+    :param userid: User id
+    :return: dict
+    """
+    user_dict = {
+        'streak': 29,
+        'user_score': 101,
+        'curr_user_carbs': 120,
+        'user_carbs_goal': 200,
+        'user_carbs_percentage': 60,
+        'curr_user_protein': 150,
+        'user_protein_goal': 200,
+        'user_protein_percentage': 75,
+        'curr_user_fat': 20,
+        'user_fat_goal': 50,
+        'user_fat_percentage': 40,
+        'curr_user_cals': 1260,
+        'user_cals_goal': 2050,
+        'user_cals_percentage': 61,
+        'breakfast_foods': ["Toast", "Eggs", "Banana"],
+        'lunch_foods': ["Pizza", "Apple"],
+        'dinner_foods': ["Pasta", "Broccoli"]
+    }
+    return user_dict
