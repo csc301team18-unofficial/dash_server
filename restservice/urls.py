@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET username
     url(r'^create_meal/(?P<client_id>.+?)/$', views.create_meal),  # POST create a meal
     url(r'^log_meal/(?P<client_id>.+?)/$', views.log_meal),  # POST log a meal
+    url(r'^log_food/(?P<client_id>.+?)/$', views.log_food_entry),  # POST log a food
     url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
     # url(r'^sprint/(?P<client_id>.+?)/$', views.sprint),  # GET current sprint
 
