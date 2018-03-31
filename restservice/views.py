@@ -153,6 +153,7 @@ def water(request, client_id):
         return JSONResponse(data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
+        # Add water intake to Entry list
         pass
 
     else:
