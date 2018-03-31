@@ -62,7 +62,8 @@ class MealBuilder:
             fat_grams=self.fat,
             protein_grams=self.protein,
             carb_grams=self.carb,
-            kilocalories=calories_from_macros(self.carb, self.fat, self.protein)
+            kilocalories=calories_from_macros(self.carb, self.fat, self.protein),
+            is_water=False
         )
         return meal
 
@@ -142,7 +143,6 @@ def get_or_create_user_and_goals(client_id):
             serving_size=100,
             sprint=1,
             points=0,
-            timezone='EST',
             last_checkin=datetime.now()
         )
 

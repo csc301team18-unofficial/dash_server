@@ -30,8 +30,6 @@ def username(request, client_id):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 @csrf_exempt
 def log_food(request, client_id):
     """
