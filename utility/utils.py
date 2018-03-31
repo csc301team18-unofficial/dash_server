@@ -219,7 +219,7 @@ def calculate_points(user, user_goals):
 
     water_points + protein_points + fat_points + carb_points
 
-    return user_goals.carb_grams
+    return 406
 
 
 def get_today_macros(user):
