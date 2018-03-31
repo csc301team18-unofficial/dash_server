@@ -264,15 +264,22 @@ def get_today_macros(user):
     return macros_dict
 
 
-def update_sprint(user_id, current_time):
+def update_sprint(user_id):
     """
     Compares the current time with the time in user.last_checkin. If the last check-in was yesterday, increment the
     user's current sprint by 1. If the last check-in was before yesterday, reset the user's sprint to 1.
     Sprint and Streak are the same thing.
-    :param user:
+
+    :param user_id: id of user
     :return:
     """
-    pass
+    user_obj = get_or_create_user_and_goals(user_id)[0]
+
+    last_checkin = user_obj.last_checkin
+    current_time = datetime.now().date()
+    delta =  current_time - last_checkin
+
+    setattr(user, sprint, (user_obj.sprint+1 if delta.days < 1 else 1))
 
 
 def build_food_req_string(food_name):
