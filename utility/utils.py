@@ -237,6 +237,12 @@ def get_today_macros(user):
         .filter(time_of_creation=today_start) \
         .filter(time_of_creation=today_end)
 
+    # test Macros
+    print("TESTING THE MACROS LIST: \n")
+    print("TESTING THE MACROS LIST: \n")
+    print(user_food_list)
+    print("TESTING THE MACROS LIST: \n")
+    print("TESTING THE MACROS LIST: \n")
     # Macros today:
     carb_g_today = 0
     fat_g_today = 0
