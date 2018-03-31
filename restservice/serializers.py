@@ -42,7 +42,6 @@ class UserSerializer(serializers.Serializer):
     serving_size = serializers.IntegerField(default=100)
     sprint = serializers.IntegerField()
     points = serializers.IntegerField()
-    timezone = serializers.CharField(max_length=32)
 
     def create(self, validated_data):
         """
@@ -54,7 +53,6 @@ class UserSerializer(serializers.Serializer):
             serving_size=validated_data["serving_size"],
             sprint=validated_data["streak"],
             points=validated_data["points"],
-            timezone=validated_data["timezone"]
         )
 
     def update(self, instance, validated_data):
@@ -68,7 +66,6 @@ class UserSerializer(serializers.Serializer):
         instance.serving_size = validated_data.get('serving_size', instance.name)
         instance.sprint = validated_data.get('streak', instance.streak)
         instance.points = validated_data.get('points', instance.points)
-        instance.timezone = validated_data.get('timezone', instance.timezone)
         instance.save()
 
         return instance
