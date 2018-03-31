@@ -191,7 +191,7 @@ def log_water(request, client_id):
     Data about user's water intake is stored in DailyFood table.
     Receives a JSON that looks like this:
     """
-    elif request.method == 'POST':
+    if request.method == 'POST':
         # Add water intake to Entry list
         pass
 
