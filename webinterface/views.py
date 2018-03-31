@@ -7,7 +7,9 @@ from restservice.models import *
 from utility.utils import *
 
 
-def insights(client_name):
+def insights(request, client_name):
+
+    print("WE'RE IN INSIGHTS BOI")
 
     try:
         user_data = get_relevant_user_data(client_name)
