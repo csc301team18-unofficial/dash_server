@@ -1,7 +1,5 @@
 from django.db import models
 
-from utility.utilconstants import TIMEZONES
-
 
 class Users(models.Model):
     user_id = models.CharField(max_length=100, primary_key=True)
@@ -10,7 +8,6 @@ class Users(models.Model):
     sprint = models.IntegerField()
     points = models.IntegerField()
     last_checkin = models.DateTimeField()   # Used to calculate the streak, updated with every logging request
-    # timezone = models.CharField(max_length=32, choices=TIMEZONES, default='EST')
 
     def __str__(self):
         return self.user_id

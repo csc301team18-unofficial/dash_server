@@ -257,7 +257,7 @@ def today_info(request, client_id):
     :return:
     """
     # TODO: HIGH PRIORITY, COMPLETE THIS
-    pass
+    return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_exempt

@@ -19,7 +19,7 @@ from restservice import views
 urlpatterns = [
     url(r'^foodinfo/(?P<client_id>.+?)/(?P<food_name>.+?)/$', views.food_info),  # GET info about a certain food
     url(r'^points/(?P<client_id>.+?)/$', views.points),  # GET points
-    # url(r'^water/(?P<client_id>.+?)/$', views.log_water),  # POST water consumption
+    url(r'^water/(?P<client_id>.+?)/$', views.log_water),  # POST water consumption
     url(r'^goals/(?P<client_id>.+?)/$', views.goals),  # GET or PUT current macros
     url(r'^username/(?P<client_id>.+?)/$', views.username),  # GET username
     url(r'^create_meal/(?P<client_id>.+?)/$', views.create_meal),  # POST create a meal
