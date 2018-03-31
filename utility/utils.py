@@ -87,7 +87,7 @@ def get_food(food_name):
     :return: A FoodCacheRecord
     """
     try:
-        food_obj = FoodCache.objects.get(food_hash=md5_hash_string(food_name))
+        food_obj = FoodCache.objects.get(food_name=food_name)
     except ObjectDoesNotExist:
         food_cache_dict = food_request(food_name)
         food_obj = FoodCache.objects.create(
