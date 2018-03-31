@@ -87,7 +87,7 @@ def log_meal(request, client_id):
         currtime = datetime.now()
 
         try:
-            new_entry = Entry.objects.create(
+            Entry.objects.create(
                 entry_id=md5_hash_string(user.user_id.__str__() + currtime.__str__()),
                 user_id=user,
                 time_of_creation=currtime,
@@ -99,6 +99,8 @@ def log_meal(request, client_id):
                 carb_grams=meal.carb_grams,
                 water_ml=0
             )
+
+            # TODO: Reward / deduct points here
             return HttpResponse(status=status.HTTP_200_OK)
         except Exception as e:
             print("Entry creation failed")

@@ -91,7 +91,7 @@ def get_food(food_name):
     except ObjectDoesNotExist:
         food_cache_dict = food_request(food_name)
         food_obj = FoodCache.objects.create(
-            food_hash=food_cache_dict["food_hash"],
+            food_id=food_cache_dict["food_id"],
             food_name=food_cache_dict["food_name"],
             kilocalories=food_cache_dict["kilocalories"],
             fat_grams=food_cache_dict["fat_grams"],
@@ -114,7 +114,7 @@ def food_request(food_name):
     food_data = response["1"]
 
     food_cache_dict = dict(
-        food_hash=food_hash,
+        food_id=food_hash,
         food_name=food_name,
         kilocalories=food_data["energyKcal"]["val"],
         protein_grams=food_data["protein"]["val"],
