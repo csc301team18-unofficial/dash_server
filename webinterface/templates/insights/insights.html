@@ -27,11 +27,11 @@
             <div class="col" id="title">
               <h1><span id="dashHead">DASH</span>board</h1>
 
-              <h4 id="days">Your current sprint (29 days)</h4>
+              <h4 id="days">Your current sprint ({{streak}} days)</h4>
               <ol id="count">&nbsp;</ol>
               <script>
                 $(function() {
-                  for (var i = 0; i < 29; i++) {
+                  for (var i = 0; i < {{streak}}; i++) {
                       $('#count').append('<li></li>');
                   };
                 });
@@ -40,7 +40,7 @@
             </div>
             <div class="col-2" id="score">
               <p>your Dash Score</p>
-              <p id="scoreValue">98</p>
+              <p id="scoreValue">{{user_score}}</p>
               <p id="scoreExplanation"> We base this score on how often you check in with DASH,
                 and how closely you follow your health goals.</p>
             </div>
@@ -54,22 +54,22 @@
                   <p>Today's Macros</p>
                     <div class="progress" id="carbs">
                       <div class="progress-bar" role="progressbar"
-                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                            40%
+                            aria-valuenow="{{user_carbs_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_carbs_percentage}}%">
+                            {{user_carbs_percentage}}%
                       </div>
                     </div>
 
                     <div class="progress" id="protein">
                       <div class="progress-bar" role="progressbar"
-                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                            40%
+                            aria-valuenow="{{user_protein_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_protein_percentage}}%">
+                            {{user_protein_percentage}}%
                       </div>
                     </div>
 
                     <div class="progress" id="fat">
                       <div class="progress-bar" role="progressbar"
-                            aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                            40%
+                            aria-valuenow="{{user_fat_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_fat_percentage}}%">
+                            {{user_fat_percentage}}%
                       </div>
                     </div>
                 </div>
@@ -83,21 +83,42 @@
               <p>Today's Meals</p>
                 <div class="progress" id="calories">
                   <div class="progress-bar" role="progressbar"
-                        aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
-                        40%
+                        aria-valuenow="{{user_cals_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_cals_percentage}}%">
+                        {{user_cals_percentage}}%
                   </div>
                 </div>
             </div>
         </div>
         <div class="row justify-content-start">
-            <div class="col-2">
+            <div class="col-3">
               Breakfast
+              <ul class="food_list">
+                <li>Breakfast food 1</li>
+                <li>Breakfast food 2</li>
+                <li>Breakfast food 3</li>
+                <li>Breakfast food 4</li>
+                <li>Breakfast food 5</li>
+              </ul>
             </div>
-            <div class="col-2">
+            <div class="col-3">
               Lunch
+              <ul class="food_list">
+                <li>Lunch food 1</li>
+                <li>Lunch food 2</li>
+                <li>Lunch food 3</li>
+                <li>Lunch food 4</li>
+                <li>Lunch food 5</li>
+              </ul>
             </div>
-            <div class="col-2">
+            <div class="col-3">
               Dinner
+              <ul class="food_list">
+                <li>Dinner food 1</li>
+                <li>Dinner food 2</li>
+                <li>Dinner food 3</li>
+                <li>Dinner food 4</li>
+                <li>Dinner food 5</li>
+              </ul>
             </div>
         </div>
     </div>
