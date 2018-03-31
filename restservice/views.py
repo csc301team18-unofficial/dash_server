@@ -129,7 +129,7 @@ def log_meal(request, client_id):
             # Create meal entry
             Entry.objects.create(
                 entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
-                user_id=user,
+                user_id=client_id,
                 time_of_creation=curr_datetime,
                 entry_name=meal_name,
                 is_meal=True,
@@ -240,7 +240,7 @@ def log_water(request, client_id):
             # Create meal entry
             Entry.objects.create(
                 entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
-                user_id=user,
+                user_id=client_id,
                 time_of_creation=curr_datetime,
                 entry_name= "water",
                 kilocalories=0,
