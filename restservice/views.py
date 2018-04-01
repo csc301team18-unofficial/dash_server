@@ -245,10 +245,11 @@ def log_water(request, client_id):
                 fat_grams=0,
                 protein_grams=0,
                 carb_grams=0,
-                is_water=True,
-                water_ml=water_ml
+                water_ml=water_ml,
+                is_water=True
             )
 
+            print("Testing the waters (Entry object creation)")
             print(entry_obj.water_ml)
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
