@@ -261,6 +261,7 @@ def get_today_macros(user):
 
     for entry in user_food_list:
         if entry.is_water:
+            print("ENTRY FOUND FOR WATER {}".format(entry.water_ml))
             water_ml_today += entry.water_ml
 
         carb_g_today += entry.carb_grams
