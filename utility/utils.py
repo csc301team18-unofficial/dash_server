@@ -201,25 +201,32 @@ def calculate_points(user, user_goals):
     - Daily macros now: 105%
     - Total points now: 150 - 5 = 145
     """
-    daily_macros_dict = get_today_macros(user.user_id)
+    try:
+        daily_macros_dict = get_today_macros(user.user_id)
 
-    # if daily amounts consumed are over the goal limit, points are negative
+        # if daily amounts consumed are over the goal limit, points are negative
 
-    water_points = daily_macros_dict['water_ml'] / user_goals.water_ml
-    water_points = water_points if (water_points <= 1) else (1 - water_points)
+        water_points = daily_macros_dict['water_ml'] / user_goals.water_ml
+        water_points = water_points if (water_points <= 1) else (1 - water_points)
 
-    protein_points = daily_macros_dict['protein_grams'] / user_goals.protein_grams
-    protein_points = protein_points if (protein_points <= 1) else (1 - protein_points)
+        protein_points = daily_macros_dict['protein_grams'] / user_goals.protein_grams
+        protein_points = protein_points if (protein_points <= 1) else (1 - protein_points)
 
-    fat_points = daily_macros_dict['fat_grams'] / user_goals.fat_grams
-    fat_points = fat_points if (fat_points <= 1) else (1 - fat_points)
+        fat_points = daily_macros_dict['fat_grams'] / user_goals.fat_grams
+        fat_points = fat_points if (fat_points <= 1) else (1 - fat_points)
 
-    carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
-    carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
+        carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
+        carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
 
-    points = water_points + protein_points + fat_points + carb_points
+        points = water_points + protein_points + fat_points + carb_points
 
-    return points
+        return points
+
+    except Exception as e:
+        print("CALCULATING POINTS IS BROKEN")
+        print(e.__class__.__name__)
+        print(e)
+        return 10
 
 
 def get_today_macros(user):
@@ -273,11 +280,21 @@ def update_points_sprint_checkin(user, user_goals, current_datetime):
     # update sprint
     update_sprint(user)
 
-    # update user's last_checkin
-    setattr(user, "last_checkin", current_datetime)
+    try:
+        # update user's last_checkin
+        setattr(user, "last_checkin", current_datetime)
+    except Exception as e:
+        print("UPDATING CHECKIN IS BROKEN")
+        print(e.__class__.__name__)
+        print(e)
 
-    # add points to score
-    setattr(user, "points", user.points + calculate_points(user, user_goals))
+    try:
+        # add points to score
+        setattr(user, "points", user.points + calculate_points(user, user_goals))
+    except Exception as e:
+        print("UPDATING POINTS IS BROKEN")
+        print(e.__class__.__name__)
+        print(e)
 
     user.save()
 
@@ -288,12 +305,18 @@ def update_sprint(user):
     user's current sprint by 1. If the last check-in was before yesterday, reset the user's sprint to 1.
     Sprint and Streak are the same thing.
     """
-    last_checkin = user.last_checkin
-    current_time = datetime.now().date()
-    delta = current_time - last_checkin
 
-    setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
-    user.save()
+    try:
+        last_checkin = user.last_checkin
+        current_time = datetime.now().date()
+        delta = current_time - last_checkin
+
+        setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
+        user.save()
+    except Exception as e:
+        print("UPDATING SPRINT IS BROKEN")
+        print(e.__class__.__name__)
+        print(e)
 
 
 def build_food_req_string(food_name):

@@ -230,7 +230,7 @@ def log_water(request, client_id):
         curr_datetime = datetime.now()
 
         # Create water entry
-        id_hash = md5_hash_string(str(user.user_id) + str(curr_datetime))
+        id_hash = md5_hash_string(user.user_id.__str__() + curr_datetime.__str__())
         print(id_hash)
 
         try:
