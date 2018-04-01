@@ -229,10 +229,12 @@ def log_water(request, client_id):
 
         curr_datetime = datetime.now()
 
+        # Create water entry
+        id_hash = md5_hash_string(str(user.user_id) + str(curr_datetime))
+        print(id_hash)
+
         try:
-            # Create water entry
-            id_hash = md5_hash_string(str(user.user_id) + str(curr_datetime))
-            print(id_hash)
+
             entry_obj = Entry.objects.create(
                 entry_id=id_hash,
                 user_id_id=user.user_id,
