@@ -222,8 +222,6 @@ def log_water(request, client_id):
         user, user_goals = get_or_create_user_and_goals(client_id)
 
         water_data = JSONParser().parse(request)
-        print(water_data)
-        print(water_data["water_ml"])
         if "water_ml" in water_data:
             water_ml = water_data["water_ml"]
         else:
@@ -232,13 +230,13 @@ def log_water(request, client_id):
         curr_datetime = datetime.now()
 
         try:
-
             # Create water entry
             Entry.objects.create(
                 entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
                 user_id=client_id,
                 time_of_creation=curr_datetime,
-                entry_name= "water",
+                entry_name="water",
+                is_meal=False,
                 kilocalories=0,
                 fat_grams=0,
                 protein_grams=0,
