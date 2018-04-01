@@ -254,6 +254,7 @@ def log_water(request, client_id):
         except Exception as e:
             print("Entry creation failed: water")
             print(e.__class__.__name__)
+            print("Water machine broke")
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
