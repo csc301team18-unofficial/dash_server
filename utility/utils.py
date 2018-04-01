@@ -259,10 +259,7 @@ def get_today_macros(user):
     today_start = datetime.combine(today, time())
     today_end = datetime.combine(tomorrow, time())
 
-    user_food_list = Entry.objects \
-        .filter(user_id=user) \
-        .filter(time_of_creation=today_start) \
-        .filter(time_of_creation=today_end)
+    user_food_list = Entry.objects.filter(user_id=user)#.filter(time_of_creation=today_start).filter(time_of_creation=today_end)
 
     if user_food_list.exists():
         for entry in user_food_list:
@@ -282,12 +279,13 @@ def get_today_macros(user):
             'protein_grams': protein_g_today,
             'water_ml': water_ml_today
         }
+        return macros_dict
     else:
         print("QUERYSET EMPTY, BAD THINGS HAPPENING")
+        return None
 
 
 
-    return macros_dict
 
 
 def update_points_sprint_checkin(user, user_goals, current_datetime):
