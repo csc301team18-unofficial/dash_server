@@ -286,11 +286,7 @@ def update_points_sprint_checkin(user, user_goals, current_datetime):
 
     try:
         # add points to score
-        new_points = user.points + calculate_points(user, user_goals)
-
-        print("NEW POINTS ARE {}".format(new_points))
-        setattr(user, "points", new_points)
-
+        setattr(user, "points", user.points + calculate_points(user, user_goals))
     except Exception as e:
         print("UPDATING POINTS IS BROKEN")
         print(e.__class__.__name__)
