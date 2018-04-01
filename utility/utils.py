@@ -206,12 +206,6 @@ def calculate_points(user, user_goals):
         # if daily amounts consumed are over the goal limit, points are negative
 
         water_points = daily_macros_dict['water_ml'] / user_goals.water_ml
-        print("DAILY MACROS {}   USER GOALS {}   WATER PERCENT {}".format(
-            daily_macros_dict['water_ml'],
-            user_goals.water_ml,
-            water_points
-        ))
-
         water_points = int(water_points*100 if (0 <= water_points <= 1) else (-water_points*100))
 
         protein_points = daily_macros_dict['protein_grams'] / user_goals.protein_grams
