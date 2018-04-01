@@ -58,12 +58,11 @@ class MealBuilder:
         meal = MealCache.objects.create(
             meal_id=self.meal_id,
             meal_name=self.meal_name,
-            user_id=self.user.user_id,
+            user_id=self.user,
             fat_grams=self.fat,
             protein_grams=self.protein,
             carb_grams=self.carb,
             kilocalories=calories_from_macros(self.carb, self.fat, self.protein),
-            is_water=False
         )
         return meal
 
@@ -236,15 +235,9 @@ def get_today_macros(user):
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
     # Food/meal entries logged today so far:
+
     today = datetime.now().date()
     tomorrow = today + timedelta(1)
-    today_start = datetime.combine(today, time())
-    today_end = datetime.combine(tomorrow, time())
-
-    user_food_list = Entry.objects \
-        .filter(user_id=user.user_id) \
-        .filter(time_of_creation=today_start) \
-        .filter(time_of_creation=today_end)
 
     # test Macros
     print("TESTING THE MACROS LIST: \n")
@@ -258,20 +251,28 @@ def get_today_macros(user):
     protein_g_today = 0
     water_ml_today = 0
 
-    for entry in user_food_list:
-        carb_g_today += entry.carb_grams
-        fat_g_today += entry.fat_grams
-        protein_g_today += entry.protein_grams
-        water_ml_today += entry.water_ml
+    today_start = datetime.combine(today, time())
+    today_end = datetime.combine(tomorrow, time())
 
-    macros_dict = {
-        'carbs_grams': carb_g_today,
-        'fat_grams': fat_g_today,
-        'protein_grams': protein_g_today,
-        'water_ml': water_ml_today
-    }
+    user_food_list = Entry.objects.filter(user_id=user).filter(time_of_creation__range=[today_start, today_end])
 
-    return macros_dict
+    if user_food_list.exists():
+        for entry in user_food_list:
+            water_ml_today += entry.water_ml
+            carb_g_today += entry.carb_grams
+            fat_g_today += entry.fat_grams
+            protein_g_today += entry.protein_grams
+
+        macros_dict = {
+            'carb_grams': carb_g_today,
+            'fat_grams': fat_g_today,
+            'protein_grams': protein_g_today,
+            'water_ml': water_ml_today
+        }
+        return macros_dict
+    else:
+        print("QUERYSET EMPTY")
+        return None
 
 
 def update_points_sprint_checkin(user, user_goals, current_datetime):

@@ -1,23 +1,25 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
+    <meta charset="utf-8">
 
-  <title>DASH - Insights</title>
+    <title>DASH - Insights</title>
 
-  {% load staticfiles %}
-  <!--<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">-->
+    {% load staticfiles %}
+    <!--<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">-->
 
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'resources/styles.css' %}">
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'resources/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <link rel="stylesheet" href="../../static/resources/styles.css"> -->
 
 
-  <!--[if lt IE 9]>
+    <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
   <![endif]-->
 </head>
@@ -26,96 +28,154 @@
     <div class="container" id="headline">
         <div class="row">
             <div class="col" id="title">
-              <h1><span id="dashHead">DASH</span>board</h1>
-              <h2><a id="hellothere" href="https://media1.tenor.com/images/1717e8c1f6164f3bcf9a3ff313f199d8/tenor.gif">Hello there,</a> {{username}}!</h2>
-              <h4 id="days">Your current sprint ({{streak}} days)</h4>
-              <ol id="count">&nbsp;</ol>
-              <script>
-                $(function() {
-                  for (var i = 0; i < {{streak}}; i++) {
-                      $('#count').append('<li></li>');
-                  };
-                });
-              </script>
+                <h1><span id="dashHead">DASH</span>board</h1>
+                <h2><a id="hellothere" href="https://media1.tenor.com/images/1717e8c1f6164f3bcf9a3ff313f199d8/tenor.gif">Hello there,</a> {{username}}!</h2>
+                <h4 id="days">Your current sprint ({{streak}} days)</h4>
+                <ol id="count">&nbsp;</ol>
+                <script>
+                    $(function() {
+                        for (var i = 0; i < {{streak}}; i++) {
+                            $('#count').append('<li></li>');
+                        };
+                    });
+                </script>
 
             </div>
             <div class="col-2" id="score">
-              <p>your Dash Score</p>
-              <p id="scoreValue">{{user_score}}</p>
-              <p id="scoreExplanation"> We base this score on how often you check in with DASH,
-                and how closely you follow your health goals.</p>
+                <p>your Dash Score</p>
+                <p id="scoreValue">{{user_score}}</p>
+                <p id="scoreExplanation"> We base this score on how often you check in with DASH, and how closely you follow your health goals.</p>
             </div>
-          </div>
         </div>
+    </div>
     </div>
 
     <div class="container" id="macros">
-            <div class="row justify-content-start">
-                <div class="col-6">
-                  <p>Today's Macros</p>
-                    <div class="progress" id="carbs">
-                      <div class="progress-bar" role="progressbar"
-                            aria-valuenow="{{user_carbs_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_carbs_percentage}}%">
-                            {{user_carbs_percentage}}%
-                      </div>
+        <div class="row justify-content-start">
+            <div class="col">
+                <p>Today's Macros</p>
+                <div class="row justify-content-start">
+                    <div class="col-5">
+                        <div class="progress" id="carbs">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{user_carbs_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_carbs_percentage}}%">
+                                {{user_carbs_percentage}}%
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="progress" id="protein">
-                      <div class="progress-bar" role="progressbar"
-                            aria-valuenow="{{user_protein_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_protein_percentage}}%">
-                            {{user_protein_percentage}}%
-                      </div>
+                    <div class="col-2">
+                        <p class="macroLabels">Carbohydrates</p>
                     </div>
-
-                    <div class="progress" id="fat">
-                      <div class="progress-bar" role="progressbar"
-                            aria-valuenow="{{user_fat_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_fat_percentage}}%">
-                            {{user_fat_percentage}}%
-                      </div>
+                    <div class="col-1">
+                        <p class="macroLabels">({{user_carbs_goal}}g)</p>
+                    </div>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col-5">
+                        <div class="progress" id="protein">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{user_protein_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_protein_percentage}}%">
+                                {{user_protein_percentage}}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <p class="macroLabels">Protein</p>
+                    </div>
+                    <div class="col-1">
+                        <p class="macroLabels">({{user_protein_goal}}g)</p>
+                    </div>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col-5">
+                        <div class="progress" id="fat">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{user_fat_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_fat_percentage}}%">
+                                {{user_fat_percentage}}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <p class="macroLabels">Fats</p>
+                    </div>
+                    <div class="col-1">
+                        <p class="macroLabels">({{user_fat_goal}}g)</p>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 
 
     <div class="container" id="meals">
         <div class="row justify-content-start">
-            <div class="col-6">
-              <p>Today's Meals</p>
-                <div class="progress" id="calories">
-                  <div class="progress-bar" role="progressbar"
-                        aria-valuenow="{{user_cals_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_cals_percentage}}%">
-                        {{user_cals_percentage}}%
-                  </div>
+            <div class="col">
+                <p>Today's Meals</p>
+                <div class="row justify-content-start">
+                    <div class="col-5">
+                        <div class="progress" id="calories">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{user_cals_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_cals_percentage}}%">
+                                {{user_cals_percentage}}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <p class="calorieLabel">Calories</p>
+                    </div>
+                    <div class="col-1">
+                        <p class="calorieLabel">({{user_cals_goal}})</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-start">
+        <div id="mealRow" class="row justify-content-start">
             <div class="col-3">
-              Breakfast
-              <ul class="food_list">
-                {% for breakfast in breakfast_foods %}
-                  <li>{{breakfast}}</li>
-                {% endfor %}
-              </ul>
+                Breakfast
+                <ul class="food_list">
+                    {% for breakfast in breakfast_foods %}
+                    <li>{{breakfast}}</li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col-3">
-              Lunch
-              <ul class="food_list">
-                {% for lunch in lunch_foods %}
-                  <li>{{lunch}}</li>
-                {% endfor %}
-              </ul>
+                Lunch
+                <ul class="food_list">
+                    {% for lunch in lunch_foods %}
+                    <li>{{lunch}}</li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col-3">
-              Dinner
-              <ul class="food_list">
-                {% for dinner in dinner_foods %}
-                  <li>{{dinner}}</li>
-                {% endfor %}
-              </ul>
+                Dinner
+                <ul class="food_list">
+                    {% for dinner in dinner_foods %}
+                    <li>{{dinner}}</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
+  <script>
+  // JS for beer animation
+  $(document).ready(function() {
+    $('.pour') //Pour Me Another Drink, Bartender!
+      .delay(2000)
+      .animate({
+        height: '360px'
+        }, 1500)
+      .delay(1600)
+      .slideUp(500);
+    
+    $('#liquid') // I Said Fill 'Er Up!
+      .delay(3400)
+      .animate({
+        height: '170px'
+      }, 2500);
+
+    $('.beer-foam') // Keep that Foam Rollin' Toward the Top! Yahooo!
+      .delay(3400)
+      .animate({
+        bottom: '200px'
+        }, 2500);
+    });
+  </script>
 </body>
+
 </html>
