@@ -74,15 +74,16 @@ def log_food(request, client_id):
             # Create food entry
             Entry.objects.create(
                 entry_id=md5_hash_string(str(client_id) + str(curr_datetime)),
-                user_id=client_id,
+                user_id=user,
                 time_of_creation=curr_datetime,
                 entry_name=food_name,
                 is_meal=False,
-                kilocalories=food_data["kilocalories"]*serving,
-                fat_grams=food_data["fat_grams"]*serving,
-                carb_grams=food_data["carb_grams"]*serving,
-                protein_grams=food_data["protein_grams"]*serving,
-                water_ml=0
+                kilocalories=food_data.kilocalories*serving,
+                fat_grams=food_data.fat_grams*serving,
+                carb_grams=food_data.carb_grams*serving,
+                protein_grams=food_data.protein_grams*serving,
+                water_ml=0,
+                is_water=False
             )
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
@@ -91,6 +92,7 @@ def log_food(request, client_id):
         except Exception as e:
             print("Entry creation failed: food")
             print(e.__class__.__name__)
+            print(e)
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
