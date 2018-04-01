@@ -202,29 +202,22 @@ def calculate_points(user, user_goals):
     - Total points now: 150 - 5 = 145
     """
     try:
-        daily_macros_dict = get_today_macros(user)
+        daily_macros_dict = get_today_macros(user.user_id)
 
         # if daily amounts consumed are over the goal limit, points are negative
 
         water_points = daily_macros_dict['water_ml'] / user_goals.water_ml
-        print("DAILY MACROS {}   USER GOALS {}   WATER PERCENT {}".format(
-            daily_macros_dict['water_ml'],
-            user_goals.water_ml,
-            water_points
-        ))
-
-        water_points = int(water_points*100 if (0 <= water_points <= 1) else (-water_points*100))
+        water_points = water_points if (water_points <= 1) else (1 - water_points)
 
         protein_points = daily_macros_dict['protein_grams'] / user_goals.protein_grams
-        protein_points = int(protein_points*100 if (0 <= protein_points <= 1) else (-protein_points*100))
+        protein_points = protein_points if (protein_points <= 1) else (1 - protein_points)
 
         fat_points = daily_macros_dict['fat_grams'] / user_goals.fat_grams
-        fat_points = int(fat_points*100 if (0 <= fat_points <= 1) else (-fat_points*100))
+        fat_points = fat_points if (fat_points <= 1) else (1 - fat_points)
 
         carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
-        carb_points = int(carb_points*100 if (0 <= carb_points <= 1) else (-fat_points*100))
+        carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
 
-        print("WATER POINTS AWARDED: {}".format(water_points))
         points = water_points + protein_points + fat_points + carb_points
 
         return points
@@ -253,6 +246,12 @@ def get_today_macros(user):
         .filter(time_of_creation=today_start) \
         .filter(time_of_creation=today_end)
 
+    # test Macros
+    print("TESTING THE MACROS LIST: \n")
+    print("TESTING THE MACROS LIST: \n")
+    print(user_food_list)
+    print("TESTING THE MACROS LIST: \n")
+    print("TESTING THE MACROS LIST: \n")
     # Macros today:
     carb_g_today = 0
     fat_g_today = 0
@@ -260,16 +259,13 @@ def get_today_macros(user):
     water_ml_today = 0
 
     for entry in user_food_list:
-        if entry.is_water:
-            print("ENTRY FOUND FOR WATER {}".format(entry.water_ml))
-            water_ml_today += entry.water_ml
-
         carb_g_today += entry.carb_grams
         fat_g_today += entry.fat_grams
         protein_g_today += entry.protein_grams
+        water_ml_today += entry.water_ml
 
     macros_dict = {
-        'carb_grams': carb_g_today,
+        'carbs_grams': carb_g_today,
         'fat_grams': fat_g_today,
         'protein_grams': protein_g_today,
         'water_ml': water_ml_today
@@ -294,11 +290,7 @@ def update_points_sprint_checkin(user, user_goals, current_datetime):
 
     try:
         # add points to score
-        new_points = user.points + calculate_points(user, user_goals)
-
-        print("NEW POINTS ARE {}".format(new_points))
-        setattr(user, "points", new_points)
-
+        setattr(user, "points", user.points + calculate_points(user, user_goals))
     except Exception as e:
         print("UPDATING POINTS IS BROKEN")
         print(e.__class__.__name__)
@@ -318,6 +310,8 @@ def update_sprint(user):
         last_checkin = user.last_checkin
         current_time = datetime.now()
         delta = current_time - last_checkin
+
+        print("TIME DIFFERENCE IS {}".format(delta.days))
 
         setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
         user.save()
