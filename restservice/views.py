@@ -85,7 +85,7 @@ def log_food(request, client_id):
                 water_ml=0
             )
 
-            update_points_sprint_checkin(user, user_goals, curr_datetime)
+            # update_points_sprint_checkin(user, user_goals, curr_datetime)
             return HttpResponse(status=status.HTTP_200_OK)
 
         except Exception as e:
