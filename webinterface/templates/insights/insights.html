@@ -53,7 +53,7 @@
     <div class="container" id="macros">
         <div class="row justify-content-start">
             <div class="col">
-                <p>Today's Macros</p>
+                <h3>Today's Macros</h3>
                 <div class="row justify-content-start">
                     <div class="col-5">
                         <div class="progress" id="carbs">
@@ -66,7 +66,7 @@
                         <p class="macroLabels">Carbohydrates</p>
                     </div>
                     <div class="col-1">
-                        <p class="macroLabels">({{user_carbs_goal}}g)</p>
+                        <p class="macroLabels">({{curr_user_carbs}}g/{{user_carbs_goal}}g)</p>
                     </div>
                 </div>
                 <div class="row justify-content-start">
@@ -81,7 +81,7 @@
                         <p class="macroLabels">Protein</p>
                     </div>
                     <div class="col-1">
-                        <p class="macroLabels">({{user_protein_goal}}g)</p>
+                        <p class="macroLabels">({{curr_user_protein}}g/{{user_protein_goal}}g)</p>
                     </div>
                 </div>
                 <div class="row justify-content-start">
@@ -96,7 +96,7 @@
                         <p class="macroLabels">Fats</p>
                     </div>
                     <div class="col-1">
-                        <p class="macroLabels">({{user_fat_goal}}g)</p>
+                        <p class="macroLabels">({{curr_user_fat}}g/{{user_fat_goal}}g)</p>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,8 @@
     <div class="container" id="meals">
         <div class="row justify-content-start">
             <div class="col">
-                <p>Today's Meals</p>
+                <h3>Today's Meals</h3>
+                <h6>Food Consumption</h6>
                 <div class="row justify-content-start">
                     <div class="col-5">
                         <div class="progress" id="calories">
@@ -120,14 +121,34 @@
                         <p class="calorieLabel">Calories</p>
                     </div>
                     <div class="col-1">
-                        <p class="calorieLabel">({{user_cals_goal}})</p>
+                        <p class="calorieLabel">({{curr_user_cals}}kcal/{{user_cals_goal}}kcal)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-start">
+            <div class="col">
+                <h6>Water Intake</h6>
+                <div class="row justify-content-start">
+                    <div class="col-5">
+                        <div class="progress" id="water">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{user_water_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_water_percentage}}%">
+                                {{user_water_percentage}}%
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <p class="waterLabel">Water</p>
+                    </div>
+                    <div class="col-1">
+                        <p class="waterLabel">({{curr_user_water}}ml/{{user_water_goal}}ml)</p>
                     </div>
                 </div>
             </div>
         </div>
         <div id="mealRow" class="row justify-content-start">
             <div class="col-3">
-                Breakfast
+                <h5>Breakfast</h5>
                 <ul class="food_list">
                     {% for breakfast in breakfast_foods %}
                     <li>{{breakfast}}</li>
@@ -135,7 +156,7 @@
                 </ul>
             </div>
             <div class="col-3">
-                Lunch
+                <h5>Lunch</h5>
                 <ul class="food_list">
                     {% for lunch in lunch_foods %}
                     <li>{{lunch}}</li>
@@ -143,7 +164,7 @@
                 </ul>
             </div>
             <div class="col-3">
-                Dinner
+                <h5>Dinner</h5>
                 <ul class="food_list">
                     {% for dinner in dinner_foods %}
                     <li>{{dinner}}</li>
@@ -162,7 +183,7 @@
         }, 1500)
       .delay(1600)
       .slideUp(500);
-    
+
     $('#liquid') // I Said Fill 'Er Up!
       .delay(3400)
       .animate({
