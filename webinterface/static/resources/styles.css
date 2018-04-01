@@ -118,11 +118,11 @@ ol li:nth-child(5n) {
     margin-top: 50px;
 }
 
-#calories {
+#calories, #water {
   height: 40px;
 }
 
-.calorieLabel {
+.calorieLabel, .waterLabel {
     margin-top: 33px;
     margin-bottom: -5px;
 }
