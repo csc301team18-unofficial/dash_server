@@ -270,14 +270,16 @@ def get_today_macros(user):
 def update_points_sprint_checkin(user, user_goals, current_datetime):
     # TODO: Needs docs!
 
-    # update user's last_checkin
-    setattr(user, "last_checkin", current_datetime)
-
     # update sprint
     update_sprint(user)
 
+    # update user's last_checkin
+    setattr(user, "last_checkin", current_datetime)
+
     # add points to score
     setattr(user, "points", user.points + calculate_points(user, user_goals))
+
+    user.save()
 
 
 def update_sprint(user):
@@ -291,6 +293,7 @@ def update_sprint(user):
     delta = current_time - last_checkin
 
     setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
+    user.save()
 
 
 def build_food_req_string(food_name):
