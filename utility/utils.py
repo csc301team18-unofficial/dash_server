@@ -250,6 +250,12 @@ def get_today_macros(user):
     print("TODAY TIME: {}".format(today))
     print("TOMORROW TIME: {}".format(tomorrow))
 
+    # Macros today:
+    carb_g_today = 0
+    fat_g_today = 0
+    protein_g_today = 0
+    water_ml_today = 0
+
     today_start = datetime.combine(today, time())
     today_end = datetime.combine(tomorrow, time())
 
@@ -258,29 +264,28 @@ def get_today_macros(user):
         .filter(time_of_creation=today_start) \
         .filter(time_of_creation=today_end)
 
-    # Macros today:
-    carb_g_today = 0
-    fat_g_today = 0
-    protein_g_today = 0
-    water_ml_today = 0
+    if user_food_list.exists():
+        for entry in user_food_list:
+            print(entry.entry_name)
 
-    for entry in user_food_list:
-        print(entry.entry_name)
+            if entry.is_water:
+                print("ENTRY FOUND FOR WATER {}".format(entry.water_ml))
+                water_ml_today += entry.water_ml
 
-        if entry.is_water:
-            print("ENTRY FOUND FOR WATER {}".format(entry.water_ml))
-            water_ml_today += entry.water_ml
+            carb_g_today += entry.carb_grams
+            fat_g_today += entry.fat_grams
+            protein_g_today += entry.protein_grams
 
-        carb_g_today += entry.carb_grams
-        fat_g_today += entry.fat_grams
-        protein_g_today += entry.protein_grams
+        macros_dict = {
+            'carb_grams': carb_g_today,
+            'fat_grams': fat_g_today,
+            'protein_grams': protein_g_today,
+            'water_ml': water_ml_today
+        }
+    else:
+        print("QUERYSET EMPTY, BAD THINGS HAPPENING")
 
-    macros_dict = {
-        'carb_grams': carb_g_today,
-        'fat_grams': fat_g_today,
-        'protein_grams': protein_g_today,
-        'water_ml': water_ml_today
-    }
+
 
     return macros_dict
 
