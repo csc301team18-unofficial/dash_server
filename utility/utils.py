@@ -58,12 +58,11 @@ class MealBuilder:
         meal = MealCache.objects.create(
             meal_id=self.meal_id,
             meal_name=self.meal_name,
-            user_id=self.user.user_id,
+            user_id=self.user,
             fat_grams=self.fat,
             protein_grams=self.protein,
             carb_grams=self.carb,
             kilocalories=calories_from_macros(self.carb, self.fat, self.protein),
-            is_water=False
         )
         return meal
 
@@ -275,9 +274,6 @@ def get_today_macros(user):
     else:
         print("QUERYSET EMPTY")
         return None
-
-
-
 
 
 def update_points_sprint_checkin(user, user_goals, current_datetime):
