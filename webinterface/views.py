@@ -29,6 +29,7 @@ def get_dummy_data_for_html():
     :return: dict
     """
     user_dict = {
+        'username': "Grievous",
         'streak': 29,
         'user_score': 101,
         'curr_user_carbs': 120,

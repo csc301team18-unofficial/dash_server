@@ -27,6 +27,10 @@ body {
     color: #CC5500;
 }
 
+#hellothere:hover {
+  cursor: default;
+}
+
 #score{
     text-align: center;
 }
