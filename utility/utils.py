@@ -207,16 +207,16 @@ def calculate_points(user, user_goals):
         # if daily amounts consumed are over the goal limit, points are negative
 
         water_points = daily_macros_dict['water_ml'] / user_goals.water_ml
-        water_points = water_points if (water_points <= 1) else (1 - water_points)
+        water_points = int(water_points*100 if (0 <= water_points <= 1) else (-water_points*100))
 
         protein_points = daily_macros_dict['protein_grams'] / user_goals.protein_grams
-        protein_points = protein_points if (protein_points <= 1) else (1 - protein_points)
+        protein_points = int(protein_points*100 if (0 <= protein_points <= 1) else (-protein_points*100))
 
         fat_points = daily_macros_dict['fat_grams'] / user_goals.fat_grams
-        fat_points = fat_points if (fat_points <= 1) else (1 - fat_points)
+        fat_points = int(fat_points*100 if (0 <= fat_points <= 1) else (-fat_points*100))
 
         carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
-        carb_points = carb_points if (carb_points <= 1) else (1 - carb_points)
+        carb_points = int(carb_points*100 if (0 <= carb_points <= 1) else (-fat_points*100))
 
         print("WATER POINTS AWARDED: {}".format(water_points))
         points = water_points + protein_points + fat_points + carb_points
