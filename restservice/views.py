@@ -74,7 +74,7 @@ def log_food(request, client_id):
             # Create food entry
             Entry.objects.create(
                 entry_id=md5_hash_string(str(client_id) + str(curr_datetime)),
-                user_id=client_id,
+                user_id=user,
                 time_of_creation=curr_datetime,
                 entry_name=food_name,
                 is_meal=False,
