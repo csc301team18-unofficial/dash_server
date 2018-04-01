@@ -11,8 +11,8 @@ from utility.utils import *
 def insights(request, client_name):
 
     try:
-        user_data = get_relevant_user_data(client_name)
-        return render(request, "templates/insights/insights.html", get_dummy_data_for_html("blah"))
+        # user_data = get_relevant_user_data(client_name)
+        return render(request, "insights/insights.html", get_dummy_data_for_html())
 
     except ObjectDoesNotExist:
         # TODO: The user doesn't have an account, so render an error page telling them to use the app at least once
@@ -21,7 +21,7 @@ def insights(request, client_name):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-def get_dummy_data_for_html(userid):
+def get_dummy_data_for_html():
     """
     Return dummy dictionary to display on HTML.
 
