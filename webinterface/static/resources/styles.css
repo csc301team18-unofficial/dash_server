@@ -118,6 +118,10 @@ ol li:nth-child(5n) {
     margin-top: 50px;
 }
 
+#mealrow h5{
+  text-decoration: underline;
+}
+
 #calories, #water {
   height: 40px;
 }
@@ -130,6 +134,7 @@ ol li:nth-child(5n) {
 .food_list {
   margin-top: 30px;
   padding-left: 0;
+  list-style-type: none;
 }
 
 .food_list li {
