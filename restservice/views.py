@@ -243,7 +243,7 @@ def log_water(request, client_id):
                 carb_grams=0,
                 is_water=True,
                 water_ml=water_ml
-            )
+            ).save()
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
 
