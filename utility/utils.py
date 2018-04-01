@@ -254,7 +254,7 @@ def get_today_macros(user):
     today_end = datetime.combine(tomorrow, time())
 
     user_food_list = Entry.objects \
-        .filter(user_id=user.user_id) \
+        .filter(user_id=user) \
         .filter(time_of_creation=today_start) \
         .filter(time_of_creation=today_end)
 
@@ -265,6 +265,8 @@ def get_today_macros(user):
     water_ml_today = 0
 
     for entry in user_food_list:
+        print(entry.entry_name)
+
         if entry.is_water:
             print("ENTRY FOUND FOR WATER {}".format(entry.water_ml))
             water_ml_today += entry.water_ml
