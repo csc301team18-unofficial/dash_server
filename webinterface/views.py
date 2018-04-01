@@ -43,10 +43,10 @@ def get_dummy_data_for_html():
         'user_fat_percentage': 40,
         'curr_user_water': 2000,
         'user_water_goal': 3780,
-        'user_water_percentage': 40,
+        'user_water_percentage': 53,
         'curr_user_cals': 1260,
         'user_cals_goal': 2050,
-        'user_cals_percentage': 53,
+        'user_cals_percentage': 61,
         'breakfast_foods': ["Toast", "Eggs", "Banana"],
         'lunch_foods': ["Pizza", "Apple"],
         'dinner_foods': ["Pasta", "Broccoli"]

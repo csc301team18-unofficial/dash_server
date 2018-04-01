@@ -108,7 +108,7 @@
         <div class="row justify-content-start">
             <div class="col">
                 <h3>Today's Meals</h3>
-                <h4>Food Consumption</h4>
+                <h6>Food Consumption</h6>
                 <div class="row justify-content-start">
                     <div class="col-5">
                         <div class="progress" id="calories">
@@ -128,7 +128,7 @@
         </div>
         <div class="row justify-content-start">
             <div class="col">
-                <h4>Water Intake</h4>
+                <h6>Water Intake</h6>
                 <div class="row justify-content-start">
                     <div class="col-5">
                         <div class="progress" id="water">
@@ -148,7 +148,7 @@
         </div>
         <div id="mealRow" class="row justify-content-start">
             <div class="col-3">
-                Breakfast
+                <h5>Breakfast</h5>
                 <ul class="food_list">
                     {% for breakfast in breakfast_foods %}
                     <li>{{breakfast}}</li>
@@ -156,7 +156,7 @@
                 </ul>
             </div>
             <div class="col-3">
-                Lunch
+                <h5>Lunch</h5>
                 <ul class="food_list">
                     {% for lunch in lunch_foods %}
                     <li>{{lunch}}</li>
@@ -164,7 +164,7 @@
                 </ul>
             </div>
             <div class="col-3">
-                Dinner
+                <h5>Dinner</h5>
                 <ul class="food_list">
                     {% for dinner in dinner_foods %}
                     <li>{{dinner}}</li>
