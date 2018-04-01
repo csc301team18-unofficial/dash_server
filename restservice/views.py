@@ -78,10 +78,10 @@ def log_food(request, client_id):
                 time_of_creation=curr_datetime,
                 entry_name=food_name,
                 is_meal=False,
-                kilocalories=food_data["kilocalories"]*serving,
-                fat_grams=food_data["fat_grams"]*serving,
-                carb_grams=food_data["carb_grams"]*serving,
-                protein_grams=food_data["protein_grams"]*serving,
+                kilocalories=food_data.kilocalories*serving,
+                fat_grams=food_data.fat_grams*serving,
+                carb_grams=food_data.carb_grams*serving,
+                protein_grams=food_data.protein_grams*serving,
                 water_ml=0,
                 is_water=False
             )
