@@ -122,7 +122,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/webinterface/static/'
 
 # Connect to Heroku-PostgreSQL URL
 db_from_env = dj_database_url.config(conn_max_age=500, ssl_require=True)
