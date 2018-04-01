@@ -82,7 +82,8 @@ def log_food(request, client_id):
                 fat_grams=food_data["fat_grams"]*serving,
                 carb_grams=food_data["carb_grams"]*serving,
                 protein_grams=food_data["protein_grams"]*serving,
-                water_ml=0
+                water_ml=0,
+                is_water=False
             )
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
@@ -91,6 +92,7 @@ def log_food(request, client_id):
         except Exception as e:
             print("Entry creation failed: food")
             print(e.__class__.__name__)
+            print(e)
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)

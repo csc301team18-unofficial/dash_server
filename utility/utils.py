@@ -217,8 +217,9 @@ def calculate_points(user, user_goals):
         carb_points = daily_macros_dict['carb_grams'] / user_goals.carb_grams
         carb_points = int(carb_points*100 if (0 <= carb_points <= 1) else (-fat_points*100))
 
-        print("WATER POINTS AWARDED: {}".format(water_points))
         points = water_points + protein_points + fat_points + carb_points
+
+        points = points * user.sprint
 
         return points
 
@@ -229,7 +230,7 @@ def calculate_points(user, user_goals):
         return 10
 
 
-def get_today_macros(user):
+def get_today_macros(user, start_time=None):
     """
     Get the amount of carbs / protein / fat / water / kcal the user has consumed since the beginning of the day
     :param user: The user we're checking
@@ -237,8 +238,12 @@ def get_today_macros(user):
     """
     # Food/meal entries logged today so far:
 
-    today = datetime.now().date()
-    tomorrow = today + timedelta(1)
+    if start_time:
+        start = user.last_checkin
+        end = start + timedelta(1)
+    else:
+        start = datetime.now().date()
+        end = start + timedelta(1)
 
     # Macros today:
     carb_g_today = 0
@@ -246,8 +251,8 @@ def get_today_macros(user):
     protein_g_today = 0
     water_ml_today = 0
 
-    today_start = datetime.combine(today, time())
-    today_end = datetime.combine(tomorrow, time())
+    today_start = datetime.combine(start, time())
+    today_end = datetime.combine(end, time())
 
     user_food_list = Entry.objects.filter(user_id=user).filter(time_of_creation__range=[today_start, today_end])
 
