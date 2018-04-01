@@ -235,7 +235,7 @@ def log_water(request, client_id):
             print(id_hash)
             entry_obj = Entry.objects.create(
                 entry_id=id_hash,
-                user_id=user.user_id,
+                user_id_id=user.user_id,
                 time_of_creation=curr_datetime,
                 entry_name="water",
                 is_meal=False,
