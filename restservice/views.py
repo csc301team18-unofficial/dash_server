@@ -235,7 +235,7 @@ def log_water(request, client_id):
 
         try:
 
-            entry_obj = Entry.objects.create(
+            Entry.objects.create(
                 entry_id=id_hash,
                 user_id_id=user.user_id,
                 time_of_creation=curr_datetime,
@@ -249,9 +249,6 @@ def log_water(request, client_id):
                 is_water=True
             )
 
-            print("Testing the waters (Entry object creation)")
-            print(entry_obj.water_ml)
-
             update_points_sprint_checkin(user, user_goals, curr_datetime)
 
             return HttpResponse(status=status.HTTP_200_OK)
@@ -259,7 +256,6 @@ def log_water(request, client_id):
         except Exception as e:
             print("Entry creation failed: water")
             print(e.__class__.__name__)
-            print("Water machine broke")
             return HttpResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
