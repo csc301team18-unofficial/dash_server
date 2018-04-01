@@ -231,7 +231,7 @@ def log_water(request, client_id):
 
         try:
             # Create water entry
-            Entry.objects.create(
+            entry_obj = Entry.objects.create(
                 entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
                 user_id=client_id,
                 time_of_creation=curr_datetime,
@@ -244,6 +244,8 @@ def log_water(request, client_id):
                 is_water=True,
                 water_ml=water_ml
             )
+
+            print(entry_obj.__dict__)
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
 
