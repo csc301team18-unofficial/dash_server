@@ -34,11 +34,7 @@
                 <ol id="count">&nbsp;</ol>
                 <script>
                     $(function() {
-                        for (var i = 0; i < {
-                                {
-                                    streak
-                                }
-                            }; i++) {
+                        for (var i = 0; i < {{streak}}; i++) {
                             $('#count').append('<li></li>');
                         };
                     });
@@ -59,7 +55,7 @@
             <div class="col">
                 <p>Today's Macros</p>
                 <div class="row justify-content-start">
-                    <div class="col-6">
+                    <div class="col-5">
                         <div class="progress" id="carbs">
                             <div class="progress-bar" role="progressbar" aria-valuenow="{{user_carbs_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_carbs_percentage}}%">
                                 {{user_carbs_percentage}}%
@@ -74,7 +70,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-start">
-                    <div class="col-6">
+                    <div class="col-5">
                         <div class="progress" id="protein">
                             <div class="progress-bar" role="progressbar" aria-valuenow="{{user_protein_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_protein_percentage}}%">
                                 {{user_protein_percentage}}%
@@ -89,7 +85,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-start">
-                    <div class="col-6">
+                    <div class="col-5">
                         <div class="progress" id="fat">
                             <div class="progress-bar" role="progressbar" aria-valuenow="{{user_fat_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_fat_percentage}}%">
                                 {{user_fat_percentage}}%
@@ -113,7 +109,7 @@
             <div class="col">
                 <p>Today's Meals</p>
                 <div class="row justify-content-start">
-                    <div class="col-6">
+                    <div class="col-5">
                         <div class="progress" id="calories">
                             <div class="progress-bar" role="progressbar" aria-valuenow="{{user_cals_percentage}}" aria-valuemin="0" aria-valuemax="100" style="width:{{user_cals_percentage}}%">
                                 {{user_cals_percentage}}%
@@ -156,6 +152,30 @@
             </div>
         </div>
     </div>
+  <script>
+  // JS for beer animation
+  $(document).ready(function() {
+    $('.pour') //Pour Me Another Drink, Bartender!
+      .delay(2000)
+      .animate({
+        height: '360px'
+        }, 1500)
+      .delay(1600)
+      .slideUp(500);
+    
+    $('#liquid') // I Said Fill 'Er Up!
+      .delay(3400)
+      .animate({
+        height: '170px'
+      }, 2500);
+
+    $('.beer-foam') // Keep that Foam Rollin' Toward the Top! Yahooo!
+      .delay(3400)
+      .animate({
+        bottom: '200px'
+        }, 2500);
+    });
+  </script>
 </body>
 
 </html>
