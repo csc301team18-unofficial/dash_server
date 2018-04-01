@@ -308,7 +308,11 @@ def update_sprint(user):
 
     try:
         last_checkin = user.last_checkin
+<<<<<<< HEAD
+        current_time = datetime.now().datetime()
+=======
         current_time = datetime.now()
+>>>>>>> f5f12913202acdaa5fbecdfe65117378ba28f380
         delta = current_time - last_checkin
 
         setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
