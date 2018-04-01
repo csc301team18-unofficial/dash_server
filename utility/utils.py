@@ -265,7 +265,7 @@ def get_today_macros(user):
         water_ml_today += entry.water_ml
 
     macros_dict = {
-        'carbs_grams': carb_g_today,
+        'carb_grams': carb_g_today,
         'fat_grams': fat_g_today,
         'protein_grams': protein_g_today,
         'water_ml': water_ml_today
