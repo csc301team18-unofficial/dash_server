@@ -27,8 +27,19 @@ body {
     color: #CC5500;
 }
 
+#title h2 {
+  margin-bottom: 30px;
+  color: #EFEFEF;
+}
+
+#hellothere {
+  color: #EFEFEF;
+}
+
 #hellothere:hover {
   cursor: default;
+  color: #EFEFEF;
+  text-decoration: none;
 }
 
 #score{
