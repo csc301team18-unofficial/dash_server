@@ -246,12 +246,6 @@ def get_today_macros(user):
         .filter(time_of_creation=today_start) \
         .filter(time_of_creation=today_end)
 
-    # test Macros
-    print("TESTING THE MACROS LIST: \n")
-    print("TESTING THE MACROS LIST: \n")
-    print(user_food_list)
-    print("TESTING THE MACROS LIST: \n")
-    print("TESTING THE MACROS LIST: \n")
     # Macros today:
     carb_g_today = 0
     fat_g_today = 0
@@ -259,10 +253,12 @@ def get_today_macros(user):
     water_ml_today = 0
 
     for entry in user_food_list:
+        if entry.is_water:
+            water_ml_today += entry.water_ml
+
         carb_g_today += entry.carb_grams
         fat_g_today += entry.fat_grams
         protein_g_today += entry.protein_grams
-        water_ml_today += entry.water_ml
 
     macros_dict = {
         'carb_grams': carb_g_today,
@@ -290,7 +286,9 @@ def update_points_sprint_checkin(user, user_goals, current_datetime):
 
     try:
         # add points to score
-        setattr(user, "points", user.points + calculate_points(user, user_goals))
+        new_points = user.points + calculate_points(user, user_goals)
+        setattr(user, "points", new_points)
+
     except Exception as e:
         print("UPDATING POINTS IS BROKEN")
         print(e.__class__.__name__)
