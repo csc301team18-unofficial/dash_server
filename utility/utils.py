@@ -243,8 +243,13 @@ def get_today_macros(user):
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
     # Food/meal entries logged today so far:
+
     today = datetime.now().date()
     tomorrow = today + timedelta(1)
+
+    print("TODAY TIME: {}".format(today))
+    print("TOMORROW TIME: {}".format(tomorrow))
+
     today_start = datetime.combine(today, time())
     today_end = datetime.combine(tomorrow, time())
 
