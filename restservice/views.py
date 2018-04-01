@@ -231,9 +231,11 @@ def log_water(request, client_id):
 
         try:
             # Create water entry
+            id_hash = md5_hash_string(str(user.user_id) + str(curr_datetime))
+            print(id_hash)
             entry_obj = Entry.objects.create(
-                entry_id=md5_hash_string(str(user.user_id) + str(curr_datetime)),
-                user_id=client_id,
+                entry_id=id_hash,
+                user_id=user,
                 time_of_creation=curr_datetime,
                 entry_name="water",
                 is_meal=False,
