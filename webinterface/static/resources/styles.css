@@ -99,13 +99,35 @@ ol li:nth-child(5n) {
   margin-top: 60px;
 }
 
+.col-2 {
+    margin-left: -150px;
+}
+
+.col-1 {
+    margin-left: -39px;
+}
+
+.macroLabels {
+    margin-top: 17px;
+    margin-bottom: -5px;
+}
+
 /* Meals styles*/
 #meals {
   margin-top: 60px;
 }
 
+#mealRow {
+    margin-top: 50px;
+}
+
 #calories {
   height: 40px;
+}
+
+.calorieLabel {
+    margin-top: 33px;
+    margin-bottom: -5px;
 }
 
 .food_list {
