@@ -245,7 +245,7 @@ def log_water(request, client_id):
                 water_ml=water_ml
             )
 
-            print(entry_obj)
+            print(entry_obj.water_ml)
 
             update_points_sprint_checkin(user, user_goals, curr_datetime)
 
