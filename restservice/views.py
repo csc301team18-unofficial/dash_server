@@ -66,6 +66,8 @@ def log_food(request, client_id):
         else:
             return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
+        serving = serving / 100
+
         food_data = get_food(food_name)
 
         curr_datetime = datetime.now()
