@@ -202,7 +202,7 @@ def calculate_points(user, user_goals):
     - Total points now: 150 - 5 = 145
     """
     try:
-        daily_macros_dict = get_today_macros(user.user_id)
+        daily_macros_dict = get_today_macros(user)
 
         # if daily amounts consumed are over the goal limit, points are negative
 
@@ -310,8 +310,6 @@ def update_sprint(user):
         last_checkin = user.last_checkin
         current_time = datetime.now()
         delta = current_time - last_checkin
-
-        print("TIME DIFFERENCE IS {}".format(delta.days))
 
         setattr(user, "sprint", (user.sprint+1 if 2 < delta.days < 1 else 1))
         user.save()
