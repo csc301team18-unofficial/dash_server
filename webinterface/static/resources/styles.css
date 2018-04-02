@@ -179,11 +179,11 @@ ol li:nth-child(5n) {
       margin-bottom: 35px;
     }
 
-    #macros .col-2:nth-child(2) .macroLabels,  #meals .col-2:nth-child(2) .calorieLabel{
+    #macros .col-2:nth-child(2) .macroLabels, #meals .col-2:nth-child(2) .calorieLabel, #meals .col-2:nth-child(5) .WaterLabel{
       text-align: left;
     }
 
-    #macros .col-2:nth-child(3) .macroLabels,  #meals .col-2:nth-child(3) .calorieLabel{
+    #macros .col-2:nth-child(3) .macroLabels, #meals .col-2:nth-child(3) .calorieLabel, #meals .col-2:nth-child(6) .WaterLabel{
       text-align: right;
     }
 
