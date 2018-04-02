@@ -100,9 +100,6 @@ class GoalsSerializer(serializers.Serializer):
         )
 
     def update(self, instance, validated_data):
-        # TODO: Remove this in production
-        print("GAMESERIALIZER UPDATE CALLED, SOMETHING HAS GONE HORRIBLY WRONG")
-
         for goal_param in utilconstants.GOAL_PARAM_NAMES:
             try:
                 value = validated_data[goal_param]

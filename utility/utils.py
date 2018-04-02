@@ -276,7 +276,12 @@ def get_today_macros(user, start_time=None):
 
 
 def update_points_sprint_checkin(user, user_goals, current_datetime):
-    # TODO: Needs docs!
+    """
+    Rewards the user points, updates their sprint and sets their "last check-in" time.
+    :param user: The user who stats are being updated
+    :param user_goals: The user's current daily goals
+    :param current_datetime: The current date and time (datetime object)
+    """
 
     # update sprint
     update_sprint(user)
@@ -285,7 +290,6 @@ def update_points_sprint_checkin(user, user_goals, current_datetime):
         # update user's last_checkin
         setattr(user, "last_checkin", current_datetime)
     except Exception as e:
-        print("UPDATING CHECKIN IS BROKEN")
         print(e.__class__.__name__)
         print(e)
 
@@ -293,7 +297,6 @@ def update_points_sprint_checkin(user, user_goals, current_datetime):
         # add points to score
         setattr(user, "points", user.points + calculate_points(user, user_goals))
     except Exception as e:
-        print("UPDATING POINTS IS BROKEN")
         print(e.__class__.__name__)
         print(e)
 
@@ -408,7 +411,5 @@ def get_relevant_user_data(client_name):
     user_data["protein_goal"] = user_goals.protein_grams
     user_data["kcal_goal"] = user_goals.kilocalories
     user_data["water_goal"] = user_goals.water_ml
-
-    # TODO: Add the user's stats for TODAY, i.e how much carbs / fats / proteins / water they've consumed so far
 
     return user_data
