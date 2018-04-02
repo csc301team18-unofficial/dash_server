@@ -179,6 +179,14 @@ ol li:nth-child(5n) {
       margin-bottom: 35px;
     }
 
+    #macros .col-2:nth-child(2) .macroLabels,  #meals .col-2:nth-child(2) .macroLabels{
+      text-align: left;
+    }
+
+    #macros .col-2:nth-child(3) .macroLabels,  #meals .col-2:nth-child(3) .macroLabels{
+      text-align: right;
+    }
+
     #meals .col-2{
       margin-top: -40px;
     }
