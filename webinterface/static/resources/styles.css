@@ -100,7 +100,7 @@ ol li:nth-child(5n) {
 }
 
 
-.col-1 {
+#macros .col-2:nth-child(3), #meals .col-2:nth-child(3) {
     margin-left: -39px;
 }
 
@@ -139,4 +139,81 @@ ol li:nth-child(5n) {
 
 .food_list li {
   margin-bottom: 10px;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 994px) {
+    #headline .col-2 {
+      max-width: 100% !important;
+    }
+
+    #score {
+      text-align: left;
+    }
+
+    #mealRow .col-3{
+      max-width: 33.3%;
+      flex: none;
+    }
+
+}
+
+@media only screen and (max-width: 769px) {
+    #title h1 {
+      font-size: 85px;
+    }
+
+    #scoreValue {
+      font-size: 75px;
+    }
+
+    #macros .col-5, #meals .col-5 {
+      max-width: 100%;
+      flex: none;
+    }
+
+    #macros .col-2,  #meals .col-2{
+      max-width: 50%;
+      flex: none;
+      margin-top: -25px;
+      margin-bottom: 35px;
+    }
+
+    #meals .col-2{
+      margin-top: -40px;
+    }
+
+}
+@media only screen and (max-width: 550px) {
+  #title h1 {
+    font-size: 65px;
+  }
+
+  #scoreValue {
+    font-size: 55px;
+  }
+
+  #title h2 {
+    font-size: 30px;
+  }
+
+  #macros h3, #meals h3 {
+    font-size: 22px;
+  }
+
+  #mealRow .col-3 {
+    max-width: 100%;
+  }
+}
+@media only screen and (max-width: 430px) {
+  #title h1 {
+    font-size: 55px;
+  }
+  #title h2 {
+    font-size: 25px;
+  }
+
+  #scoreValue {
+    font-size: 45px;
+  }
 }
