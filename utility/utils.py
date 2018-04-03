@@ -266,12 +266,12 @@ def get_today_macros(user, start_time=None):
             fat_g_today += entry.fat_grams
             protein_g_today += entry.protein_grams
 
-        macros_dict['kilocalories']: calories_from_macros(carb_g_today, fat_g_today, protein_g_today)
-        macros_dict['carb_grams']: carb_g_today
-        macros_dict['fat_grams']: fat_g_today
-        macros_dict['protein_grams']: protein_g_today
-        macros_dict['water_ml']: water_ml_today
-        
+    macros_dict['kilocalories'] = calories_from_macros(carb_g_today, fat_g_today, protein_g_today)
+    macros_dict['carb_grams'] = carb_g_today
+    macros_dict['fat_grams'] = fat_g_today
+    macros_dict['protein_grams'] = protein_g_today
+    macros_dict['water_ml'] = water_ml_today
+
     return macros_dict
 
 
