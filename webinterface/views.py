@@ -22,7 +22,7 @@ def insights(request, client_name):
     except ObjectDoesNotExist:
         # TODO: The user doesn't have an account, so render an error page telling them to use the app at least once
         print("user account for {} does not exist".format(client_name))
-        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+        return HttpResponse(status=status.HTTP_404_NOT_FOUND)
 
 
 ###################
