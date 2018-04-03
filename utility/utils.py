@@ -252,6 +252,7 @@ def get_today_macros(user, start_time=None):
     fat_g_today = 0
     protein_g_today = 0
     water_ml_today = 0
+    macros_dict = dict()
 
     today_start = datetime.combine(start, time())
     today_end = datetime.combine(end, time())
@@ -265,17 +266,13 @@ def get_today_macros(user, start_time=None):
             fat_g_today += entry.fat_grams
             protein_g_today += entry.protein_grams
 
-        macros_dict = {
-            'kilocalories': calories_from_macros(carb_g_today, fat_g_today, protein_g_today),
-            'carb_grams': carb_g_today,
-            'fat_grams': fat_g_today,
-            'protein_grams': protein_g_today,
-            'water_ml': water_ml_today
-        }
-        return macros_dict
-    else:
-        print("QUERYSET EMPTY")
-        return None
+        macros_dict['kilocalories']: calories_from_macros(carb_g_today, fat_g_today, protein_g_today)
+        macros_dict['carb_grams']: carb_g_today
+        macros_dict['fat_grams']: fat_g_today
+        macros_dict['protein_grams']: protein_g_today
+        macros_dict['water_ml']: water_ml_today
+        
+    return macros_dict
 
 
 def update_points_sprint_checkin(user, user_goals, current_datetime):
@@ -438,20 +435,21 @@ def get_relevant_user_data(client_name):
         user_data["user_water_goal"] = user_goals.water_ml
         user_data["user_water_percentage"] = round(today_info["water_ml"] / user_goals.water_ml)
 
-        # Add meals and food consumed today
-        start = datetime.now().date()
-        end = start + timedelta(1)
+        if today_info:
+            # Add meals and food consumed today is any exist
+            start = datetime.now().date()
+            end = start + timedelta(1)
 
-        today_start = datetime.combine(start, time())
-        today_end = datetime.combine(end, time())
+            today_start = datetime.combine(start, time())
+            today_end = datetime.combine(end, time())
 
-        user_food_list = Entry.objects.filter(user_id=user)\
-            .filter(is_water=False)\
-            .filter(time_of_creation__range=[today_start, today_end])
+            user_food_list = Entry.objects.filter(user_id=user)\
+                .filter(is_water=False)\
+                .filter(time_of_creation__range=[today_start, today_end])
 
-        if user_food_list.exists():
-            for entry in user_food_list:
-                user_data[which_meal(entry.time_of_creation)] = entry.entry_name
+            if user_food_list.exists():
+                for entry in user_food_list:
+                    user_data[which_meal(entry.time_of_creation)] = entry.entry_name
 
         return user_data
 
