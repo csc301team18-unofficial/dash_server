@@ -12,7 +12,10 @@ def insights(request, client_name):
 
     try:
         # user_data = get_relevant_user_data(client_name)
-        data = get_relevant_user_data(client_name)
+        if client_name == 'democlient':
+            data = get_dummy_data_for_html("AngryAnnoyedAardvark")
+        else:
+            data = get_relevant_user_data(client_name)
 
         return render(request, "insights/insights.html", data)
 

@@ -234,6 +234,8 @@ def get_today_macros(user, start_time=None):
     """
     Get the amount of carbs / protein / fat / water / kcal the user has consumed since the beginning of the day
     :param user: The user we're checking
+    :param start_time: The time from which to start checking for entries. If not specified,
+    defaults to beginning of the current day
     :return: A dictionary that maps macro -> quantity of macro consumed
     """
     # Food/meal entries logged today so far:
@@ -408,7 +410,7 @@ def get_relevant_user_data(client_name):
 
         # Add goals and other stats to user, create space for logged entries
         user_data["username"] = user.name
-        user_data["points"] = user.points
+        user_data["user_score"] = user.points
         user_data["streak"] = user.sprint
 
         user_data["breakfast_foods"] = []
@@ -418,23 +420,23 @@ def get_relevant_user_data(client_name):
         # Add macro quanities, goals and percentages
         user_data["curr_user_carbs"] = today_info["carb_grams"]
         user_data["user_carbs_goal"] = user_goals.carb_grams
-        user_data["user_carbs_percentage"] = int(today_info["carb_grams"] / user_goals.carb_grams)
+        user_data["user_carbs_percentage"] = round(today_info["carb_grams"] // user_goals.carb_grams)
 
         user_data["curr_user_fat"] = today_info["carb_grams"]
         user_data["user_fat_goal"] = user_goals.fat_grams
-        user_data["user_fat_percentage"] = int(today_info["fat_grams"] / user_goals.fat_grams)
+        user_data["user_fat_percentage"] = round(today_info["fat_grams"] // user_goals.fat_grams)
 
         user_data["curr_user_protein"] = today_info["carb_grams"]
         user_data["user_protein_goal"] = user_goals.protein_grams
-        user_data["user_protein_percentage"] = int(today_info["protein_grams"] / user_goals.protein_grams)
+        user_data["user_protein_percentage"] = round(today_info["protein_grams"] / user_goals.protein_grams)
 
         user_data["curr_user_cals"] = today_info["kilocalories"]
         user_data["user_cals_goal"] = user_goals.kilocalories
-        user_data["user_cals_percentage"] = int(today_info["kilocalories"] / user_goals.kilocalories)
+        user_data["user_cals_percentage"] = round(today_info["kilocalories"] / user_goals.kilocalories)
 
         user_data["curr_user_water"] = today_info["carb_grams"]
         user_data["user_water_goal"] = user_goals.water_ml
-        user_data["user_water_percentage"] = int(today_info["water_ml"] / user_goals.water_ml)
+        user_data["user_water_percentage"] = round(today_info["water_ml"] / user_goals.water_ml)
 
         # Add meals and food consumed today
         start = datetime.now().date()
