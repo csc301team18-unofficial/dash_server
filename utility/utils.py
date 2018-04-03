@@ -5,7 +5,6 @@ import hashlib
 import monsterurl
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, timedelta, time
-from math import ceil
 
 """
 File for general utility functions and classes.
@@ -418,23 +417,23 @@ def get_relevant_user_data(client_name):
         # Add macro quanities, goals and percentages
         user_data["curr_user_carbs"] = today_info["carb_grams"]
         user_data["user_carbs_goal"] = user_goals.carb_grams
-        user_data["user_carbs_percentage"] = ceil(today_info["carb_grams"] / user_goals.carb_grams)
+        user_data["user_carbs_percentage"] = int((today_info["carb_grams"] / user_goals.carb_grams) * 100)
 
         user_data["curr_user_fat"] = today_info["fat_grams"]
         user_data["user_fat_goal"] = user_goals.fat_grams
-        user_data["user_fat_percentage"] = ceil(today_info["fat_grams"] / user_goals.fat_grams)
+        user_data["user_fat_percentage"] = int((today_info["fat_grams"] / user_goals.fat_grams) * 100)
 
         user_data["curr_user_protein"] = today_info["protein_grams"]
         user_data["user_protein_goal"] = user_goals.protein_grams
-        user_data["user_protein_percentage"] = ceil(today_info["protein_grams"] / user_goals.protein_grams)
+        user_data["user_protein_percentage"] = int((today_info["protein_grams"] / user_goals.protein_grams) * 100)
 
         user_data["curr_user_cals"] = today_info["kilocalories"]
         user_data["user_cals_goal"] = user_goals.kilocalories
-        user_data["user_cals_percentage"] = ceil(today_info["kilocalories"] / user_goals.kilocalories)
+        user_data["user_cals_percentage"] = int((today_info["kilocalories"] / user_goals.kilocalories) * 100)
 
         user_data["curr_user_water"] = today_info["water_ml"]
         user_data["user_water_goal"] = user_goals.water_ml
-        user_data["user_water_percentage"] = ceil(today_info["water_ml"] / user_goals.water_ml)
+        user_data["user_water_percentage"] = int((today_info["water_ml"] / user_goals.water_ml) * 100)
 
         if today_info:
             # Add meals and food consumed today is any exist
