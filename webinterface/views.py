@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from rest_framework import status
-from django.views.decorators.csrf import csrf_exempt
-from restservice.models import *
+
+import pprint
 
 from utility.utils import *
 
@@ -16,6 +16,9 @@ def insights(request, client_name):
             data = get_dummy_data_for_html("AngryAnnoyedAardvark")
         else:
             data = get_relevant_user_data(client_name)
+
+        pp = pprint.PrettyPrinter(indent=2)
+        pp.pprint(data)
 
         return render(request, "insights/insights.html", data)
 
