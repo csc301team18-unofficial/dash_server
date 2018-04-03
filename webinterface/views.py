@@ -12,7 +12,9 @@ def insights(request, client_name):
 
     try:
         # user_data = get_relevant_user_data(client_name)
-        return render(request, "insights/insights.html", get_dummy_data_for_html(client_name))
+        data = get_relevant_user_data(client_name)
+
+        return render(request, "insights/insights.html", data)
 
     except ObjectDoesNotExist:
         # TODO: The user doesn't have an account, so render an error page telling them to use the app at least once

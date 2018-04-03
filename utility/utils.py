@@ -201,7 +201,7 @@ def calculate_points(user, user_goals):
     - Total points now: 150 - 5 = 145
     """
     try:
-        daily_macros_dict = get_today_macros(user)
+        daily_macros_dict = get_today_macros(user, user.last_checkin)
 
         # if daily amounts consumed are over the goal limit, points are negative
 
@@ -239,7 +239,7 @@ def get_today_macros(user, start_time=None):
     # Food/meal entries logged today so far:
 
     if start_time:
-        start = user.last_checkin
+        start = start_time
         end = start + timedelta(1)
     else:
         start = datetime.now().date()
@@ -264,6 +264,7 @@ def get_today_macros(user, start_time=None):
             protein_g_today += entry.protein_grams
 
         macros_dict = {
+            'kilocalories': calories_from_macros(carb_g_today, fat_g_today, protein_g_today),
             'carb_grams': carb_g_today,
             'fat_grams': fat_g_today,
             'protein_grams': protein_g_today,
@@ -370,11 +371,11 @@ def which_meal(datetime_obj):
 
     meal_time = datetime_obj.time()
     if breakfast_time <= meal_time < lunch_time:
-        return "breakfast"
+        return "breakfast_foods"
     elif lunch_time <= meal_time < dinner_time:
-        return "lunch"
+        return "lunch_foods"
     else:
-        return "dinner"
+        return "dinner_foods"
 
 
 def get_relevant_user_data(client_name):
@@ -400,16 +401,59 @@ def get_relevant_user_data(client_name):
         # Catch the exception and pass it along, handle in parent
         raise ObjectDoesNotExist
 
-    user_goals = Goals.objects.get(user_id=user.user_id)
-    user_data = dict()
+    try:
+        user_goals = Goals.objects.get(user_id=user.user_id)
+        user_data = dict()
+        today_info = get_today_macros(user)
 
-    # Add goals and other stats to user
-    user_data["points"] = user.score
-    user_data["sprint"] = user.streak
-    user_data["carb_goal"] = user_goals.carb_grams
-    user_data["fat_goal"] = user_goals.fat_grams
-    user_data["protein_goal"] = user_goals.protein_grams
-    user_data["kcal_goal"] = user_goals.kilocalories
-    user_data["water_goal"] = user_goals.water_ml
+        # Add goals and other stats to user, create space for logged entries
+        user_data["username"] = user.name
+        user_data["points"] = user.points
+        user_data["streak"] = user.sprint
 
-    return user_data
+        user_data["breakfast_foods"] = []
+        user_data["lunch_foods"] = []
+        user_data["dinner_foods"] = []
+
+        # Add macro quanities, goals and percentages
+        user_data["curr_user_carbs"] = today_info["carb_grams"]
+        user_data["user_carbs_goal"] = user_goals.carb_grams
+        user_data["user_carbs_percentage"] = int(today_info["carb_grams"] / user_goals.carb_grams)
+
+        user_data["curr_user_fat"] = today_info["carb_grams"]
+        user_data["user_fat_goal"] = user_goals.fat_grams
+        user_data["user_fat_percentage"] = int(today_info["fat_grams"] / user_goals.fat_grams)
+
+        user_data["curr_user_protein"] = today_info["carb_grams"]
+        user_data["user_protein_goal"] = user_goals.protein_grams
+        user_data["user_protein_percentage"] = int(today_info["protein_grams"] / user_goals.protein_grams)
+
+        user_data["curr_user_cals"] = today_info["kilocalories"]
+        user_data["user_cals_goal"] = user_goals.kilocalories
+        user_data["user_cals_percentage"] = int(today_info["kilocalories"] / user_goals.kilocalories)
+
+        user_data["curr_user_water"] = today_info["carb_grams"]
+        user_data["user_water_goal"] = user_goals.water_ml
+        user_data["user_water_percentage"] = int(today_info["water_ml"] / user_goals.water_ml)
+
+        # Add meals and food consumed today
+        start = datetime.now().date()
+        end = start + timedelta(1)
+
+        today_start = datetime.combine(start, time())
+        today_end = datetime.combine(end, time())
+
+        user_food_list = Entry.objects.filter(user_id=user)\
+            .filter(is_water=False)\
+            .filter(time_of_creation__range=[today_start, today_end])
+
+        if user_food_list.exists():
+            for entry in user_food_list:
+                user_data[which_meal(entry.time_of_creation)] = entry.entry_name
+
+        return user_data
+
+    except Exception as e:
+        print(e.__class__.__name__)
+        print(e)
+        raise ObjectDoesNotExist
